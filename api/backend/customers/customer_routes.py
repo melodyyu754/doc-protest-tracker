@@ -4,14 +4,15 @@
 ########################################################
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
-from src import db
-
+from backend.db_connection import db
 
 customers = Blueprint('customers', __name__)
 
 # Get all customers from the DB
 @customers.route('/customers', methods=['GET'])
 def get_customers():
+    current_app.logger.info('customer_routes.py: GET /customers')
+    print("hello")
     cursor = db.get_db().cursor()
     cursor.execute('select id, company, last_name,\
         first_name, job_title, business_phone from customers')
@@ -27,6 +28,7 @@ def get_customers():
 
 @customers.route('/customers', methods=['PUT'])
 def update_customer():
+    current_app.logger.info('PUT /customers route')
     cust_info = request.json
     # current_app.logger.info(cust_info)
     cust_id = cust_info['id']
@@ -44,8 +46,9 @@ def update_customer():
 # Get customer detail for customer with particular userID
 @customers.route('/customers/<userID>', methods=['GET'])
 def get_customer(userID):
+    current_app.logger.info('GET /customers/<userID> route')
     cursor = db.get_db().cursor()
-    cursor.execute('select * from customers where id = {0}'.format(userID))
+    cursor.execute('select id, first_name, last_name from customers where id = {0}'.format(userID))
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()

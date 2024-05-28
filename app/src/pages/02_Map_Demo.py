@@ -8,7 +8,7 @@ from urllib.error import URLError
 
 st.set_page_config(page_title="Mapping Demo", page_icon="🌍")
 
-add_logo("assets/logo.png", height=320)
+add_logo("assets/logo.png", height=400)
 
 st.markdown("# Mapping Demo")
 st.sidebar.header("Mapping Demo")

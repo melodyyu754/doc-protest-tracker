@@ -9,7 +9,7 @@ import plotly.express as px
 
 st.set_page_config(page_title="World Bank Data Viz", page_icon="🏦")
 
-add_logo("assets/logo.png", height=320)
+add_logo("assets/logo.png", height=400)
 
 st.header('World Bank Data')
 

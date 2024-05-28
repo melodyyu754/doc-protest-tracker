@@ -8,7 +8,7 @@ from streamlit_extras.app_logo import add_logo
 
 st.set_page_config (page_title="API Test", page_icon="🙏")
 
-add_logo("assets/logo.png", height=320)
+add_logo("assets/logo.png", height=400)
 
 st.write("# Accessing a REST API from Within Streamlit")
 

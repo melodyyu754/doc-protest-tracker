@@ -18,7 +18,7 @@ def response_generator():
 #-----------------------------------------------------------------------
 
 st.set_page_config (page_title="Sample Chat Bot", page_icon="🤖")
-add_logo("assets/logo.png", height=320)
+add_logo("assets/logo.png", height=400)
 
 st.title("Echo Bot 🤖")
 

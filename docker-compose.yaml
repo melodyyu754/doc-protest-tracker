@@ -1,11 +1,9 @@
-version: '3.9'
-
 services:
 
   app:
     build: ./app
     container_name: front-end 
-    volumes: ['./app/src:/appcode', './secrets:/secrets']
+    volumes: ['./app/src:/appcode']
       #    restart: unless-stopped
     ports:
       - 8501:8501
@@ -13,12 +11,15 @@ services:
   api:
     build: ./api
     container_name: web-api
+    hostname: web-api
     volumes: ['./api:/apicode']
       
     ports:
       - 4000:4000
 
   db:
+    env_file:
+      - ./api/.env
     image: mysql:8
     container_name: mysql_db
     volumes:
@@ -29,17 +30,4 @@ services:
 
     restart: unless-stopped
 
-    environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/secret_db_root_pw
-      MYSQL_USER: webapp
-      MYSQL_PASSWORD_FILE: /run/secrets/secret_db_pw
 
-    secrets:
-        - secret_db_pw
-        - secret_db_root_pw
-
-secrets:
-  secret_db_pw:
-    file: ./secrets/db_password.txt
-  secret_db_root_pw:
-    file: ./secrets/db_root_password.txt

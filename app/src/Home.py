@@ -8,7 +8,7 @@ import plotly.express as px
 
 
 
-add_logo("assets/logo.png", height=320)
+add_logo("assets/logo.png", height=400)
 
 st.title('Welcome to the Brussels 2024 Dialogue Sample App')
 

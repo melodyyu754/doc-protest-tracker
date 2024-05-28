@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
+from streamlit_extras.app_logo import add_logo
 
-
-
+add_logo("assets/logo.png", height=400)
 st.write("""
 # Simple Iris Flower Prediction App
 
