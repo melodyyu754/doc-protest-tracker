@@ -1,50 +1,40 @@
-import pandas as pd
+import logging
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 import streamlit as st
-from streamlit_extras.app_logo import add_logo
-import world_bank_data as wb
-import matplotlib.pyplot as plt
-import numpy as np
-import plotly.express as px
+from modules.nav import SideBarLinks
 
+st.set_page_config(layout = 'wide')
 
+st.session_state['authenticated'] = False
+SideBarLinks(show_home=True)
 
-add_logo("assets/logo.png", height=400)
+st.title('Global Goop')
 
-st.title('Welcome to the Brussels 2024 Dialogue Sample App')
+st.write('\n\n')
+st.write('### HI! As which user would you like to log in?')
 
-st.write("""
-        This is a sample application to 
-        demonstrate what you will be able to do by the 
-        end of the project.  
+if st.button("Act as Sally, a student activist at Columbia University",
+            type = 'primary',
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'activist'
+    st.session_state['first_name'] = 'Sally'
+    st.switch_page('pages/00_Activist_Home.py')
 
-        This may seem trivial as it is running in a
-        browser, but what you aren't seeing is that 
-        the code for this small app is bundled up in a 
-        Docker container and deployed to the public internet
-        using Fly.io.
-         
-        To be added: 
-        - Realtime Inferencing 
-        """)  
+if st.button('Act as McGuinness, the president of the United States',
+            type = 'primary',
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'politician'
+    st.session_state['first_name'] = 'McGuinness'
+    st.switch_page('pages/10_Politician_Home.py')
 
-# st.header('World Bank Data')
-
-# with st.echo(code_location='above'):
-#     countries:pd.DataFrame = wb.get_countries()
-   
-#     st.dataframe(countries)
-
-# with st.echo(code_location='above'):
-#     arr = np.random.normal(1, 1, size=100)
-#     test_plot, ax = plt.subplots()
-#     ax.hist(arr, bins=20)
-
-#     st.pyplot(test_plot)
-
-
-# with st.echo(code_location='above'):
-#     slim_countries = countries[countries['incomeLevel'] != 'Aggregates']
-#     data_crosstab = pd.crosstab(slim_countries['region'], 
-#                                 slim_countries['incomeLevel'],  
-#                                 margins = False) 
-#     st.table(data_crosstab)
+if st.button('Act as Sydney, a reporter at the New York Times',
+            type = 'primary',
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'reporter'
+    st.session_state['first_name'] = 'Sydney'
+    st.switch_page('pages/20_Journalist_Home.py')
