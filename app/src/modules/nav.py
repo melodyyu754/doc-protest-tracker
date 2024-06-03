@@ -2,37 +2,65 @@
 
 import streamlit as st
 
-#### ------------------------ General ------------------------
+
+#### ------------------------ Home/About Page ------------------------
 def HomeNav():
     st.sidebar.page_link("Home.py", label="Home", icon='🏠')
-
 def AboutPageNav():
-    st.sidebar.page_link("pages/30_About.py", label="About", icon="🧠")
+    st.sidebar.page_link("pages/50_About.py", label="About", icon='👥')
 
-#### ------------------------ Examples for Role of pol_strat_advisor ------------------------
-def PolStratAdvHomeNav():
-    st.sidebar.page_link("pages/00_Pol_Strat_Home.py", label="Political Strategist Home", icon='👤')
+#### ------------------------ Home Pages ------------------------
+def ActivistHomeNav():
+    st.sidebar.page_link("pages/00_Activist_Home.py", label="Activist Home", icon='👥')
 
-def WorldBankVizNav():
-    st.sidebar.page_link("pages/01_World_Bank_Viz.py", label="World Bank Visualization", icon='🏦')
+def PoliticianHomeNav():
+    st.sidebar.page_link("pages/01_Politician_Home.py", label="Politician Home", icon='🎩')
 
-def MapDemoNav():
-    st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon='🗺️')
+def JournalistHomeNav():
+    st.sidebar.page_link("pages/02_Journalist_Home.py", label="Journalist Home", icon='📰')
 
-## ------------------------ Examples for Role of usaid_worker ------------------------
-def ApiTestNav():
-    st.sidebar.page_link("pages/12_API_Test.py", label="Test the API", icon='🛜')
+#### ------------------------ Post Pages ------------------------
+def ViewPostsNav():
+    st.sidebar.page_link("pages/10_View_Posts.py", label="View Posts", icon='📄')
 
-def PredictionNav():
-    st.sidebar.page_link("pages/11_Prediction.py", label="Regression Prediction", icon='📈')
+def NewPostNav():
+    st.sidebar.page_link("pages/11_New_Post.py", label="New Post", icon='✍️')
 
-def ClassificationNav():
-    st.sidebar.page_link("pages/13_Classification.py", label="Classification Demo", icon='🌺')
+def UpdateDeletePostNav():
+    st.sidebar.page_link("pages/12_Update_Delete_Post.py", label="Update/Delete Post", icon='📝')
 
-#### ------------------------ System Admin Role ------------------------
-def AdminPageNav():
-    st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon='🖥️')
-    st.sidebar.page_link("pages/21_ML_Model_Mgmt.py", label='ML Model Management', icon='🏢')
+#### ------------------------ Protest Pages ------------------------
+def ViewProtestsNav():
+    st.sidebar.page_link("pages/20_View_Protests.py", label="View Protests", icon='📢')
+
+def NewProtestNav():
+    st.sidebar.page_link("pages/21_New_Protest.py", label="New Protest", icon='🚩')
+
+def UpdateDeleteProtestNav():
+    st.sidebar.page_link("pages/22_Update_Delete_Protest.py", label="Update/Delete Protest", icon='✏️')
+
+def CompareProtestsNav():
+    st.sidebar.page_link("pages/23_Compare_Protests.py", label="Compare Protests", icon='⚖️')
+
+def SaveProtestsNav():
+    st.sidebar.page_link("pages/24_Save_Protests.py", label="Save Protests", icon='💾')
+
+def ViewProtestMapNav():
+    st.sidebar.page_link("pages/25_View_Protest_Map.py", label="View Protest Map", icon='🗺️')
+
+#### ------------------------ Country Pages ------------------------
+def ViewCountriesNav():
+    st.sidebar.page_link("pages/30_View_Countries.py", label="View Countries", icon='🌍')
+
+def CompareCountriesNav():
+    st.sidebar.page_link("pages/31_Compare_Countries.py", label="Compare Countries", icon='🌐')
+
+#### ------------------------ Model Pages ------------------------
+def ViewModel1Nav():
+    st.sidebar.page_link("pages/41_Model_1.py", label="View Model 1", icon='🔬')
+
+def ViewModel2Nav():
+    st.sidebar.page_link("pages/42_Model_2.py", label="View Model 2", icon='🔭')
 
 
 # --------------------------------Links Function -----------------------------------------------
@@ -56,21 +84,35 @@ def SideBarLinks(show_home=False):
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
 
-        # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
-        if st.session_state['role'] == 'pol_strat_advisor':
-            PolStratAdvHomeNav()
-            WorldBankVizNav()
-            MapDemoNav()
+        # If the user role is student activist, show the activist pages
+        if st.session_state['role'] == 'activist':
+            ActivistHomeNav()
+            ViewPostsNav()
+            NewPostNav()
+            UpdateDeletePostNav()
+            ViewProtestsNav()
+            NewProtestNav()
+            UpdateDeleteProtestNav()
 
-        # If the user role is usaid worker, show the Api Testing page
-        if st.session_state['role'] == 'usaid_worker':
-            PredictionNav()
-            ApiTestNav() 
-            ClassificationNav()
+        #  If the user is a politician, show the politician pages
+        if st.session_state['role'] == 'politician':
+            PoliticianHomeNav()
+            ViewProtestsNav()
+            ViewProtestMapNav()
+            ViewModel1Nav()
         
-        # If the user is an administrator, give them access to the administrator pages
-        if st.session_state['role'] == 'administrator':
-            AdminPageNav()
+        # If the user is a journalist, show the journalist pages
+        if st.session_state['role'] == 'journalist':
+            JournalistHomeNav()
+            ViewPostsNav()
+            NewPostNav()
+            UpdateDeletePostNav()
+            ViewProtestsNav()
+            SaveProtestsNav()
+            CompareProtestsNav()
+            ViewCountriesNav()
+            CompareCountriesNav()
+            ViewModel1Nav()
 
     # Always show the About page at the bottom of the list of links
     AboutPageNav()

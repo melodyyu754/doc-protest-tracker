@@ -29,12 +29,12 @@ if st.button('Act as McGuinness, the president of the United States',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'politician'
     st.session_state['first_name'] = 'McGuinness'
-    st.switch_page('pages/10_Politician_Home.py')
+    st.switch_page('pages/01_Politician_Home.py')
 
 if st.button('Act as Sydney, a reporter at the New York Times',
             type = 'primary',
             use_container_width=True):
     st.session_state['authenticated'] = True
-    st.session_state['role'] = 'reporter'
+    st.session_state['role'] = 'journalist'
     st.session_state['first_name'] = 'Sydney'
-    st.switch_page('pages/20_Journalist_Home.py')
+    st.switch_page('pages/02_Journalist_Home.py')
