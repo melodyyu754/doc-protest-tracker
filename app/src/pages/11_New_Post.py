@@ -11,92 +11,42 @@ SideBarLinks()
 add_logo("assets/logo.png", height=400)
 
 # set up the page
-st.markdown("# Mapping Demo")
-st.sidebar.header("Mapping Demo")
+st.sidebar.header("New Post")
 st.write(
-    """This Mapping Demo is from the Streamlit Documentation. It shows how to use
-[`st.pydeck_chart`](https://docs.streamlit.io/library/api-reference/charts/st.pydeck_chart)
-to display geospatial data."""
+    """This is the page where you can create a new post. Fill out the form below to create a new post."""
 )
 
+st.title("Create a New Post")
 
-@st.cache_data
-def from_data_file(filename):
-    url = (
-        "http://raw.githubusercontent.com/streamlit/"
-        "example-data/master/hello/v1/%s" % filename
-    )
-    return pd.read_json(url)
+# User ID (Assuming you have a user authentication system)
+# Replace with your actual user ID retrieval logic
+user_id = st.text_input("Your User ID (if not automatically filled)", value="Get from session")
 
+# Post Title
+title = st.text_input("Post Title")
 
-try:
-    ALL_LAYERS = {
-        "Bike Rentals": pdk.Layer(
-            "HexagonLayer",
-            data=from_data_file("bike_rental_stats.json"),
-            get_position=["lon", "lat"],
-            radius=200,
-            elevation_scale=4,
-            elevation_range=[0, 1000],
-            extruded=True,
-        ),
-        "Bart Stop Exits": pdk.Layer(
-            "ScatterplotLayer",
-            data=from_data_file("bart_stop_stats.json"),
-            get_position=["lon", "lat"],
-            get_color=[200, 30, 0, 160],
-            get_radius="[exits]",
-            radius_scale=0.05,
-        ),
-        "Bart Stop Names": pdk.Layer(
-            "TextLayer",
-            data=from_data_file("bart_stop_stats.json"),
-            get_position=["lon", "lat"],
-            get_text="name",
-            get_color=[0, 0, 0, 200],
-            get_size=15,
-            get_alignment_baseline="'bottom'",
-        ),
-        "Outbound Flow": pdk.Layer(
-            "ArcLayer",
-            data=from_data_file("bart_path_stats.json"),
-            get_source_position=["lon", "lat"],
-            get_target_position=["lon2", "lat2"],
-            get_source_color=[200, 30, 0, 160],
-            get_target_color=[200, 30, 0, 160],
-            auto_highlight=True,
-            width_scale=0.0001,
-            get_width="outbound",
-            width_min_pixels=3,
-            width_max_pixels=30,
-        ),
-    }
-    st.sidebar.markdown("### Map Layers")
-    selected_layers = [
-        layer
-        for layer_name, layer in ALL_LAYERS.items()
-        if st.sidebar.checkbox(layer_name, True)
-    ]
-    if selected_layers:
-        st.pydeck_chart(
-            pdk.Deck(
-                map_style="mapbox://styles/mapbox/light-v9",
-                initial_view_state={
-                    "latitude": 37.76,
-                    "longitude": -122.4,
-                    "zoom": 11,
-                    "pitch": 50,
-                },
-                layers=selected_layers,
-            )
-        )
+# Cause Dropdown
+causes = ["Technical Issue", "Feature Request", "General Discussion", "Other"]
+selected_cause = st.selectbox("Select Cause", causes)
+
+# Post Text (Using a text area for longer input)
+text = st.text_area("Write your post here...")
+
+# Submission Button
+if st.button("Submit Post"):
+    if title and text:
+        # Here, you would typically integrate with your forum's database or API to store the post data.
+        st.success("Post submitted successfully!")
+
+        # Optionally, clear the form after submission
+        st.experimental_rerun()
     else:
-        st.error("Please choose at least one layer above.")
-except URLError as e:
-    st.error(
-        """
-        **This demo requires internet access.**
-        Connection error: %s
-    """
-        % e.reason
-    )
+        st.warning("Please fill in the title and post text.")
+
+
+
+# st.write("## Post Information")
+# title = st.text_input("Title", "")
+# content = st.text_area("Content", "")
+# author = st.text_input("Author", "")
+# published = st.checkbox("Published")

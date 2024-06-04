@@ -31,4 +31,3 @@ VALUES
   ('dev', 'blue'),
   ('pro', 'yellow'),
   ('junior', 'red');
-

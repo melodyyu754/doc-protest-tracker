@@ -23,7 +23,7 @@ if st.button('View Protests',
 if st.button('View Protest Map',
               type='primary',
               use_container_width=True):
-    st.switch_page('pages/21_View_Protest_Map.py')
+    st.switch_page('pages/25_View_Protest_Map.py')
 
 if st.button('View Model 1',
               type='primary',

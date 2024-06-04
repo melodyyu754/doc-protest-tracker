@@ -7,58 +7,46 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
-def response_generator():
-  response = random.choice (
-    [
-      "Hello there! How can I assist you today?",
-      "Hi, human!  Is there anything I can help you with?",
-      "Do you need help?",
-    ]
-  )
-  for word in response.split():
-    yield word + " "
-    time.sleep(0.05)
-#-----------------------------------------------------------------------
+# create a function to simulate a REST API call to update a post
+def update_post(post_id, title, text):
+    time.sleep(2)
+    return {
+        "post_id": post_id,
+        "title": title,
+        "text": text,
+        "updated_at": time.time()
+    }
 
-st.set_page_config (page_title="Sample Chat Bot", page_icon="🤖")
-add_logo("assets/logo.png", height=400)
+# create a function to simulate a REST API call to delete a post
+def delete_post(post_id):
+    time.sleep(2)
+    return {
+        "post_id": post_id,
+        "deleted_at": time.time()
+    }
 
-st.title("Echo Bot 🤖")
+# build it out in the app using streamlit, in two separate columns
 
-st.markdown("""
-            Currently, this chat bot only returns a random message from the following list:
-            - Hello there! How can I assist you today?
-            - Hi, human!  Is there anything I can help you with?
-            - Do you need help?
-            """
-           )
+# make two columns
+col1, col2 = st.columns(2)
+# add a text input for the post ID in column 1
+with col1:
+  st.write("### Update Post")
+  update_post_id = st.text_input("Post ID")
+  title = st.text_input("Title")
+  text = st.text_area("Text")
+  # add a button to update the post
+  if st.button("Update Post", type="primary", use_container_width=True):
+      # call the update post function
+      updated_post = update_post(update_post_id, title, text)
+      st.write(updated_post)
 
-
-# Initialize chat history
-if "messages" not in st.session_state:
-  st.session_state.messages = []
-
-# Display chat message from history on app rerun
-for message in st.session_state.messages:
-  with st.chat_message(message["role"]):
-    st.markdown(message["content"])
-
-# React to user input
-if prompt := st.chat_input("What is up?"):
-  # Display user message in chat message container
-  with st.chat_message("user"):
-    st.markdown(prompt)
-  
-  # Add user message to chat history
-  st.session_state.messages.append({"role": "user", "content": prompt})
-
-  response = f"Echo: {prompt}"
-
-  # Display assistant response in chat message container
-  with st.chat_message("assistant"):
-    # st.markdown(response)
-    response = st.write_stream(response_generator())
-
-  # Add assistant response to chat history
-  st.session_state.messages.append({"role": "assistant", "content": response})
-
+# delete post
+with col2:
+  st.write("### Delete Post")
+  delete_post_id = st.text_input("Delete Post ID")
+  # add a button to delete the post
+  if st.button("Delete Post", type="secondary", use_container_width=True):
+      # call the delete post function
+      deleted_post = delete_post(delete_post_id)
+      st.write(deleted_post)
