@@ -4,6 +4,7 @@ import numpy as np
 import random
 import time
 from modules.nav import SideBarLinks
+import requests
 
 SideBarLinks()
 
@@ -32,14 +33,29 @@ col1, col2 = st.columns(2)
 # add a text input for the post ID in column 1
 with col1:
   st.write("### Update Post")
-  update_post_id = st.text_input("Post ID")
-  title = st.text_input("Title")
-  text = st.text_area("Text")
-  # add a button to update the post
-  if st.button("Update Post", type="primary", use_container_width=True):
-      # call the update post function
-      updated_post = update_post(update_post_id, title, text)
-      st.write(updated_post)
+  post_id = st.text_input("Post ID to Update")
+  title = st.text_input("New Post Title")
+  text = st.text_area("Update your post here...")
+if st.button("Update Post"):
+    if post_id and title and text:
+        # Here, you would typically integrate with your forum's database or API to update the post data.
+        # Example API endpoint to update an existing post
+        api_url = f"http://your-api-url.com/posts/{post_id}"
+        payload = {
+            "title": title,
+           
+            "text": text
+        }
+        response = requests.put(api_url, json=payload)
+        
+        if response.status_code == 200:
+            st.success("Post updated successfully!")
+            # Optionally, clear the form after submission
+            st.experimental_rerun()
+        else:
+            st.error("Failed to update post. Please try again.")
+    else:
+        st.warning("Please fill in the post ID, title, and post text.")
 
 # delete post
 with col2:

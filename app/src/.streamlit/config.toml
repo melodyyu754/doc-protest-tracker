@@ -6,3 +6,6 @@ base="light"
 primaryColor="#9999cc"
 secondaryColor="#FF0000"
 font="monospace"
+
+[server]
+fileWatcherType = "poll"

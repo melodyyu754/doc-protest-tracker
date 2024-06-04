@@ -6,6 +6,13 @@ from flask import Flask
 from backend.db_connection import db
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
+
+
+from backend.countries.countries_routes import countries
+from backend.protests.protests_routes import protests
+from backend.posts.posts_routes import posts
+
+
 import os
 from dotenv import load_dotenv
 
@@ -62,6 +69,12 @@ def create_app():
     # and give a url prefix to each
     app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
+    
+
+    app.register_blueprint(countries,   url_prefix='/cntry')
+    app.register_blueprint(posts ,      url_prefix='/psts')
+    app.register_blueprint(protests,   url_prefix='/prtsts')
+
 
     # Don't forget to return the app object
     return app

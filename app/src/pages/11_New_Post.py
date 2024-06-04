@@ -4,6 +4,7 @@ import pandas as pd
 import pydeck as pdk
 from urllib.error import URLError
 from modules.nav import SideBarLinks
+import requests
 
 SideBarLinks()
 
@@ -35,11 +36,22 @@ text = st.text_area("Write your post here...")
 # Submission Button
 if st.button("Submit Post"):
     if title and text:
-        # Here, you would typically integrate with your forum's database or API to store the post data.
-        st.success("Post submitted successfully!")
 
-        # Optionally, clear the form after submission
-        st.experimental_rerun()
+        api_url = "http://api:4000/psts/post"
+        payload = {
+                "user_id": user_id,
+                "title": title,
+                "cause": selected_cause,
+                "text": text
+            }
+        response = requests.post(api_url, json=payload)
+        
+        if response.status_code == 201:
+            st.success("Post submitted successfully!")
+            # Optionally, clear the form after submission
+            st.experimental_rerun()
+        else:
+            st.error("Failed to submit post. Please try again.")
     else:
         st.warning("Please fill in the title and post text.")
 
