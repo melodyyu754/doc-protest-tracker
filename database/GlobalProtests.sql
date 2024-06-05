@@ -86,7 +86,7 @@ CREATE TABLE if not exists comments (
     post INT NOT NULL,
     text TEXT NOT NULL,
     created_at DATE,
-    FOREIGN KEY (post) references posts(post_id),
+    FOREIGN KEY (post) references posts(post_id) ON DELETE CASCADE,
     PRIMARY KEY (comment_id) # not sure why i had post and comment_id as a double primary key?
 );
 
