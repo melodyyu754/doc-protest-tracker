@@ -1,7 +1,7 @@
 DROP DATABASE IF EXISTS GlobalProtests;
 CREATE DATABASE IF NOT EXISTS GlobalProtests;
 
-grant all privileges on cool_db.* to 'webapp'@'%';
+grant all privileges on GlobalProtests.* to 'webapp'@'%';
 flush privileges;
 
 USE GlobalProtests;
