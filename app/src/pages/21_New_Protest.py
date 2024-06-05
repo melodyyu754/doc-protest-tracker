@@ -17,7 +17,7 @@ location = st.text_input("Location (City)")
 date = st.date_input("Protest Date", value = None)
 violent = st.selectbox("Violent?", options=["True","False"], placeholder="Choose an option")
 country = st.selectbox("Country", options=["United States", "Spain", "Belgium"], placeholder="Choose an option")
-cause = st.selectbox("Protest Cause", options=["BLM", "BLM"], placeholder="Choose an option")
+cause = st.selectbox("Protest Cause", options=["BLM", "Free Palestine", "Pro Choice"], placeholder="Choose an option")
 description = st.text_area("Protest Description")
 
 

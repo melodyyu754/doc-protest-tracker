@@ -69,7 +69,7 @@ CREATE TABLE if not exists news_articles (
 );
 
 CREATE TABLE if not exists posts (
-    post_id INT UNIQUE NOT NULL,
+    post_id INT UNIQUE NOT NULL AUTO_INCREMENT,
     title VARCHAR(100) NOT NULL,
     creation_date DATE NOT NULL,
     text TEXT,

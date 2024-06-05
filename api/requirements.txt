@@ -6,9 +6,6 @@ flask-mysql==1.5.2
 cryptography==38.0.1
 python-dotenv==1.0.1
 requests
-<<<<<<< HEAD
 numpy
 pandas
 scikit-learn
-=======
->>>>>>> df573a3 (Added POST for protest)

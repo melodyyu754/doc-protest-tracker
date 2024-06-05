@@ -137,39 +137,34 @@ def get_posts():
 #     return jsonify(json_data)
 
 # POST a new product
-@posts.route('/post', methods=['POST'])
-def add_new_post():
+@posts.route('/addpost', methods=['POST'])
+def add_post():
+      # collecting data from the request object 
+    data = request.json
+
+    title = data['title']
+    creation_date = data['creation_date']
+    text = data['text']
+    created_by = data['user_id']
+    cause = data['cause']
+
+    # Construct the query
+    query = 'INSERT INTO posts (title, creation_date, text, created_by, cause) VALUES ('
+    query += "'" + title + "',"
+    query += "'" + creation_date + "',"
+    query += "'" + text + "',"
+    query += "'" + str(created_by) + "',"
+    query += "'" + str(cause) + "')g"
+   
     
-    # collecting data from the request object 
-    the_data = request.json
-    current_app.logger.info(the_data)
-
-    #extracting the variable, EDIT HERE
-    id = the_data['post_id']
-    title = the_data['title']
-    creation_date = the_data['creation_date'] #could be different here
-    text = the_data['text']
-    created_by = the_data['created_by']
-    cause = the_data['cause']
-
-
-    # Constructing the query
-    query = 'insert into posts (post_id, title, creation_date, text, created_by, cause) values ("'
-    query += str(id) + '", "'  #should be not set individually, random
-    query += title + '", "'  
-    query += str(creation_date) + '", "'
-    query += text + '", "'
-    query += str(created_by) + '", "'
-    query += str(cause) + '")'
-
-    current_app.logger.info(query)
+    print(query)
 
     # executing and committing the insert statement 
     cursor = db.get_db().cursor()
     cursor.execute(query)
     db.get_db().commit()
-    
-    return 'Success!'
+
+    return "Success"
 
 # ### Get all product categories
 # @products.route('/categories', methods = ['GET'])
