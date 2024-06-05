@@ -21,7 +21,7 @@ def get_posts():
     cursor = db.get_db().cursor()
 
     #need to edit
-    query = 'SELECT id, title, content, author, created_at FROM posts'
+    query = 'SELECT post_id, title, creation_date, text, created_by, cause FROM posts'
     filters = []
 
     #     # Apply filters
@@ -144,19 +144,25 @@ def add_new_post():
     the_data = request.json
     current_app.logger.info(the_data)
 
-    # #extracting the variable, EDIT HERE
-    # name = the_data['product_name']
-    # description = the_data['product_description']
-    # price = the_data['product_price']
-    # category = the_data['product_category']
+    #extracting the variable, EDIT HERE
+    id = the_data['post_id']
+    title = the_data['title']
+    creation_date = the_data['creation_date'] #could be different here
+    text = the_data['text']
+    created_by = the_data['created_by']
+    cause = the_data['cause']
 
-    # # Constructing the query
-    # query = 'insert into products (product_name, description, category, list_price) values ("'
-    # query += name + '", "'
-    # query += description + '", "'
-    # query += category + '", '
-    # query += str(price) + ')'
-    # current_app.logger.info(query)
+
+    # Constructing the query
+    query = 'insert into posts (post_id, title, creation_date, text, created_by, cause) values ("'
+    query += str(id) + '", "'  #should be not set individually, random
+    query += title + '", "'  
+    query += str(creation_date) + '", "'
+    query += text + '", "'
+    query += str(created_by) + '", "'
+    query += str(cause) + '")'
+
+    current_app.logger.info(query)
 
     # executing and committing the insert statement 
     cursor = db.get_db().cursor()
@@ -202,7 +208,7 @@ def delete_post(id):
     cursor = db.get_db().cursor()
 
     # Constructing the query to delete the post by id
-    query = 'DELETE FROM products WHERE id = %s'
+    query = 'DELETE FROM posts WHERE id = %s'
     
     current_app.logger.info(f'Deleting post with id: {id}')
     cursor.execute(query, (id,))

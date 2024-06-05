@@ -13,6 +13,14 @@ SideBarLinks()
 
 st.title("Prediction with Regression")
 
+data ={}
+try:
+  data = requests.get('http://api:4000/prtsts/protests').json()
+except:
+  st.write("**Important**: Could not connect to sample api, so using dummy data.")
+  data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
+st.dataframe(data)
+
 # create a 2 column layout
 col1, col2 = st.columns(2)
 

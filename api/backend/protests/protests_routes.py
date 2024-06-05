@@ -11,53 +11,70 @@ from backend.db_connection import db
 
 protests = Blueprint('protests', __name__)
 
-# Get all the products from the database
+# Get all the protests from the data base
 @protests.route('/protests', methods=['GET'])
 def get_protests():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
-
-    #need to edit
-    query = 'SELECT id, title, content, author, created_at FROM posts'
-    filters = []
-
-    #     # Apply filters
-    # if 'product_code' in request.args:
-    #     filters.append(f"product_code = '{request.args['product_code']}'")
-    # if 'product_name' in request.args:
-    #     filters.append(f"product_name LIKE '%{request.args['product_name']}%'")
-    # if 'category' in request.args:
-    #     filters.append(f"category = '{request.args['category']}'")
-    # if 'min_price' in request.args:
-    #     filters.append(f"list_price >= {request.args['min_price']}")
-    # if 'max_price' in request.args:
-    #     filters.append(f"list_price <= {request.args['max_price']}")
-
-    if filters:
-        query += ' WHERE ' + ' AND '.join(filters)
-
-    current_app.logger.info(query)
+    query = 'SELECT location, date, description, created_by, cause, country FROM protests'
     cursor.execute(query)
-    
-    # use cursor to query the database for a list of products
-    # EDIT HERE: cursor.execute('SELECT id, product_code, product_name, list_price, category FROM products')
-
-    # grab the column headers from the returned data
-    column_headers = [x[0] for x in cursor.description]
-
-    # create an empty dictionary object to use in 
-    # putting column headers together with data
+    row_headers = [x[0] for x in cursor.description]
+    data = cursor.fetchall() # give back all the date from the sql statement
     json_data = []
+    for row in data:
+        json_data.append(dict(zip(row_headers, row))) # attribute name, attribute value, etc
+    the_response = make_response(jsonify(json_data)) # turns dictionary into json and makes a response object
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json' # what tyoe of data are we sending back
+    return the_response # returns it back through the rest api stuff
 
-    # fetch all the data from the cursor
-    theData = cursor.fetchall()
+# # Get all the products from the database
+# @protests.route('/protests', methods=['GET'])
+# def get_protests():
+#     # get a cursor object from the database
+#     cursor = db.get_db().cursor()
 
-    # for each of the rows, zip the data elements together with
-    # the column headers. 
-    for row in theData:
-        json_data.append(dict(zip(column_headers, row)))
+#     #need to edit
+#     query = 'SELECT id, title, content, author, created_at FROM posts'
+#     filters = []
 
-    return jsonify(json_data)
+#     #     # Apply filters
+#     # if 'product_code' in request.args:
+#     #     filters.append(f"product_code = '{request.args['product_code']}'")
+#     # if 'product_name' in request.args:
+#     #     filters.append(f"product_name LIKE '%{request.args['product_name']}%'")
+#     # if 'category' in request.args:
+#     #     filters.append(f"category = '{request.args['category']}'")
+#     # if 'min_price' in request.args:
+#     #     filters.append(f"list_price >= {request.args['min_price']}")
+#     # if 'max_price' in request.args:
+#     #     filters.append(f"list_price <= {request.args['max_price']}")
+
+#     if filters:
+#         query += ' WHERE ' + ' AND '.join(filters)
+
+#     current_app.logger.info(query)
+#     cursor.execute(query)
+    
+#     # use cursor to query the database for a list of products
+#     # EDIT HERE: cursor.execute('SELECT id, product_code, product_name, list_price, category FROM products')
+
+#     # grab the column headers from the returned data
+#     column_headers = [x[0] for x in cursor.description]
+
+#     # create an empty dictionary object to use in 
+#     # putting column headers together with data
+#     json_data = []
+
+#     # fetch all the data from the cursor
+#     theData = cursor.fetchall()
+
+#     # for each of the rows, zip the data elements together with
+#     # the column headers. 
+#     for row in theData:
+#         json_data.append(dict(zip(column_headers, row)))
+
+#     return jsonify(json_data)
 
 # @products.route('/product/<id>', methods=['GET'])
 # def get_product_detail (id):
