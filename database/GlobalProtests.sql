@@ -41,7 +41,7 @@ CREATE TABLE if not exists users (
 );
 
 CREATE TABLE if not exists protests (
-    protest_id INT UNIQUE NOT NULL,
+    protest_id INT UNIQUE NOT NULL AUTO_INCREMENT,
     location VARCHAR(80) NOT NULL,
     date DATE NOT NULL,
     description TEXT,
@@ -87,21 +87,21 @@ CREATE TABLE if not exists comments (
     text TEXT NOT NULL,
     created_at DATE,
     FOREIGN KEY (post) references posts(post_id) ON DELETE CASCADE,
-    PRIMARY KEY (comment_id) # not sure why i had post and comment_id as a double primary key?
+    PRIMARY KEY (comment_id) # --not sure why i had post and comment_id as a double primary key?
 );
 
 CREATE TABLE if not exists protest_attendence (
     user INT,
     protest INT,
     FOREIGN KEY (user) references users(user_id),
-    FOREIGN KEY (protest) references protests(protest_id)
+    FOREIGN KEY (protest) references protests(protest_id) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists protest_likes (
     user INT,
     protest INT,
     FOREIGN KEY (user) references users(user_id),
-    FOREIGN KEY (protest) references protests(protest_id)
+    FOREIGN KEY (protest) references protests(protest_id) ON DELETE CASCADE
 );
 
 CREATE TABLE if not exists news_likes(
