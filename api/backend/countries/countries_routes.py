@@ -13,7 +13,7 @@ def get_countries():
     cursor = db.get_db().cursor()
 
     #need to edit
-    query = 'SELECT country, protests_per_capita, population, gdp_per_capita, unemployment_rate, urbanization_rate, inflation_rate FROM countries'
+    query = 'SELECT country, protests_per_capita, population, gdp_per_capita, unemployment_rate, urbanization_rate, inflation_rate FROM country'   
     filters = []
 
     #     # Apply filters

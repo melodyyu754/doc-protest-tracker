@@ -16,7 +16,7 @@ protests = Blueprint('protests', __name__)
 def get_protests():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
-    query = 'SELECT location, date, description, created_by, cause, country FROM protests'
+    query = 'SELECT protest_id, location, date, description, created_by, cause, country FROM protests'
     cursor.execute(query)
     row_headers = [x[0] for x in cursor.description]
     data = cursor.fetchall() # give back all the date from the sql statement
@@ -202,13 +202,42 @@ def add_new_protest():
     
 #     return jsonify(json_data)
 
+
+
+#  location VARCHAR(80) NOT NULL,
+#     date DATE NOT NULL,
+#     description TEXT,
+#    longitude FLOAT NOT NULL,
+#     latitude FLOAT NOT NULL,
 # UPDATE a post
 @protests.route('/protest', methods = ['PUT'])
 def update_protest():
-    product_info = request.json
-    current_app.logger.info(product_info)
+   try:
+        connection = db.get_db()
+        cursor = connection.cursor()
 
-    return "Success"
+        the_data = request.json
+        protest_id = the_data['protest_id']
+        location = the_data['location']
+        description = the_data['description']
+      
+
+        query = 'UPDATE protests SET location = %s, description = %s WHERE protest_id = %s'
+
+        current_app.logger.info(f'Updating post with post_id: {protest_id}')
+        cursor.execute(query, (location, description, protest_id))
+        connection.commit()
+
+        if cursor.rowcount == 0:
+            return make_response(jsonify({"error": "Post not found"}), 404)
+
+        return make_response(jsonify({"message": "Post updated successfully"}), 200)
+   except Error as e:
+        current_app.logger.error(f"Error updating post with post_id: {protest_id}, error: {e}")
+        return make_response(jsonify({"error": "Internal server error"}), 500)
+   finally:
+        if cursor:
+            cursor.close()
 
 # DELETE a post
 @protests.route('/protest/<int:id>', methods=['DELETE'])
@@ -216,9 +245,9 @@ def delete_protest(id):
     cursor = db.get_db().cursor()
 
     # Constructing the query to delete the post by id
-    query = 'DELETE FROM protests WHERE id = %s'
+    query = 'DELETE FROM protests WHERE protest_id = %s'
     
-    current_app.logger.info(f'Deleting post with id: {id}')
+    current_app.logger.info(f'Deleting protest with id: {id}')
     cursor.execute(query, (id,))
     db.get_db().commit()
     
