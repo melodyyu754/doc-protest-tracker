@@ -40,7 +40,7 @@ if st.button("Update Post"):
     if post_id and title and text:
         # Here, you would typically integrate with your forum's database or API to update the post data.
         # Example API endpoint to update an existing post
-        api_url = f"http://your-api-url.com/posts/{post_id}"
+        api_url = f"http://api:4000/psts/post"
         payload = {
             "title": title,
            
@@ -62,7 +62,18 @@ with col2:
   st.write("### Delete Post")
   delete_post_id = st.text_input("Delete Post ID")
   # add a button to delete the post
-  if st.button("Delete Post", type="secondary", use_container_width=True):
-      # call the delete post function
-      deleted_post = delete_post(delete_post_id)
-      st.write(deleted_post)
+  if st.button("Delete Post"):
+            if delete_post_id:
+
+                # Example API endpoint to delete an existing post
+                api_url = f"http://api:4000/psts/post/{int(delete_post_id)}"
+                response = requests.delete(api_url)
+                
+                if response.status_code == 200:
+                    st.success("Post deleted successfully!")
+                    # Optionally, clear the form after submission
+                    st.experimental_rerun()
+                else:
+                    st.error("Failed to delete post. Please try again.")
+            else:
+                st.warning("Please fill in the post ID.")
