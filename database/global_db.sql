@@ -15,7 +15,7 @@ CREATE TABLE if not exists cause (
 CREATE TABLE if not exists country (
     year INT,
     country VARCHAR(80) UNIQUE NOT NULL,
-    protests_per_capita FLOAT, # where is this
+    protests_per_capita FLOAT, 
     population INT,
     gdp_per_capita FLOAT,
     unemployment_rate FLOAT,
