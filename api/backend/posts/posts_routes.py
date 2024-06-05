@@ -197,10 +197,31 @@ def add_new_post():
 # UPDATE a post
 @posts.route('/post', methods = ['PUT'])
 def update_post():
-    product_info = request.json
-    current_app.logger.info(product_info)
+    try:
+        connection = db.get_db()
+        cursor = connection.cursor()
 
-    return "Success"
+        the_data = request.json
+        post_id = the_data['post_id']
+        title = the_data['title']
+        text = the_data['text']
+
+        query = 'UPDATE posts SET title = %s, text = %s WHERE post_id = %s'
+
+        current_app.logger.info(f'Updating post with post_id: {post_id}')
+        cursor.execute(query, (title, text, post_id))
+        connection.commit()
+
+        if cursor.rowcount == 0:
+            return make_response(jsonify({"error": "Post not found"}), 404)
+
+        return make_response(jsonify({"message": "Post updated successfully"}), 200)
+    except Error as e:
+        current_app.logger.error(f"Error updating post with post_id: {post_id}, error: {e}")
+        return make_response(jsonify({"error": "Internal server error"}), 500)
+    finally:
+        if cursor:
+            cursor.close()
 
 # DELETE a post
 @posts.route('/post/<int:id>', methods=['DELETE'])
@@ -208,9 +229,9 @@ def delete_post(id):
     cursor = db.get_db().cursor()
 
     # Constructing the query to delete the post by id
-    query = 'DELETE FROM posts WHERE id = %s'
+    query = 'DELETE FROM posts WHERE post_id = %s'
     
-    current_app.logger.info(f'Deleting post with id: {id}')
+    current_app.logger.info(f'Deleting post with post_id: {id}')
     cursor.execute(query, (id,))
     db.get_db().commit()
     
