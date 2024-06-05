@@ -41,7 +41,7 @@ CREATE TABLE if not exists users (
 );
 
 CREATE TABLE if not exists protests (
-    protest_id INT UNIQUE NOT NULL,
+    protest_id INT UNIQUE NOT NULL AUTO_INCREMENT,
     location VARCHAR(80) NOT NULL,
     date DATE NOT NULL,
     description TEXT,
