@@ -1,8 +1,7 @@
-# import numpy as np 
-# import pandas as pd
-# from sklearn.model_selection import train_test_split
-# from sklearn.metrics import r2_score
-# import numpy as np
+import numpy as np 
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
 
 # df_scaled = pd.read_csv("backend/model1/data_scaled.csv")
 # df_not_scaled = pd.read_csv("backend/model1/all_data_revised.csv")
@@ -89,47 +88,52 @@
 #     lobf = linear_regression(X_train_poly, y_train)
 #     return lobf
 
-# lobf = initialize()
-
-# def predict(public_trust_input, gdp_per_capita_input, region_input):
-#         public_trust_input_scaled = ((public_trust_input - df_not_scaled['public_trust_percentage'].mean()) / df_not_scaled['public_trust_percentage'].std()).round(3)
-#         print(public_trust_input_scaled)
-#         gdp_per_capita_input_scaled = ((gdp_per_capita_input - df_not_scaled['gdp_per_capita'].mean()) / df_not_scaled['gdp_per_capita'].std()).round(3)
-#         print(gdp_per_capita_input_scaled)
-#         if region_input == 'Western':
-#              input_vector = np.array([[public_trust_input_scaled,
-#                                   gdp_per_capita_input_scaled,
-#                                   public_trust_input_scaled ** 2,
-#                                   gdp_per_capita_input_scaled ** 2,
-#                                   public_trust_input_scaled ** 3,
-#                                   gdp_per_capita_input_scaled ** 3,
-#                                   1,
-#                                   0,
-#                                   0,
-#                                   public_trust_input_scaled * gdp_per_capita_input_scaled]])
-#         elif region_input == 'Asian':
-#              input_vector = np.array([[public_trust_input_scaled,
-#                                   gdp_per_capita_input_scaled,
-#                                   public_trust_input_scaled ** 2,
-#                                   gdp_per_capita_input_scaled ** 2,
-#                                   public_trust_input_scaled ** 3,
-#                                   gdp_per_capita_input_scaled ** 3,
-#                                   0,
-#                                   1,
-#                                   0,
-#                                   public_trust_input_scaled * gdp_per_capita_input_scaled]])
-#         else:
-#              input_vector = np.array([[public_trust_input_scaled,
-#                                   gdp_per_capita_input_scaled,
-#                                   public_trust_input_scaled ** 2,
-#                                   gdp_per_capita_input_scaled ** 2,
-#                                   public_trust_input_scaled ** 3,
-#                                   gdp_per_capita_input_scaled ** 3,
-#                                   0,
-#                                   0,
-#                                   1,
-#                                   public_trust_input_scaled * gdp_per_capita_input_scaled]])
+def predict(var01, var02, var03):
+    lobf = initialize()
+    var01 = pd.to_numeric(var01)
+    var02 = pd.to_numeric(var02)
+    public_trust_input_scaled = ((int(var01) - df_not_scaled['public_trust_percentage'].mean()) / df_not_scaled['public_trust_percentage'].std()).round(3)
+    print(public_trust_input_scaled)
+    gdp_per_capita_input_scaled = ((int(var02) - df_not_scaled['gdp_per_capita'].mean()) / df_not_scaled['gdp_per_capita'].std()).round(3)
+    print(gdp_per_capita_input_scaled)
+    if var03 == 'Western':
+        input_vector = np.array([[public_trust_input_scaled,
+                                  gdp_per_capita_input_scaled,
+                                  public_trust_input_scaled ** 2,
+                                  gdp_per_capita_input_scaled ** 2,
+                                  public_trust_input_scaled ** 3,
+                                  gdp_per_capita_input_scaled ** 3,
+                                  1,
+                                  0,
+                                  0,
+                                  public_trust_input_scaled * gdp_per_capita_input_scaled]])
+    elif var03 == 'Asian':
+        input_vector = np.array([[public_trust_input_scaled,
+                                  gdp_per_capita_input_scaled,
+                                  public_trust_input_scaled ** 2,
+                                  gdp_per_capita_input_scaled ** 2,
+                                  public_trust_input_scaled ** 3,
+                                  gdp_per_capita_input_scaled ** 3,
+                                  0,
+                                  1,
+                                  0,
+                                  public_trust_input_scaled * gdp_per_capita_input_scaled]])
+    else:
+        input_vector = np.array([[public_trust_input_scaled,
+                                  gdp_per_capita_input_scaled,
+                                  public_trust_input_scaled ** 2,
+                                  gdp_per_capita_input_scaled ** 2,
+                                  public_trust_input_scaled ** 3,
+                                  gdp_per_capita_input_scaled ** 3,
+                                  0,
+                                  0,
+                                  1,
+                                  public_trust_input_scaled * gdp_per_capita_input_scaled]])
              
-#         input_vector = np.concatenate((np.ones((1, 1)), input_vector), axis=1)
-#         prediction = np.matmul(input_vector, lobf)
-#         return prediction
+    input_vector = np.concatenate((np.ones((1, 1)), input_vector), axis=1)
+    # this might be event per capita, which we should probably change???
+    prediction = np.matmul(input_vector, lobf)
+    return prediction[0]
+
+
+#print(predict(50, 0, "Western"))
