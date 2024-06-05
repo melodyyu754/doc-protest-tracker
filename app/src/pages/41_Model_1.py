@@ -40,6 +40,6 @@ logger.info(f'var_03 = {var_03}')
 if st.button('Predict Number of Protests',
              type='primary',
              use_container_width=True):
-  results = requests.get(f'http://api:4000/model1/{var_01}/{var_02}/{var_03}').json()
+  results = requests.get(f'http://api:4000/model1/model1/{var_01}/{var_02}/{var_03}').json()
   logger.info(f"Response: {results}")
   st.write(results)
