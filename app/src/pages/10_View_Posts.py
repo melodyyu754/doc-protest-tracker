@@ -29,11 +29,20 @@ st.write(f"### Hi, {st.session_state['first_name']}.")
 
 # st.dataframe(data)
 
+causes_response = requests.get('http://api:4000/cause/names').json()
+cause_names = [cause['name'] for cause in causes_response]
+cause_dict = {cause['name']: cause['id'] for cause in causes_response}
+
+
 # Inputs for filtering
 creation_time = st.date_input('Creation Time', value = None)
+
+
 # Multi-select inputs for usernames and cause names
-selected_usernames = st.multiselect('Usernames', list(usernames.keys()))
-selected_causes = st.multiselect('Causes', list(causes.keys()))
+# doing later
+#selected_usernames = st.multiselect('Usernames', list('1', '2', '3'))
+# Multi-select for causes
+selected_causes = st.multiselect("Select Causes", options=cause_names)
 
 # Button to trigger the filter action
 if st.button('Filter Posts'):
@@ -41,10 +50,10 @@ if st.button('Filter Posts'):
     params = {}
     if creation_time:
         params['creation_time'] = creation_time
-    if selected_usernames:
-        params['user_id'] = [usernames[username] for username in selected_usernames]
+    # if selected_usernames:
+    #     params['user_id'] = [usernames[username] for username in selected_usernames]
     if selected_causes:
-        params['cause'] = [causes[cause] for cause in selected_causes]
+        params['cause'] = [cause_dict[cause] for cause in selected_causes]
 
     # Make a request to the backend API
     response = requests.get('http://api:4000/psts/posts', params= params).json()
