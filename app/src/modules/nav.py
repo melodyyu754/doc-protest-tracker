@@ -1,6 +1,7 @@
 # Idea borrowed from https://github.com/fsmosca/sample-streamlit-authenticator
 
 import streamlit as st
+from st_pages import Page, Section, show_pages, add_page_title
 
 
 #### ------------------------ Home/About Page ------------------------

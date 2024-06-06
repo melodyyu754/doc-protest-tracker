@@ -17,11 +17,9 @@ logger = logging.getLogger()
 SideBarLinks()
 
 # set the header of the page
-<<<<<<< HEAD
+
 st.header('Community Post Forum')
-=======
-st.header('All Posts')
->>>>>>> 5b99559 (working on filtering)
+
 
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
