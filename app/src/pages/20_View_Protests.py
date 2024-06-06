@@ -43,4 +43,16 @@ try:
   data = requests.get('http://api:4000/prtsts/protests').json()
 except:
   st.write("**Important**: Could not connect to sample api")
-st.table(data)
+
+# Define a function to create a card for each post
+def create_card(protest):
+    st.markdown(f"""
+    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+        <h2>{protest['Cause']}</h2>
+        <h4>{protest['Date']}</h4>
+        <h4>{protest['City']},{protest['Country']} </h4>
+        <p>{protest['Description']}</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+
