@@ -3,7 +3,7 @@
 # Remove this file if you are not using it in your project
 ########################################################
 from flask import Blueprint, request, jsonify, make_response, current_app
-# import json
+import json
 from backend.db_connection import db
 from backend.model1.model1_functions import predict
 
@@ -24,4 +24,4 @@ def predicting_amount_of_protests(var01, var02, var03):
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
 
-#     return the_response
+    return the_response
