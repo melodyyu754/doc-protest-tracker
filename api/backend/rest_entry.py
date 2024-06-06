@@ -5,11 +5,9 @@ from backend.db_connection import db
 # from backend.model1.model1_routes import model1
 from backend.posts.posts_routes import posts
 from backend.protests.protests_routes import protests
-from backend.posts.posts_routes import posts
 from backend.model1.model1_routes import model1
 
 
-import os
 from dotenv import load_dotenv
 from flask import Flask
 
