@@ -2,8 +2,6 @@ from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from backend.db_connection import db
 
-
-
 countries = Blueprint('countries', __name__)
 
 # Get all the products from the database
@@ -53,3 +51,14 @@ def get_countries():
         json_data.append(dict(zip(column_headers, row)))
 
     return jsonify(json_data)
+
+@countries.route('/names', methods=['GET'])
+def get_country_names():
+    # get a cursor object from the database
+    cursor = db.get_db().cursor()
+    query = 'SELECT country FROM country'   
+    current_app.logger.info(query)
+    cursor.execute(query)
+    theData = cursor.fetchall()
+    country_names = [row[0] for row in theData]
+    return jsonify(country_names)

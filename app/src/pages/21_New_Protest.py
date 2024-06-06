@@ -12,12 +12,15 @@ SideBarLinks()
 st.sidebar.header("New Protest")
 
 st.title("Create a New Protest")
-user_id = st.selectbox("User ID", options=['1','2','3'], placeholder="Choose an option") # (created_by)
+
+country_names = requests.get('http://api:4000/cntry/names').json()
+cause_names = requests.get('http://api:4000/cause/names').json()
+user_id = st.selectbox("Your User ID", placeholder="Choose an option", index = None, options=['1','2','3']) # (created_by)
 location = st.text_input("Location (City)")
 date = st.date_input("Protest Date", value = None)
-violent = st.selectbox("Violent?", options=["True","False"], placeholder="Choose an option")
-country = st.selectbox("Country", options=["United States", "Spain", "Belgium"], placeholder="Choose an option")
-cause = st.selectbox("Protest Cause", options=["BLM", "Free Palestine", "Pro Choice"], placeholder="Choose an option")
+violent = st.selectbox("Violent?", options=["True","False"], index = None, placeholder="Choose an option")
+country = st.selectbox("Country", options=country_names, index = None, placeholder="Choose an option")
+cause = st.selectbox("Protest Cause", placeholder="Choose an option",index = None, options=cause_names)
 description = st.text_area("Protest Description")
 
 
