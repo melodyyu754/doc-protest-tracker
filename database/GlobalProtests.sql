@@ -117,6 +117,31 @@ CREATE TABLE if not exists user_interests (
     FOREIGN KEY (user) references users(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS model1_lobf_coefficients(
+    sequence_number INTEGER AUTO_INCREMENT PRIMARY KEY,
+    beta_0 FLOAT,
+    beta_1 FLOAT,
+    beta_2 FLOAT,
+    beta_3 FLOAT,
+    beta_4 FLOAT,
+    beta_5 FLOAT,
+    beta_6 FLOAT,
+    beta_7 FLOAT,
+    beta_8 FLOAT,
+    beta_9 FLOAT,
+    beta_10 FLOAT
+);
+
+CREATE TABLE IF NOT EXISTS model1_coefficients(
+    sequence_number INTEGER AUTO_INCREMENT PRIMARY KEY,
+    beta_vals varchar(100)
+);
+
+-- INSERT INTO model1_lobf_coefficients(beta_0, beta_1, beta_2, beta_3, beta_4, beta_5, beta_6, beta_7, beta_8, beta_9, beta_10) values (0.57510206  0.22857838  0.13772783  0.04979198 -0.4937919  -0.11312699
+--   0.1375963  -0.22989093 -1.85444731 -0.22844257  0.08438092);
+
+-- INSERT INTO model1_coefficients (beta_vals) VALUES ("[0.57510206, 0.22857838, 0.13772783, 0.04979198, -0.4937919, -0.11312699, 0.1375963, -0.22989093, -1.85444731, -0.22844257, 0.08438092]");
+
 INSERT INTO cause (cause_id, cause_name) VALUES ('1', 'Racial Inequality');
 INSERT INTO cause (cause_id, cause_name) VALUES ('2', 'Climate Change');
 INSERT INTO cause (cause_id, cause_name) VALUES ('3', 'Political Corruption');

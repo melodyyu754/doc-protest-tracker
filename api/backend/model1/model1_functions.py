@@ -2,6 +2,10 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
+from backend.db_connection import db
+from flask import jsonify
+import logging
+logger = logging.getLogger()
 
 df_scaled = pd.read_csv("backend/model1/data_scaled.csv")
 df_not_scaled = pd.read_csv("backend/model1/all_data_revised.csv")
@@ -89,9 +93,24 @@ def initialize():
     return lobf
 
 def predict(var01, var02, var03):
-    lobf = initialize()
+    """
+    Retreives model parameters from the database and uses them for real-time prediction
+    """
     var01 = pd.to_numeric(var01)
     var02 = pd.to_numeric(var02)
+
+    # get a database cursor 
+    cursor = db.get_db().cursor()
+    # get the model params from the database
+    query = 'SELECT beta_0, beta_1, beta_2, beta_3, beta_4, beta_5, beta_6, beta_7, beta_8, beta_9, beta_10 FROM model1_lobf_coefficients ORDER BY sequence_number DESC LIMIT 1'
+    cursor.execute(query)
+    values = cursor.fetchone()
+    lobf_coefficients = list(values)
+    logger.info(f"coefficients: {lobf_coefficients}")
+
+    # turn the values from the database into a numpy array
+    lobf = np.array(list(map(float, lobf_coefficients)))
+
     public_trust_input_scaled = ((int(var01) - df_not_scaled['public_trust_percentage'].mean()) / df_not_scaled['public_trust_percentage'].std()).round(3)
     print(public_trust_input_scaled)
     gdp_per_capita_input_scaled = ((int(var02) - df_not_scaled['gdp_per_capita'].mean()) / df_not_scaled['gdp_per_capita'].std()).round(3)
@@ -134,6 +153,3 @@ def predict(var01, var02, var03):
     # this might be event per capita, which we should probably change???
     prediction = np.matmul(input_vector, lobf)
     return prediction[0]
-
-
-#print(predict(50, 0, "Western"))
