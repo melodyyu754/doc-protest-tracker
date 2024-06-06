@@ -1,6 +1,7 @@
 # Idea borrowed from https://github.com/fsmosca/sample-streamlit-authenticator
 
 import streamlit as st
+from st_pages import Page, Section, show_pages, add_page_title
 
 
 #### ------------------------ Home/About Page ------------------------
@@ -26,8 +27,15 @@ def ViewPostsNav():
 def NewPostNav():
     st.sidebar.page_link("pages/11_New_Post.py", label="New Post", icon='✍️')
 
-def UpdateDeletePostNav():
-    st.sidebar.page_link("pages/12_Update_Delete_Post.py", label="Update/Delete Post", icon='📝')
+# def UpdateDeletePostNav():
+#     st.sidebar.page_link("pages/12_Update_Delete_Post.py", label="Update/Delete Post", icon='📝')
+
+def DeletePostNav():
+    st.sidebar.page_link("pages/12_Update_Post.py", label="Delete Post", icon='📝')
+
+def UpdatePostNav():
+    st.sidebar.page_link("pages/13_Delete_Post.py", label="Edit Post", icon='📝')
+
 
 #### ------------------------ Protest Pages ------------------------
 def ViewProtestsNav():
@@ -36,8 +44,14 @@ def ViewProtestsNav():
 def NewProtestNav():
     st.sidebar.page_link("pages/21_New_Protest.py", label="New Protest", icon='🚩')
 
-def UpdateDeleteProtestNav():
-    st.sidebar.page_link("pages/22_Update_Delete_Protest.py", label="Update/Delete Protest", icon='✏️')
+# def UpdateDeleteProtestNav():
+#     st.sidebar.page_link("pages/22_Update_Delete_Protest.py", label="Update/Delete Protest", icon='✏️')
+
+def DeleteProtestNav():
+    st.sidebar.page_link("pages/23_Delete_Protests.py", label="Remove Protest", icon='✏️')
+
+def UpdateProtestNav():
+    st.sidebar.page_link("pages/22_Update_Protest.py", label="Add Protest", icon='✏️')
 
 def CompareProtestsNav():
     st.sidebar.page_link("pages/23_Compare_Protests.py", label="Compare Protests", icon='⚖️')
@@ -89,10 +103,12 @@ def SideBarLinks(show_home=False):
             ActivistHomeNav()
             ViewPostsNav()
             NewPostNav()
-            UpdateDeletePostNav()
+            UpdatePostNav()
+            DeletePostNav()
             ViewProtestsNav()
             NewProtestNav()
-            UpdateDeleteProtestNav()
+            UpdateProtestNav()
+            DeleteProtestNav()
 
         #  If the user is a politician, show the politician pages
         if st.session_state['role'] == 'politician':
@@ -106,7 +122,8 @@ def SideBarLinks(show_home=False):
             JournalistHomeNav()
             ViewPostsNav()
             NewPostNav()
-            UpdateDeletePostNav()
+            UpdatePostNav()
+            DeletePostNav()
             ViewProtestsNav()
             SaveProtestsNav()
             # CompareProtestsNav()
@@ -123,4 +140,3 @@ def SideBarLinks(show_home=False):
             del st.session_state['role']
             del st.session_state['authenticated']
             st.switch_page('Home.py')
-
