@@ -4,6 +4,12 @@ logger = logging.getLogger()
 import streamlit as st
 from modules.nav import SideBarLinks
 import requests
+import json
+
+
+lobf_json = requests.get(f'http://api:4000/model1/lobf').json()
+logger.info(f'hiii = {lobf_json}')
+requests.post(f'http://api:4000/model1/insert-params', json=lobf_json)
 
 st.set_page_config(layout = 'wide')
 
