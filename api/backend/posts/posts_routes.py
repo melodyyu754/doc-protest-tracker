@@ -154,7 +154,7 @@ def add_post():
     query += "'" + creation_date + "',"
     query += "'" + text + "',"
     query += "'" + str(created_by) + "',"
-    query += "'" + str(cause) + "')g"
+    query += "'" + str(cause) + "')"
    
     
     print(query)
