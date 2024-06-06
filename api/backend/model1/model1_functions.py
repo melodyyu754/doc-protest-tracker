@@ -2,96 +2,115 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
+from backend.db_connection import db
+from flask import jsonify
+import logging
+logger = logging.getLogger()
 
 df_scaled = pd.read_csv("backend/model1/data_scaled.csv")
 df_not_scaled = pd.read_csv("backend/model1/all_data_revised.csv")
 
-# def linear_regression(X, y):
-#     """performs the linear perceptron algorithm which takes in an original X matrix and a y vector
-#     Args:
-#         X (2d-array): represents a matrix of a bias column with numeric values representative of the x features 
-#         y (1d-array): represents a vector of labels (-1 or 1)
-#     Returns:
-#         w (1d-array): the final weight vector that determines the direction and orientation of the line of best fit
-#     """
-#     return np.linalg.inv(X.T.dot(X)).dot(X.T).dot(y) 
+def linear_regression(X, y):
+    """performs the linear perceptron algorithm which takes in an original X matrix and a y vector
+    Args:
+        X (2d-array): represents a matrix of a bias column with numeric values representative of the x features
+        y (1d-array): represents a vector of labels (-1 or 1)
+    Returns:
+        w (1d-array): the final weight vector that determines the direction and orientation of the line of best fit
+    """
+    return np.linalg.inv(X.T.dot(X)).dot(X.T).dot(y)
 
-# def linreg_predict(Xnew, ynew, m):
-#     """takes in the X matrix, y vector, and the m vector which contains the coefficients of the calculated line of best fit and outputs a dictionary that contains the predicted y values, the residuals, the mse, and the r2 score
+def linreg_predict(Xnew, ynew, m):
+    """takes in the X matrix, y vector, and the m vector which contains the coefficients of the calculated line of best fit and outputs a dictionary that contains the predicted y values, the residuals, the mse, and the r2 score
 
-#     Args:
-#         Xnew (1d or 2d-array): which includes all the desired predictor feature values (not including the bias term)
-#         y (1d-array):  includes all corresponding output values to Xnew
-#         m (1d-array): contains the coefficients from the line of best fit function
-#     Returns:
-#         preds (dictionary): dictionary containing the predicted y values, the residuals between the y values and the predicted y values, the mse, and the r2 score
-#     """
-#     linreg_stats = {}
-#     ypreds = np.matmul(Xnew, m)
-#     linreg_stats['ypreds'] = ypreds
-#     resids = ynew - ypreds
-#     linreg_stats['resids'] = resids
+    Args:
+        Xnew (1d or 2d-array): which includes all the desired predictor feature values (not including the bias term)
+        y (1d-array):  includes all corresponding output values to Xnew
+        m (1d-array): contains the coefficients from the line of best fit function
+    Returns:
+        preds (dictionary): dictionary containing the predicted y values, the residuals between the y values and the predicted y values, the mse, and the r2 score
+    """
+    linreg_stats = {}
+    ypreds = np.matmul(Xnew, m)
+    linreg_stats['ypreds'] = ypreds
+    resids = ynew - ypreds
+    linreg_stats['resids'] = resids
     
-#     #the mse function
-#     mse = np.square(resids).mean()
-#     linreg_stats['mse'] = mse
-#     linreg_stats['r2'] = r2_score(ynew, ypreds)
+    #the mse function
+    mse = np.square(resids).mean()
+    linreg_stats['mse'] = mse
+    linreg_stats['r2'] = r2_score(ynew, ypreds)
     
-#     return linreg_stats
+    return linreg_stats
 
-# def initialize():
-#     # PRESENT MODEL
-#     # Defining my X and y arrays
-#     X = df_scaled[['public_trust_percentage_scaled', 'gdp_per_capita_scaled', 'Western', 'Asian', 'South American']]
-#     y = df_scaled['events_per_capita_scaled']
+def initialize():
+    # PRESENT MODEL
+    # Defining my X and y arrays
+    X = df_scaled[['public_trust_percentage_scaled', 'gdp_per_capita_scaled', 'Western', 'Asian', 'South American']]
+    y = df_scaled['events_per_capita_scaled']
 
-#     # Cross validation
-#     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    # Cross validation
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-#     # Adding Interaction Terms because public trust percentage and gdp per capita are highly correlated  
-#     X_train['public_trust_x_gdp_per_capita'] = X_train['public_trust_percentage_scaled'] * X_train['gdp_per_capita_scaled']
-#     X_test['public_trust_x_gdp_per_capita'] = X_test['public_trust_percentage_scaled'] * X_test['gdp_per_capita_scaled'] 
+    # Adding Interaction Terms because public trust percentage and gdp per capita are highly correlated  
+    X_train['public_trust_x_gdp_per_capita'] = X_train['public_trust_percentage_scaled'] * X_train['gdp_per_capita_scaled']
+    X_test['public_trust_x_gdp_per_capita'] = X_test['public_trust_percentage_scaled'] * X_test['gdp_per_capita_scaled'] 
 
-#     # addressing multicolinerarity by having these features interact since they are highly correlated
-#     X_train_poly_2a = X_train['public_trust_percentage_scaled'] * X_train['public_trust_percentage_scaled']
-#     X_train_poly_2b = X_train['gdp_per_capita_scaled'] * X_train['gdp_per_capita_scaled']
-#     X_train_poly_3a = X_train['public_trust_percentage_scaled'] * X_train['public_trust_percentage_scaled'] * X_train['public_trust_percentage_scaled']
-#     X_train_poly_3b = X_train['gdp_per_capita_scaled'] * X_train['gdp_per_capita_scaled'] * X_train['gdp_per_capita_scaled']
+    # addressing multicolinerarity by having these features interact since they are highly correlated
+    X_train_poly_2a = X_train['public_trust_percentage_scaled'] * X_train['public_trust_percentage_scaled']
+    X_train_poly_2b = X_train['gdp_per_capita_scaled'] * X_train['gdp_per_capita_scaled']
+    X_train_poly_3a = X_train['public_trust_percentage_scaled'] * X_train['public_trust_percentage_scaled'] * X_train['public_trust_percentage_scaled']
+    X_train_poly_3b = X_train['gdp_per_capita_scaled'] * X_train['gdp_per_capita_scaled'] * X_train['gdp_per_capita_scaled']
 
-#     X_test_poly_2a = X_test['public_trust_percentage_scaled'] * X_test['public_trust_percentage_scaled']
-#     X_test_poly_2b = X_test['gdp_per_capita_scaled'] * X_test['gdp_per_capita_scaled']
-#     X_test_poly_3a = X_test['public_trust_percentage_scaled'] * X_test['public_trust_percentage_scaled'] * X_test['public_trust_percentage_scaled']
-#     X_test_poly_3b = X_test['gdp_per_capita_scaled'] * X_test['gdp_per_capita_scaled'] * X_test['gdp_per_capita_scaled']
+    X_test_poly_2a = X_test['public_trust_percentage_scaled'] * X_test['public_trust_percentage_scaled']
+    X_test_poly_2b = X_test['gdp_per_capita_scaled'] * X_test['gdp_per_capita_scaled']
+    X_test_poly_3a = X_test['public_trust_percentage_scaled'] * X_test['public_trust_percentage_scaled'] * X_test['public_trust_percentage_scaled']
+    X_test_poly_3b = X_test['gdp_per_capita_scaled'] * X_test['gdp_per_capita_scaled'] * X_test['gdp_per_capita_scaled']
 
-#     # Concatenate features individually to make the model simpler 
-#     # right now my model only has x_a * x_b + x_a^3 * x_a^3 is this what you meant? or should x_a^2 * x_a^2 also be included
-#     X_train_poly = np.concatenate((X_train[['public_trust_percentage_scaled', 'gdp_per_capita_scaled']],
-#                                     X_train_poly_2a.values.reshape(-1, 1),
-#                                     X_train_poly_2b.values.reshape(-1, 1),
-#                                     X_train_poly_3a.values.reshape(-1, 1), 
-#                                     X_train_poly_3b.values.reshape(-1, 1)), axis=1)
-#     X_test_poly = np.concatenate((X_test[['public_trust_percentage_scaled', 'gdp_per_capita_scaled']],
-#                                     X_test_poly_2a.values.reshape(-1, 1),
-#                                     X_test_poly_2b.values.reshape(-1, 1),
-#                                     X_test_poly_3a.values.reshape(-1, 1), 
-#                                     X_test_poly_3b.values.reshape(-1, 1)), axis=1)
+    # Concatenate features individually to make the model simpler 
+    # right now my model only has x_a * x_b + x_a^3 * x_a^3 is this what you meant? or should x_a^2 * x_a^2 also be included
+    X_train_poly = np.concatenate((X_train[['public_trust_percentage_scaled', 'gdp_per_capita_scaled']],
+                                    X_train_poly_2a.values.reshape(-1, 1),
+                                    X_train_poly_2b.values.reshape(-1, 1),
+                                    X_train_poly_3a.values.reshape(-1, 1), 
+                                    X_train_poly_3b.values.reshape(-1, 1)), axis=1)
+    X_test_poly = np.concatenate((X_test[['public_trust_percentage_scaled', 'gdp_per_capita_scaled']],
+                                    X_test_poly_2a.values.reshape(-1, 1),
+                                    X_test_poly_2b.values.reshape(-1, 1),
+                                    X_test_poly_3a.values.reshape(-1, 1), 
+                                    X_test_poly_3b.values.reshape(-1, 1)), axis=1)
 
-#     # adding bias column to my X_train and X_test matrix
-#     X_train_poly = np.concatenate((np.ones((X_train_poly.shape[0], 1)), X_train_poly), axis=1)
-#     X_test_poly = np.concatenate((np.ones((X_test_poly.shape[0], 1)), X_test_poly), axis=1)
+    # adding bias column to my X_train and X_test matrix
+    X_train_poly = np.concatenate((np.ones((X_train_poly.shape[0], 1)), X_train_poly), axis=1)
+    X_test_poly = np.concatenate((np.ones((X_test_poly.shape[0], 1)), X_test_poly), axis=1)
 
-#     # Concatenate the transformed features with the original categorical features
-#     X_train_poly = np.concatenate((X_train_poly, X_train[['Western', 'Asian', 'South American', 'public_trust_x_gdp_per_capita']]), axis=1)
-#     X_test_poly = np.concatenate((X_test_poly, X_test[['Western', 'Asian', 'South American', 'public_trust_x_gdp_per_capita']]), axis=1)
+    # Concatenate the transformed features with the original categorical features
+    X_train_poly = np.concatenate((X_train_poly, X_train[['Western', 'Asian', 'South American', 'public_trust_x_gdp_per_capita']]), axis=1)
+    X_test_poly = np.concatenate((X_test_poly, X_test[['Western', 'Asian', 'South American', 'public_trust_x_gdp_per_capita']]), axis=1)
 
-#     # --- Create and Fit Model ---
-#     lobf = linear_regression(X_train_poly, y_train)
-#     return lobf
+    # --- Create and Fit Model ---
+    lobf = linear_regression(X_train_poly, y_train)
+    return lobf
 
 def predict(var01, var02, var03):
-    lobf = initialize()
+    """
+    Retreives model parameters from the database and uses them for real-time prediction
+    """
     var01 = pd.to_numeric(var01)
     var02 = pd.to_numeric(var02)
+
+    # get a database cursor 
+    cursor = db.get_db().cursor()
+    # get the model params from the database
+    query = 'SELECT beta_0, beta_1, beta_2, beta_3, beta_4, beta_5, beta_6, beta_7, beta_8, beta_9, beta_10 FROM model1_lobf_coefficients ORDER BY sequence_number DESC LIMIT 1'
+    cursor.execute(query)
+    values = cursor.fetchone()
+    lobf_coefficients = list(values)
+    logger.info(f"coefficients: {lobf_coefficients}")
+
+    # turn the values from the database into a numpy array
+    lobf = np.array(list(map(float, lobf_coefficients)))
+
     public_trust_input_scaled = ((int(var01) - df_not_scaled['public_trust_percentage'].mean()) / df_not_scaled['public_trust_percentage'].std()).round(3)
     print(public_trust_input_scaled)
     gdp_per_capita_input_scaled = ((int(var02) - df_not_scaled['gdp_per_capita'].mean()) / df_not_scaled['gdp_per_capita'].std()).round(3)
@@ -134,6 +153,3 @@ def predict(var01, var02, var03):
     # this might be event per capita, which we should probably change???
     prediction = np.matmul(input_vector, lobf)
     return prediction[0]
-
-
-#print(predict(50, 0, "Western"))
