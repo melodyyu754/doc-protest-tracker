@@ -12,6 +12,31 @@ st.set_page_config(layout="wide")
 SideBarLinks()
 
 st.title("Protests")
+
+col1, col2, col3 = st.columns(3)
+d = False
+if st.session_state['role'] != 'politician':
+  
+
+  with col1:
+    if st.button(label = "Add Protest",
+            type = 'primary',
+            use_container_width=True):
+      st.switch_page('pages/21_New_Protest.py')
+
+  with col2:
+    if st.button(label = "Update Protest",
+            type = 'primary',
+            use_container_width=True):
+      st.switch_page('pages/22_Update_Protest.py')
+
+  with col3:
+    if st.button(label = "Remove Protest",
+            type = 'primary',
+            use_container_width=True):
+      st.switch_page('pages/23_Delete_Protests.py')
+
+
 st.header("Past and Current Protests")
 data ={}
 try:
