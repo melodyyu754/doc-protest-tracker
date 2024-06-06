@@ -90,9 +90,6 @@ def add_protest():
     db.get_db().commit()
 
     return "Success"
-<<<<<<< HEAD
-
-<<<<<<< HEAD
 # Get one protest with one protest
 @protests.route('/protests/<protest_id>', methods=['GET'])
 def get_protest_detail(protest_id):
