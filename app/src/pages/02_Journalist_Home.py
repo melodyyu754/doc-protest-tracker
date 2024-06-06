@@ -39,10 +39,10 @@ if st.button('Save Protests',
               use_container_width=True):
     st.switch_page('pages/24_Save_Protests.py')
 
-if st.button('Compare Protests',
-              type='primary',
-              use_container_width=True):
-    st.switch_page('pages/23_Compare_Protests.py')
+# if st.button('Compare Protests',
+#               type='primary',
+#               use_container_width=True):
+#     st.switch_page('pages/23_Compare_Protests.py')
 
 if st.button('View Countries',
               type='primary',

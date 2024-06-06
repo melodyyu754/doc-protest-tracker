@@ -109,7 +109,7 @@ def SideBarLinks(show_home=False):
             UpdateDeletePostNav()
             ViewProtestsNav()
             SaveProtestsNav()
-            CompareProtestsNav()
+            # CompareProtestsNav()
             ViewCountriesNav()
             CompareCountriesNav()
             ViewModel1Nav()
