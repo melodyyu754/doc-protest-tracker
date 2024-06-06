@@ -6,6 +6,7 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from backend.db_connection import db
+from datetime import datetime
 
 # GET all posts, -filtering of posts 
 # POST  new post 
@@ -20,12 +21,39 @@ def get_posts():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
 
-    #need to edit
-    query = 'SELECT post_id, title, creation_date, text, created_by, cause, first_name, last_name FROM posts LEFT JOIN users ON posts.created_by = user_id'
+    query = """SELECT title, creation_date, text, CONCAT(first_name, ' ', last_name) as full_name, cause_name 
+    FROM posts
+        JOIN cause on posts.cause = cause.cause_id
+        JOIN users on posts.created_by = users.user_id
+    """
+
+
     filters = []
+
+        # Apply filters
+    if 'creation_date' in request.args:
+        filters.append(f"creation_date >= '{request.args['creation_date']}'")
+    if 'cause' in request.args:
+        causes = request.args.getlist('cause')
+        cause_filter = ', '.join(causes)
+        filters.append(f"cause IN ({cause_filter})")
+    if 'created_by' in request.args:
+        usernames = request.args.getlist('created_by')
+        user_filter = ', '.join(usernames)
+        filters.append(f"created_by IN ({user_filter})")
+
+
+    if filters:
+        query += ' WHERE ' + ' AND '.join(filters)
+
+    query += ' order by creation_date desc'
+    
 
     current_app.logger.info(query)
     cursor.execute(query)
+    
+    # use cursor to query the database for a list of products
+    # EDIT HERE: cursor.execute('SELECT id, product_code, product_name, list_price, category FROM products')
 
     # grab the column headers from the returned data
     column_headers = [x[0] for x in cursor.description]
@@ -43,6 +71,8 @@ def get_posts():
         json_data.append(dict(zip(column_headers, row)))
 
     return jsonify(json_data)
+
+
 
 
 @posts.route('/myposts/<user_id>', methods=['GET'])
