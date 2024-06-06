@@ -12,19 +12,57 @@ import requests
 SideBarLinks()
 
 # set the header of the page
-st.header('World Bank Data')
+st.header('All Posts')
 
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
 
-data = {} 
-try:
-  data = requests.get('http://api:4000/psts/posts').json()
-except:
-  st.write("**Important**: Could not connect to sample api, so using dummy data.")
-  data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
+# data = {} 
+# try:
+#   data = requests.get('http://api:4000/psts/posts').json()
+# except:
+#   st.write("**Important**: Could not connect to sample api, so using dummy data.")
+#   data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-st.dataframe(data)
+
+# date = st.date_input("Protest Date", value = None)
+
+# st.dataframe(data)
+
+# Inputs for filtering
+creation_time = st.date_input('Creation Time', value = None)
+# Multi-select inputs for usernames and cause names
+selected_usernames = st.multiselect('Usernames', list(usernames.keys()))
+selected_causes = st.multiselect('Causes', list(causes.keys()))
+
+# Button to trigger the filter action
+if st.button('Filter Posts'):
+    # Construct the query parameters
+    params = {}
+    if creation_time:
+        params['creation_time'] = creation_time
+    if selected_usernames:
+        params['user_id'] = [usernames[username] for username in selected_usernames]
+    if selected_causes:
+        params['cause'] = [causes[cause] for cause in selected_causes]
+
+    # Make a request to the backend API
+    response = requests.get('http://api:4000/psts/posts', params= params).json()
+    # Check if the request was successful
+    if response.status_code == 200:
+        filtered_posts = response.json()
+        if filtered_posts:
+            # Display the filtered posts in a table
+            df = pd.DataFrame(filtered_posts)
+            st.dataframe(df)
+        else:
+            st.write("No posts found with the given filters.")
+    else:
+        st.write("Error fetching filtered posts. Please try again.")
+
+
+
+
 
 
 # # get the countries from the world bank data
