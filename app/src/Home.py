@@ -21,6 +21,7 @@ if st.button("Act as Sally, a student activist at Columbia University",
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'activist'
     st.session_state['first_name'] = 'Sally'
+    st.session_state['user_id'] = 1
     st.switch_page('pages/00_Activist_Home.py')
 
 if st.button('Act as McGuinness, the president of the United States',
@@ -29,6 +30,7 @@ if st.button('Act as McGuinness, the president of the United States',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'politician'
     st.session_state['first_name'] = 'McGuinness'
+    st.session_state['user_id'] = 2
     st.switch_page('pages/01_Politician_Home.py')
 
 if st.button('Act as Sydney, a reporter at the New York Times',
@@ -37,4 +39,5 @@ if st.button('Act as Sydney, a reporter at the New York Times',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'journalist'
     st.session_state['first_name'] = 'Sydney'
+    st.session_state['user_id'] = 3
     st.switch_page('pages/02_Journalist_Home.py')

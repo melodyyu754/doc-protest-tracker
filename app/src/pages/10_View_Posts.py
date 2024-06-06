@@ -32,13 +32,36 @@ except:
 
 # Define a function to create a card for each post
 def create_card(post):
-    st.markdown(f"""
-    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-        <h3>{post['title']}</h3>
-        <p>{post['text']}</p>
-        <small>Posted by {post['created_by']} on {post['creation_date']}</small>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container():
+        st.markdown(f"""
+        <div style="border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
+            <h3>{post['title']}</h3>
+            <p>{post['text']}</p>
+            <small>Posted by {post['created_by']} on {post['creation_date']}</small>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Add a delete button if the post was created by the logged in user
+        if st.session_state['user_id'] == post['created_by']:
+            st.button("Delete", key=f"delete-{post['post_id']}", on_click=lambda: delete_post(post['post_id']))
+
+        # Add a update button if the post was created by the logged in user
+        # if st.session_state['user_id'] == post['created_by']:
+        #     st.button("Update", key=f"update-{post['post_id']}", on_click=lambda: update_post(post['post_id']))
+
+def update_post(post_id):
+  # redirect to the update post page, populating the form with the post data
+  st.session_state['post_id'] = post_id
+  print('rah')
+  st.switch_page('pages/12_Update_Delete_Post.py')
+
+# hard-coded delete button for testing
+st.button("Delete", key="delete-1", on_click=lambda: delete_post('3'))
+
+def delete_post(post_id):
+    api_url = f"http://api:4000/psts/post/{post_id}"
+    response = requests.delete(api_url)
+    return response
 
 # Display each post in a card
 for post in data:

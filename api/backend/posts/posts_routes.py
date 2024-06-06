@@ -62,6 +62,29 @@ def get_posts():
 
     return jsonify(json_data)
 
+@posts.route('/post/<post_id>', methods=['GET'])
+def get_country_detail(country):
+    # Parameterized query to prevent SQL injection
+    query = ('SELECT post_id, title, creation_date, text, created_by, cause FROM posts WHERE post_id = %s')
+
+    current_app.logger.info(query)
+
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (country,))
+    column_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(column_headers, row)))
+
+    # Check if any data is found
+    if not json_data:
+        return jsonify({"error": "Post not found"}), 404
+
+    return jsonify(json_data)
+
+
+
 # @products.route('/product/<id>', methods=['GET'])
 # def get_product_detail (id):
 
