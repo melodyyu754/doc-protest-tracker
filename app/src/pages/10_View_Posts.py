@@ -17,6 +17,10 @@ st.header('World Bank Data')
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
 
+# add filtering on the sidebar to filter the data by cause with checkboxes
+st.sidebar.header('Filter Data')
+causes = st.sidebar.multiselect('Select Causes', ['A', 'B', 'C'])
+
 data = {} 
 try:
   data = requests.get('http://api:4000/psts/posts').json()

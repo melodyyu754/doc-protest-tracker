@@ -9,12 +9,12 @@ df_not_scaled = pd.read_csv("backend/model1/all_data_revised.csv")
 def linear_regression(X, y):
     """performs the linear perceptron algorithm which takes in an original X matrix and a y vector
     Args:
-        X (2d-array): represents a matrix of a bias column with numeric values representative of the x features 
+        X (2d-array): represents a matrix of a bias column with numeric values representative of the x features
         y (1d-array): represents a vector of labels (-1 or 1)
     Returns:
         w (1d-array): the final weight vector that determines the direction and orientation of the line of best fit
     """
-    return np.linalg.inv(X.T.dot(X)).dot(X.T).dot(y) 
+    return np.linalg.inv(X.T.dot(X)).dot(X.T).dot(y)
 
 def linreg_predict(Xnew, ynew, m):
     """takes in the X matrix, y vector, and the m vector which contains the coefficients of the calculated line of best fit and outputs a dictionary that contains the predicted y values, the residuals, the mse, and the r2 score
