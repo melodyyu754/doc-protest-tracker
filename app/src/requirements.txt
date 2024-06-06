@@ -12,3 +12,5 @@ validators
 plotly
 seaborn
 scikit-learn
+shap
+st-pages
