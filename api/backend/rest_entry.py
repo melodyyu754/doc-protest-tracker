@@ -73,4 +73,6 @@ def create_app():
     app.register_blueprint(model1,     url_prefix='/model1')
 
     # Don't forget to return the app object
+    app.register_blueprint(causes,      url_prefix='/cause')
+    # app.register_blueprint(model1,     url_prefix='/model1')
     return app
