@@ -7,8 +7,10 @@ import numpy as np
 import plotly.express as px
 from modules.nav import SideBarLinks
 import requests
+import logging 
+from datetime import date
 
-import logging
+
 logger = logging.getLogger()
 
 # Call the SideBarLinks from the nav module in the modules directory

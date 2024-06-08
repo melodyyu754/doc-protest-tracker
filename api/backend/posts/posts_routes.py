@@ -31,8 +31,8 @@ def get_posts():
     filters = []
 
         # Apply filters
-    if 'creation_date' in request.args:
-        filters.append(f"creation_date >= '{request.args['creation_date']}'")
+    if 'creation_time' in request.args:
+        filters.append(f"creation_date >= '{request.args['creation_time']}'")
     if 'cause' in request.args:
         causes = request.args.getlist('cause')
         cause_filter = ', '.join(causes)
