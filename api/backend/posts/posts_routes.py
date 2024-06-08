@@ -62,21 +62,18 @@ def get_posts():
 
     return jsonify(json_data)
 
+# Get one post with one post_id
 @posts.route('/post/<post_id>', methods=['GET'])
-def get_country_detail(country):
-    # Parameterized query to prevent SQL injection
-    query = ('SELECT post_id, title, creation_date, text, created_by, cause FROM posts WHERE post_id = %s')
+def get_post_detail(post_id):
+    query = ('SELECT post_id, title, creation_date, text, created_by, cause FROM posts WHERE post_id = ' + str(post_id))
 
     current_app.logger.info(query)
 
     cursor = db.get_db().cursor()
-    cursor.execute(query, (country,))
+    cursor.execute(query)
     column_headers = [x[0] for x in cursor.description]
-    json_data = []
     theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(column_headers, row)))
-
+    json_data = [dict(zip(column_headers, row)) for row in theData]
     # Check if any data is found
     if not json_data:
         return jsonify({"error": "Post not found"}), 404
@@ -159,7 +156,7 @@ def get_country_detail(country):
     
 #     return jsonify(json_data)
 
-# POST a new product
+# Post a new post
 @posts.route('/addpost', methods=['POST'])
 def add_post():
       # collecting data from the request object 

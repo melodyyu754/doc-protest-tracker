@@ -17,7 +17,6 @@ col1, col2, col3 = st.columns(3)
 d = False
 if st.session_state['role'] != 'politician':
   
-
   with col1:
     if st.button(label = "Add Protest",
             type = 'primary',
@@ -55,4 +54,6 @@ def create_card(protest):
     </div>
     """, unsafe_allow_html=True)
 
-
+# Display each post in a card
+for protest in data:
+    create_card(protest)

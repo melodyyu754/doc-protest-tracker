@@ -31,10 +31,10 @@ def NewPostNav():
 #     st.sidebar.page_link("pages/12_Update_Delete_Post.py", label="Update/Delete Post", icon='📝')
 
 def DeletePostNav():
-    st.sidebar.page_link("pages/12_Update_Post.py", label="Delete Post", icon='📝')
+    st.sidebar.page_link("pages/12_Update_Post.py", label="Update Post", icon='📝')
 
 def UpdatePostNav():
-    st.sidebar.page_link("pages/13_Delete_Post.py", label="Edit Post", icon='📝')
+    st.sidebar.page_link("pages/13_Delete_Post.py", label="Delete Post", icon='📝')
 
 
 #### ------------------------ Protest Pages ------------------------

@@ -8,11 +8,14 @@ import plotly.express as px
 from modules.nav import SideBarLinks
 import requests
 
+import logging
+logger = logging.getLogger()
+
 # Call the SideBarLinks from the nav module in the modules directory
 SideBarLinks()
 
 # set the header of the page
-st.header('Community Forum')
+st.header('Community Post Forum')
 
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
@@ -28,8 +31,6 @@ except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-# st.dataframe(data)
-
 # Define a function to create a card for each post
 def create_card(post):
     with st.container():
@@ -41,28 +42,23 @@ def create_card(post):
         </div>
         """, unsafe_allow_html=True)
 
-        # Add a delete button if the post was created by the logged in user
+        col1, col2 = st.columns(2)
+
+        # Add a delete and update button 
         if st.session_state['user_id'] == post['created_by']:
-            st.button("Delete", key=f"delete-{post['post_id']}", on_click=lambda: delete_post(post['post_id']))
+            with col1:
+              if st.button("Delete", type = 'primary', key=f"delete-{post['post_id']}", use_container_width=True):
+                api_url = f"http://api:4000/psts/post/{post['post_id']}"
+                response = requests.delete(api_url)
+                st.experimental_rerun() # extremely necessary 
+                return response
+            with col2:
+              if st.button("Update", type = 'primary', key=f"update-{post['post_id']}", use_container_width=True):
+                st.session_state['post_id'] = post['post_id']
+                st.switch_page('pages/12_Update_Post.py')
 
-        # Add a update button if the post was created by the logged in user
-        # if st.session_state['user_id'] == post['created_by']:
-        #     st.button("Update", key=f"update-{post['post_id']}", on_click=lambda: update_post(post['post_id']))
-
-def update_post(post_id):
-  # redirect to the update post page, populating the form with the post data
-  st.session_state['post_id'] = post_id
-  print('rah')
-  st.switch_page('pages/12_Update_Delete_Post.py')
-
-# hard-coded delete button for testing
-st.button("Delete", key="delete-1", on_click=lambda: delete_post('3'))
-
-def delete_post(post_id):
-    api_url = f"http://api:4000/psts/post/{post_id}"
-    response = requests.delete(api_url)
-    return response
 
 # Display each post in a card
 for post in data:
     create_card(post)
+
