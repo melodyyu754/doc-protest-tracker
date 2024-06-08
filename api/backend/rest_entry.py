@@ -6,6 +6,7 @@ from backend.db_connection import db
 from backend.posts.posts_routes import posts
 from backend.protests.protests_routes import protests
 from backend.model1.model1_routes import model1
+from backend.model2.model2_routes import model2
 
 
 from dotenv import load_dotenv
@@ -69,8 +70,9 @@ def create_app():
     app.register_blueprint(countries,   url_prefix='/cntry')
     app.register_blueprint(posts ,      url_prefix='/psts')
     app.register_blueprint(protests,   url_prefix='/prtsts')
-    app.register_blueprint(causes,      url_prefix='/cause')
+    # app.register_blueprint(causes,      url_prefix='/cause')
     app.register_blueprint(model1,     url_prefix='/model1')
+    app.register_blueprint(model2,     url_prefix='/model2')
 
     # Don't forget to return the app object
 

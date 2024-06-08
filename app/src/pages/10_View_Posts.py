@@ -30,7 +30,7 @@ except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-# st.dataframe(data)
+st.dataframe(data)
 
 # Define a function to create a card for each post
 def create_card(post):
