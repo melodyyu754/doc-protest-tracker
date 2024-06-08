@@ -29,7 +29,7 @@ cause_mapping = {cause['cause_name']: cause['cause_id'] for cause in causes}
 
 # Submission Button
 if st.button("Submit"):
-    if user_id and title and creation_date and text and cause:
+    if user_id and title and creation_date and text and selected_cause:
         if cause == "Racial Inequality":
             cause = 1
         elif cause == "Climate Change":
