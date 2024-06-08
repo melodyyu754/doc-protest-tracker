@@ -15,11 +15,17 @@ st.sidebar.header("New Post")
 st.title("Create a New Post")
 cause_names = requests.get('http://api:4000/cause/names').json()
 user_id = st.text_input("User_ID", value=str(st.session_state['user_id']), disabled = True)
+
+user_id = st.selectbox("User ID", options=['1','2','3'], placeholder="Choose an option") # (created_by)
+
 title = st.text_input("Post Title")
 creation_date = st.date_input("Creation Date", value=date.today())
 text = st.text_area("Post Description")
-cause = st.selectbox("Protest Cause", options=cause_names, placeholder="Choose an option")
 
+causes = requests.get('http://api:4000/cause/cause').json()
+cause_names =  [cause['cause_name'] for cause in causes]
+selected_cause = st.selectbox("Select Cause", options=cause_names, placeholder="Choose an option")
+cause_mapping = {cause['cause_name']: cause['cause_id'] for cause in causes}
 
 # Submission Button
 if st.button("Submit"):
