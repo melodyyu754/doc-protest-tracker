@@ -6,18 +6,20 @@ from flask import Blueprint, request, jsonify, make_response, current_app
 from backend.db_connection import db
 from backend.model1.model1_functions import predict
 from backend.model1.model1_functions import initialize
+from backend.model1.model1_functions import generate_activity_level
 import logging
 logger = logging.getLogger()
 
 model1 = Blueprint('model1', __name__)
 
 # Get all customers from the DB
-@model1.route('/model1/<var01>/<var02>/<var03>', methods=['GET'])
-def predicting_amount_of_protests(var01, var02, var03):
+@model1.route('/model1/<var01>/<var02>/<var03>/<var04>', methods=['GET'])
+def predicting_amount_of_protests(var01, var02, var03, var04):
     current_app.logger.info(f'var02 = {var02}')
     current_app.logger.info(f'var03 = {var03}')
+    current_app.logger.info(f'var04 = {var04}')
 
-    prediction = predict(var01, var02, var03)
+    prediction = predict(var01, var02, var03, var04)
     #print(prediction)
     return_dict = {'prediction_value': prediction}
     #current_app.logger.info(f'hello = {return_dict}')
@@ -44,6 +46,7 @@ def get_lobf():
     "beta_8" : lobf[8],
     "beta_9" : lobf[9],
     "beta_10" : lobf[10],
+    "beta_11" : lobf[11]
     }
     #current_app.logger.info(f'hello = {return_dict}')
     the_response = make_response(jsonify(lobf_dict))
@@ -71,10 +74,11 @@ def insert_coefficients():
     beta_8 = data['beta_8']
     beta_9 = data['beta_9']
     beta_10 = data['beta_10']
+    beta_11 = data['beta_11']
 
 
     # Construct the query
-    query = 'INSERT INTO model1_lobf_coefficients (beta_0, beta_1, beta_2, beta_3, beta_4, beta_5, beta_6, beta_7, beta_8, beta_9, beta_10) VALUES ('
+    query = 'INSERT INTO model1_lobf_coefficients (beta_0, beta_1, beta_2, beta_3, beta_4, beta_5, beta_6, beta_7, beta_8, beta_9, beta_10, beta_11) VALUES ('
     query += "'" + str(beta_0) + "',"
     query += "'" + str(beta_1) + "',"
     query += "'" + str(beta_2) + "',"
@@ -85,7 +89,8 @@ def insert_coefficients():
     query += "'" + str(beta_7) + "',"
     query += "'" + str(beta_8) + "',"
     query += "'" + str(beta_9) + "',"
-    query += "'" + str(beta_10) + "')"
+    query += "'" + str(beta_10) + "',"
+    query += "'" + str(beta_11) + "')"
    
     
     print(query)
@@ -96,3 +101,18 @@ def insert_coefficients():
     db.get_db().commit()
 
     return "Success"
+
+# Get all customers from the DB
+@model1.route('/activity-level/<pred_per_capita>', methods=['GET'])
+def get_activity_level(pred_per_capita):
+    current_app.logger.info(f'pred_per_capita = {pred_per_capita}')
+
+    activity_level = generate_activity_level(pred_per_capita)
+    #print(prediction)
+    return_dict = {'activity_level': activity_level}
+    #current_app.logger.info(f'hello = {return_dict}')
+    the_response = make_response(jsonify(return_dict))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+
+    return the_response
