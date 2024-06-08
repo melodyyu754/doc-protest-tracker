@@ -44,13 +44,6 @@ if st.button("Submit"):
             cause = 6
         elif cause == "Israeli-Palestine":
             cause = 7
-=======
-    if user_id and title and creation_date and text and selected_cause:
-       
-        
-        
-        cause = cause_mapping[selected_cause] # get the cause_id from the cause name
->>>>>>> 801232f (okay refactoring actually done now)
 
         api_url = "http://api:4000//psts/addpost"
         payload = {
