@@ -9,13 +9,13 @@ def get_protests():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
     query = """
-        SELECT cause_name, date, location, protests.country, description
+        SELECT cause_name, date, location, protests.country, description, created_by, protest_id
         FROM protests
-            JOIN cause on protests.cause = cause.cause_id
+            LEFT JOIN cause on protests.cause = cause.cause_id
         ORDER BY date
         """
     cursor.execute(query)
-    row_headers = ["Cause", "Date", "City", "Country", "Description"]
+    row_headers = ["Cause", "Date", "City", "Country", "Description", "Created By", "protest_id"]
     data = cursor.fetchall() # give back all the date from the sql statement
     json_data = []
     for row in data:
@@ -59,4 +59,34 @@ def add_protest():
     db.get_db().commit()
 
     return "Success"
+
+# Get one post with one post_id
+@protests.route('/protests/<protest_id>', methods=['GET'])
+def get_protest_detail(protest_id):
+    query = ('SELECT * FROM protests WHERE protest_id = ' + str(protest_id))
+    current_app.logger.info(query)
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    column_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    json_data = [dict(zip(column_headers, row)) for row in theData]
+    # Check if any data is found
+    if not json_data:
+        return jsonify({"error": "Post not found"}), 404
+
+    return jsonify(json_data)
+
+@protests.route('/myprotests/<user_id>', methods=['GET'])
+def get_user_posts(user_id):
+    query = ('SELECT post_id, title, creation_date, text, created_by, cause, first_name, last_name FROM protests LEFT JOIN users on protests.created_by = users.user_id WHERE user_id = ' + str(user_id))
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    column_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    json_data = [dict(zip(column_headers, row)) for row in theData]
+    # Check if any data is found
+    if not json_data:
+        return jsonify({"error": "Post not found"}), 404
+
+    return jsonify(json_data)
     

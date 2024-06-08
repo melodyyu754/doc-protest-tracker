@@ -22,19 +22,6 @@ if st.session_state['role'] != 'politician':
             use_container_width=True):
       st.switch_page('pages/21_New_Protest.py')
 
-  with col2:
-    if st.button(label = "Update Protest",
-            type = 'primary',
-            use_container_width=True):
-      st.switch_page('pages/22_Update_Protest.py')
-
-  with col3:
-    if st.button(label = "Remove Protest",
-            type = 'primary',
-            use_container_width=True):
-      st.switch_page('pages/23_Delete_Protests.py')
-
-
 st.header("Past and Current Protests")
 data ={}
 try:
@@ -52,6 +39,21 @@ def create_card(protest):
         <p>{protest['Description']}</p>
     </div>
     """, unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+
+    # Add a delete and update button 
+    if st.session_state['user_id'] == protest['Created By']:
+            with col1:
+              if st.button("Delete", type = 'primary', key=f"delete-{protest['protest_id']}", use_container_width=True):
+                api_url = f"http://api:4000/prtsts/protests/{protest['protest_id']}"
+                response = requests.delete(api_url)
+                st.rerun() # extremely necessary 
+                return response
+            with col2:
+              if st.button("Update", type = 'primary', key=f"update-{protest['protest_id']}", use_container_width=True):
+                st.session_state['protest_id'] = protest['protest_id']
+                st.switch_page('pages/22_Update_Protest.py')
 
 # Display each post in a card
 for protest in data:

@@ -24,8 +24,20 @@ cause = st.selectbox("Protest Cause", options=cause_names, placeholder="Choose a
 # Submission Button
 if st.button("Submit"):
     if user_id and title and creation_date and text and cause:
-        if cause == "BLM":
+        if cause == "Racial Inequality":
             cause = 1
+        elif cause == "Climate Change":
+            cause = 2
+        elif cause == "Political Corruption":
+            cause = 3
+        elif cause == "Gender Equality":
+            cause = 4
+        elif cause == "Animal Rights":
+            cause = 5
+        elif cause == "Black Lives Matter":
+            cause = 6
+        elif cause == "Israeli-Palestine":
+            cause = 7
 
         api_url = "http://api:4000//psts/addpost"
         payload = {
