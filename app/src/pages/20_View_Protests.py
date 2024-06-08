@@ -55,4 +55,6 @@ def create_card(protest):
     </div>
     """, unsafe_allow_html=True)
 
-
+# Display each post in a card
+for protest in data:
+    create_card(protest)
