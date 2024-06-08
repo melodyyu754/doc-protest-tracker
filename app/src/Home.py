@@ -10,10 +10,10 @@ st.set_page_config(layout = 'wide')
 st.session_state['authenticated'] = False
 SideBarLinks(show_home=True)
 
-st.title('Global Goop')
+st.title('Rallify')
 
 st.write('\n\n')
-st.write('### HI! As which user would you like to log in?')
+st.write('### Hello! As which user would you like to log in?')
 
 if st.button("Act as Sally, a student activist at Columbia University",
             type = 'primary',

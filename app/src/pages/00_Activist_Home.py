@@ -13,34 +13,51 @@ SideBarLinks()
 st.title(f"Welcome Activist, {st.session_state['first_name']}.")
 st.write('')
 st.write('')
-st.write('### What would you like to do today?')
+st.markdown("<h3 style='text-align: center; color: black;'>Would would you like to do today?</h3>", unsafe_allow_html=True)
+st.write('')
 
-if st.button('View Posts',
-             type='primary',
-             use_container_width=True):
-  st.switch_page('pages/10_View_Posts.py')
+col1, col2 = st.columns(2)
 
-if st.button('Create a New Post',
-              type='primary',
-              use_container_width=True):
-    st.switch_page('pages/11_New_Post.py')
+with col1:
+    st.markdown("<h4 style='text-align: center; color: black;'>Community Forum</h4>", unsafe_allow_html=True)
+    if st.button('View Posts',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/10_View_Posts.py')
 
-if st.button('Update or Delete a Post',
-              type='primary',
-              use_container_width=True):
-    st.switch_page('pages/12_Update_Delete_Post.py')
+    if st.button('Create a New Post',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/11_New_Post.py')
 
-if st.button('View Protests',
-              type='primary',
-              use_container_width=True):
-    st.switch_page('pages/20_View_Protests.py')
+    if st.button('Edit a Post',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/12_Update_Post.py')
 
-if st.button('Create a New Protest',
-              type='primary',
-              use_container_width=True):
-    st.switch_page('pages/21_New_Protest.py')
+    if st.button('Delete a Post',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/13_Delete_Post.py')
 
-if st.button('Update or Delete a Protest',
-              type='primary',
-              use_container_width=True):
-    st.switch_page('pages/22_Update_Delete_Protest.py')
+with col2: 
+    st.markdown("<h4 style='text-align: center; color: black;'>Protests</h4>", unsafe_allow_html=True)
+    if st.button('View Protests',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/20_View_Protests.py')
+
+    if st.button('Create a New Protest',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/21_New_Protest.py')
+
+    if st.button('Edit a Protest',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/22_Update_Protest.py')
+
+    if st.button('Delete a Protest',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/23_Delete_Protests.py')

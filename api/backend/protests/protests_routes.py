@@ -1,14 +1,5 @@
-########################################################
-# Sample customers blueprint of endpoints
-# Remove this file if you are not using it in your project
-########################################################
-
 from flask import Blueprint, request, jsonify, make_response, current_app
-import json
-import random
 from backend.db_connection import db
-
-
 
 protests = Blueprint('protests', __name__)
 
@@ -24,7 +15,7 @@ def get_protests():
         ORDER BY date
         """
     cursor.execute(query)
-    row_headers = ["Cause", "Date", "City", "Country", "Decription"]
+    row_headers = ["Cause", "Date", "City", "Country", "Description"]
     data = cursor.fetchall() # give back all the date from the sql statement
     json_data = []
     for row in data:
