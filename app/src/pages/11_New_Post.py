@@ -13,19 +13,17 @@ SideBarLinks()
 st.sidebar.header("New Post")
 
 st.title("Create a New Post")
-user_id = st.selectbox("User ID", options=['1','2','3'], placeholder="Choose an option") # (created_by)
+cause_names = requests.get('http://api:4000/cause/names').json()
+user_id = st.text_input("User_ID", value=str(st.session_state['user_id']), disabled = True)
 title = st.text_input("Post Title")
 creation_date = st.date_input("Creation Date", value=date.today())
 text = st.text_area("Post Description")
-cause = st.selectbox("Protest Cause", options=["BLM", "Free Palestine", "Pro Choice"], placeholder="Choose an option")
-
+cause = st.selectbox("Protest Cause", options=cause_names, placeholder="Choose an option")
 
 
 # Submission Button
 if st.button("Submit"):
     if user_id and title and creation_date and text and cause:
-       
-        
         if cause == "BLM":
             cause = 1
 
@@ -35,10 +33,9 @@ if st.button("Submit"):
                 "title": title,
                 "creation_date": str(creation_date),
                 "text": text,
-               
                 "cause": cause,
               
-            }
+        }
         response = requests.post(api_url, json=payload)
         
         if response.status_code == 201 or response.status_code == 200:

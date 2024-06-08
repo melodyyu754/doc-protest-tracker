@@ -14,7 +14,6 @@ SideBarLinks()
 st.title("Protests")
 
 col1, col2, col3 = st.columns(3)
-d = False
 if st.session_state['role'] != 'politician':
   
   with col1:

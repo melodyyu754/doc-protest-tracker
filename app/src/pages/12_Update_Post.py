@@ -31,7 +31,7 @@ preload_post = preload_post[0]
 logger.info(preload_post)
 # populates the update form with sessionstate[postid] data, make call to api to get post, then populate the form with the data
 st.write("### Update Post")
-post_id = st.text_input("Post ID to Update", value=preload_post['post_id'])
+post_id = st.text_input("Post ID to Update", value=preload_post['post_id'], disabled = True)
 title = st.text_input("New Post Title", value=preload_post['title'])
 text = st.text_area("Update your post here...", value=preload_post['text'])
 if st.button("Update Post"):

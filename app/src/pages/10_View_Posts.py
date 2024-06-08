@@ -20,9 +20,14 @@ st.header('Community Post Forum')
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
 
-# add filtering on the sidebar to filter the data by cause with checkboxes
-st.sidebar.header('Filter Data')
-causes = st.sidebar.multiselect('Select Causes', ['A', 'B', 'C'])
+col1, col2, col3 = st.columns(3)
+if st.session_state['role'] != 'politician':
+  
+  with col1:
+    if st.button(label = "Add Post",
+            type = 'primary',
+            use_container_width=True):
+      st.switch_page('pages/11_New_Post.py')
 
 data = {} 
 try:
@@ -38,7 +43,7 @@ def create_card(post):
         <div style="border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
             <h3>{post['title']}</h3>
             <p>{post['text']}</p>
-            <small>Posted by {post['created_by']} on {post['creation_date']}</small>
+            <small>Posted by {post['first_name']} {post['last_name']} on {post['creation_date']}</small>
         </div>
         """, unsafe_allow_html=True)
 

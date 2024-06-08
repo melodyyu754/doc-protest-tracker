@@ -1,7 +1,6 @@
 # Idea borrowed from https://github.com/fsmosca/sample-streamlit-authenticator
 
 import streamlit as st
-from st_pages import Page, Section, show_pages, add_page_title
 
 
 #### ------------------------ Home/About Page ------------------------
@@ -22,7 +21,10 @@ def JournalistHomeNav():
 
 #### ------------------------ Post Pages ------------------------
 def ViewPostsNav():
-    st.sidebar.page_link("pages/10_View_Posts.py", label="View Posts", icon='📄')
+    st.sidebar.page_link("pages/10_View_Posts.py", label="All Posts", icon='📄')
+
+def MyPostsPostsNav():
+    st.sidebar.page_link("pages/14_my_posts.py", label="My Posts", icon='📄') 
 
 def NewPostNav():
     st.sidebar.page_link("pages/11_New_Post.py", label="New Post", icon='✍️')
@@ -102,9 +104,9 @@ def SideBarLinks(show_home=False):
         if st.session_state['role'] == 'activist':
             ActivistHomeNav()
             ViewPostsNav()
+            MyPostsPostsNav()
             NewPostNav()
-            UpdatePostNav()
-            DeletePostNav()
+
             ViewProtestsNav()
             NewProtestNav()
             UpdateProtestNav()
@@ -121,9 +123,9 @@ def SideBarLinks(show_home=False):
         if st.session_state['role'] == 'journalist':
             JournalistHomeNav()
             ViewPostsNav()
+            MyPostsPostsNav()
             NewPostNav()
-            UpdatePostNav()
-            DeletePostNav()
+        
             ViewProtestsNav()
             SaveProtestsNav()
             # CompareProtestsNav()

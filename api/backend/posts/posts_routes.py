@@ -21,29 +21,11 @@ def get_posts():
     cursor = db.get_db().cursor()
 
     #need to edit
-    query = 'SELECT post_id, title, creation_date, text, created_by, cause FROM posts'
+    query = 'SELECT post_id, title, creation_date, text, created_by, cause, first_name, last_name FROM posts LEFT JOIN users ON posts.created_by = user_id'
     filters = []
-
-    #     # Apply filters
-    # if 'product_code' in request.args:
-    #     filters.append(f"product_code = '{request.args['product_code']}'")
-    # if 'product_name' in request.args:
-    #     filters.append(f"product_name LIKE '%{request.args['product_name']}%'")
-    # if 'category' in request.args:
-    #     filters.append(f"category = '{request.args['category']}'")
-    # if 'min_price' in request.args:
-    #     filters.append(f"list_price >= {request.args['min_price']}")
-    # if 'max_price' in request.args:
-    #     filters.append(f"list_price <= {request.args['max_price']}")
-
-    if filters:
-        query += ' WHERE ' + ' AND '.join(filters)
 
     current_app.logger.info(query)
     cursor.execute(query)
-    
-    # use cursor to query the database for a list of products
-    # EDIT HERE: cursor.execute('SELECT id, product_code, product_name, list_price, category FROM products')
 
     # grab the column headers from the returned data
     column_headers = [x[0] for x in cursor.description]
@@ -66,9 +48,7 @@ def get_posts():
 @posts.route('/post/<post_id>', methods=['GET'])
 def get_post_detail(post_id):
     query = ('SELECT post_id, title, creation_date, text, created_by, cause FROM posts WHERE post_id = ' + str(post_id))
-
     current_app.logger.info(query)
-
     cursor = db.get_db().cursor()
     cursor.execute(query)
     column_headers = [x[0] for x in cursor.description]
@@ -80,7 +60,19 @@ def get_post_detail(post_id):
 
     return jsonify(json_data)
 
+@posts.route('/myposts/<user_id>', methods=['GET'])
+def get_user_posts(user_id):
+    query = ('SELECT post_id, title, creation_date, text, created_by, cause, first_name, last_name FROM posts JOIN users on posts.created_by = users.user_id WHERE user_id = ' + str(user_id))
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    column_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    json_data = [dict(zip(column_headers, row)) for row in theData]
+    # Check if any data is found
+    if not json_data:
+        return jsonify({"error": "Post not found"}), 404
 
+    return jsonify(json_data)
 
 # @products.route('/product/<id>', methods=['GET'])
 # def get_product_detail (id):
