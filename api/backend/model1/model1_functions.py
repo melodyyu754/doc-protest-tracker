@@ -50,12 +50,11 @@ def initialize():
     query = 'SELECT * FROM real_data_scaled ORDER BY id'
     cursor.execute(query)
     data_scaled = cursor.fetchall()
-
+    logger.info(f'dataset: {data_scaled}')
     column_names = ['id', 'event_date', 'country', 'western', 'asian', 'south_american', 'counts', 'population_scaled', 'events_per_capita_scaled', 'gdp_per_capita_scaled', 'public_trust_percentage_scaled']
     df_scaled = pd.DataFrame.from_records(data_scaled, columns=column_names)
-    #logger.info(f"coefficients: {df_scaled}")
     
-    X = df_scaled[['public_trust_percentage_scaled', 'gdp_per_capita_scaled', 'western', 'asian', 'south_american']]
+    X = df_scaled[['public_trust_percentage_scaled', 'gdp_per_capita_scaled', 'western', 'asian', 'south_american', 'population_scaled']]
     y = df_scaled['events_per_capita_scaled']
 
     # Cross validation
@@ -94,19 +93,20 @@ def initialize():
     X_test_poly = np.concatenate((np.ones((X_test_poly.shape[0], 1)), X_test_poly), axis=1)
 
     # Concatenate the transformed features with the original categorical features
-    X_train_poly = np.concatenate((X_train_poly, X_train[['western', 'asian', 'south_american', 'public_trust_x_gdp_per_capita']]), axis=1)
-    X_test_poly = np.concatenate((X_test_poly, X_test[['western', 'asian', 'south_american', 'public_trust_x_gdp_per_capita']]), axis=1)
+    X_train_poly = np.concatenate((X_train_poly, X_train[['western', 'asian', 'south_american', 'public_trust_x_gdp_per_capita', 'population_scaled']]), axis=1)
+    X_test_poly = np.concatenate((X_test_poly, X_test[['western', 'asian', 'south_american', 'public_trust_x_gdp_per_capita', 'population_scaled']]), axis=1)
 
     # --- Create and Fit Model ---
     lobf = linear_regression(X_train_poly, y_train)
     return lobf
 
-def predict(var01, var02, var03):
+def predict(var01, var02, var03, var04):
     """
     Retreives model parameters from the database and uses them for real-time prediction
     """
     var01 = pd.to_numeric(var01)
     var02 = pd.to_numeric(var02)
+    var04 = pd.to_numeric(var04)
 
     # get a database cursor 
     cursor = db.get_db().cursor()
@@ -121,9 +121,10 @@ def predict(var01, var02, var03):
     # get a database cursor 
     cursor = db.get_db().cursor()
     # get the model params from the database
-    query = 'SELECT beta_0, beta_1, beta_2, beta_3, beta_4, beta_5, beta_6, beta_7, beta_8, beta_9, beta_10 FROM model1_lobf_coefficients ORDER BY sequence_number DESC LIMIT 1'
+    query = 'SELECT beta_0, beta_1, beta_2, beta_3, beta_4, beta_5, beta_6, beta_7, beta_8, beta_9, beta_10, beta_11 FROM model1_lobf_coefficients ORDER BY sequence_number DESC LIMIT 1'
     cursor.execute(query)
     values = cursor.fetchone()
+    logger.info(f'from query: {values}')
     lobf_coefficients = list(values)
     logger.info(f"coefficients: {lobf_coefficients}")
 
@@ -134,6 +135,7 @@ def predict(var01, var02, var03):
     print(public_trust_input_scaled)
     gdp_per_capita_input_scaled = ((int(var02) - df_not_scaled['gdp_per_capita'].mean()) / df_not_scaled['gdp_per_capita'].std()).round(3)
     print(gdp_per_capita_input_scaled)
+    population_input_scaled = ((int(var04) - df_not_scaled['population'].mean()) / df_not_scaled['population'].std()).round(3)
     if var03 == 'Western':
         input_vector = np.array([[public_trust_input_scaled,
                                   gdp_per_capita_input_scaled,
@@ -144,7 +146,8 @@ def predict(var01, var02, var03):
                                   1,
                                   0,
                                   0,
-                                  public_trust_input_scaled * gdp_per_capita_input_scaled]])
+                                  public_trust_input_scaled * gdp_per_capita_input_scaled,
+                                  population_input_scaled]])
     elif var03 == 'Asian':
         input_vector = np.array([[public_trust_input_scaled,
                                   gdp_per_capita_input_scaled,
@@ -155,7 +158,8 @@ def predict(var01, var02, var03):
                                   0,
                                   1,
                                   0,
-                                  public_trust_input_scaled * gdp_per_capita_input_scaled]])
+                                  public_trust_input_scaled * gdp_per_capita_input_scaled,
+                                  population_input_scaled]])
     else:
         input_vector = np.array([[public_trust_input_scaled,
                                   gdp_per_capita_input_scaled,
@@ -166,9 +170,20 @@ def predict(var01, var02, var03):
                                   0,
                                   0,
                                   1,
-                                  public_trust_input_scaled * gdp_per_capita_input_scaled]])
+                                  public_trust_input_scaled * gdp_per_capita_input_scaled,
+                                  population_input_scaled]])
              
     input_vector = np.concatenate((np.ones((1, 1)), input_vector), axis=1)
     # this might be event per capita, which we should probably change???
-    prediction = np.matmul(input_vector, lobf)
-    return prediction[0]
+    prediction_scaled = np.matmul(input_vector, lobf)
+    prediction_unscaled = prediction_scaled[0] * df_not_scaled['events_per_capita'].std().round(3) + df_not_scaled['events_per_capita'].mean()
+    return prediction_unscaled
+
+def generate_activity_level(pred_per_capita):
+    pred_per_capita = pd.to_numeric(pred_per_capita)
+    if pred_per_capita < 4.6:
+        return "low"
+    elif pred_per_capita < 9.3:
+        return "medium"
+    else:
+        return "high"
