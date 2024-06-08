@@ -22,7 +22,7 @@ def get_posts():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
 
-    query = """SELECT post_id, title, creation_date, text, created_by, cause 
+    query = """SELECT title, creation_date, text, first_name, cause_name 
     FROM posts
         JOIN cause on posts.cause = cause.cause_id
         JOIN users on posts.created_by = users.user_id
@@ -32,10 +32,12 @@ def get_posts():
     filters = []
 
         # Apply filters
-    if 'creation_date' in request.args:
-        filters.append(f"creation_date >= '{request.args['creation_date']}'")
+    if 'creation_time' in request.args:
+        filters.append(f"creation_date >= '{request.args['creation_time']}'")
     if 'cause' in request.args:
-        filters.append(f"cause = '{request.args['cause']}'")
+        causes = request.args.getlist('cause')
+        cause_filter = ', '.join(causes)
+        filters.append(f"cause IN ({cause_filter})")
     if 'created_by' in request.args:
         filters.append(f"created_by = '{request.args['created_by']}'")
 
@@ -69,79 +71,7 @@ def get_posts():
 
     return jsonify(json_data)
 
-@posts.route('/filter_posts', methods=['GET'])
-def filter_posts():
-    # get a cursor object from the database
-    cursor = db.get_db().cursor()
 
-    query = """SELECT title, creation_date, text, CONCAT(first_name, ' ', last_name) as full_name, cause_name 
-    FROM posts
-        JOIN cause on posts.cause = cause.cause_id
-        JOIN users on posts.created_by = users.user_id
-    """
-
-
-    #need to edit
-    query = 'SELECT post_id, title, creation_date, text, created_by, cause FROM posts'
-
-
-    filters = []
-
-        # Apply filters
-    if 'creation_time' in request.args:
-        #creation_time = datetime.strptime(creation_time, '%Y-%m-%dT%H:%M:%S')
-
-  
-        filters.append(f"product_code = '{request.args['product_code']}'")
-    if 'product_name' in request.args:
-        filters.append(f"product_name LIKE '%{request.args['product_name']}%'")
-    if 'category' in request.args:
-        filters.append(f"category = '{request.args['category']}'")
-    if 'min_price' in request.args:
-        filters.append(f"list_price >= {request.args['min_price']}")
-    if 'max_price' in request.args:
-        filters.append(f"list_price <= {request.args['max_price']}")
-        # Apply filters
-    if 'creation_time' in request.args:
-        filters.append(f"creation_date >= '{request.args['creation_time']}'")
-    if 'cause' in request.args:
-        causes = request.args.getlist('cause')
-        cause_filter = ', '.join(causes)
-        filters.append(f"cause IN ({cause_filter})")
-    if 'created_by' in request.args:
-        usernames = request.args.getlist('created_by')
-        user_filter = ', '.join(usernames)
-        filters.append(f"created_by IN ({user_filter})")
-
-
-    if filters:
-        query += ' WHERE ' + ' AND '.join(filters)
-
-    query += ' order by creation_date desc'
-    
-
-    current_app.logger.info(query)
-    cursor.execute(query)
-    
-    # use cursor to query the database for a list of products
-    # EDIT HERE: cursor.execute('SELECT id, product_code, product_name, list_price, category FROM products')
-
-    # grab the column headers from the returned data
-    column_headers = [x[0] for x in cursor.description]
-
-    # create an empty dictionary object to use in 
-    # putting column headers together with data
-    json_data = []
-
-    # fetch all the data from the cursor
-    theData = cursor.fetchall()
-
-    # for each of the rows, zip the data elements together with
-    # the column headers. 
-    for row in theData:
-        json_data.append(dict(zip(column_headers, row)))
-
-    return jsonify(json_data)
     # creation_time = request.args.get('creation_time')
     # user_ids = request.args.getlist('user_id', type=int)
     # causes = request.args.getlist('cause', type=int)

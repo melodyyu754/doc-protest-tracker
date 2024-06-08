@@ -17,7 +17,7 @@ from backend.cause.cause_routes import causes
 from backend.posts.posts_routes import posts
 from backend.cause.cause_routes import causes
 from backend.model1.model1_routes import model1
-from backend.causes.cause_routes import causes
+from backend.cause.cause_routes import causes
 
 
 import os
@@ -85,7 +85,7 @@ def create_app():
     app.register_blueprint(protests,   url_prefix='/prtsts')
     app.register_blueprint(causes,      url_prefix='/cause')
     app.register_blueprint(model1,     url_prefix='/model1')
-    app.register_blueprint(causes,     url_prefix='/causes')
+    app.register_blueprint(causes,     url_prefix='/cause')
 
 
     # Don't forget to return the app object
