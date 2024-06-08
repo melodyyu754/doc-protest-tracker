@@ -22,7 +22,7 @@ def get_posts():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
 
-    query = """SELECT title, creation_date, text, first_name, cause_name 
+    query = """SELECT title, creation_date, text, CONCAT(first_name, ' ', last_name) as full_name, cause_name 
     FROM posts
         JOIN cause on posts.cause = cause.cause_id
         JOIN users on posts.created_by = users.user_id
@@ -32,14 +32,16 @@ def get_posts():
     filters = []
 
         # Apply filters
-    if 'creation_time' in request.args:
-        filters.append(f"creation_date >= '{request.args['creation_time']}'")
+    if 'creation_date' in request.args:
+        filters.append(f"creation_date >= '{request.args['creation_date']}'")
     if 'cause' in request.args:
         causes = request.args.getlist('cause')
         cause_filter = ', '.join(causes)
         filters.append(f"cause IN ({cause_filter})")
     if 'created_by' in request.args:
-        filters.append(f"created_by = '{request.args['created_by']}'")
+        usernames = request.args.getlist('created_by')
+        user_filter = ', '.join(usernames)
+        filters.append(f"created_by IN ({user_filter})")
 
 
     if filters:
@@ -137,6 +139,7 @@ def add_post():
     db.get_db().commit()
 
     return "Success"
+
 
 # UPDATE a post
 @posts.route('/post', methods = ['PUT'])

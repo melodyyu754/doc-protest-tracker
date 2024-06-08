@@ -4,6 +4,7 @@ from backend.db_connection import db
 
 causes = Blueprint('causes', __name__)
 
+
 @causes.route('/cause', methods=['GET'])
 def get_cause():
     # get a cursor object from the database
