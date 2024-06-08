@@ -31,7 +31,7 @@ if st.button("Submit"):
        
         
         
-        cause = cause_mapping[cause] # get the cause_id from the cause name
+        cause = cause_mapping[selected_cause] # get the cause_id from the cause name
 
         api_url = "http://api:4000//psts/addpost"
         payload = {
