@@ -12,77 +12,40 @@ import requests
 SideBarLinks()
 
 # set the header of the page
-st.header('All Posts')
+
+st.header('Community Forum')
+
 
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
 
-# data = {} 
-# try:
-#   data = requests.get('http://api:4000/psts/posts').json()
-# except:
-#   st.write("**Important**: Could not connect to sample api, so using dummy data.")
-#   data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
+# add filtering on the sidebar to filter the data by cause with checkboxes
+st.sidebar.header('Filter Data')
+causes = st.sidebar.multiselect('Select Causes', ['A', 'B', 'C'])
 
+# add filtering on the sidebar to filter the data by cause with checkboxes
+st.sidebar.header('Filter Data')
+causes = st.sidebar.multiselect('Select Causes', ['A', 'B', 'C'])
 
-# date = st.date_input("Protest Date", value = None)
+data = {} 
+try:
+  data = requests.get('http://api:4000/psts/posts').json()
+except:
+  st.write("**Important**: Could not connect to sample api, so using dummy data.")
+  data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
 # st.dataframe(data)
 
-# Inputs for filtering
-creation_time = st.date_input('Creation Time', value = None)
-# Multi-select inputs for usernames and cause names
-selected_usernames = st.multiselect('Usernames', list(usernames.keys()))
-selected_causes = st.multiselect('Causes', list(causes.keys()))
+# Define a function to create a card for each post
+def create_card(post):
+    st.markdown(f"""
+    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+        <h3>{post['title']}</h3>
+        <p>{post['text']}</p>
+        <small>Posted by {post['created_by']} on {post['creation_date']}</small>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Button to trigger the filter action
-if st.button('Filter Posts'):
-    # Construct the query parameters
-    params = {}
-    if creation_time:
-        params['creation_time'] = creation_time
-    if selected_usernames:
-        params['user_id'] = [usernames[username] for username in selected_usernames]
-    if selected_causes:
-        params['cause'] = [causes[cause] for cause in selected_causes]
-
-    # Make a request to the backend API
-    response = requests.get('http://api:4000/psts/posts', params= params).json()
-    # Check if the request was successful
-    if response.status_code == 200:
-        filtered_posts = response.json()
-        if filtered_posts:
-            # Display the filtered posts in a table
-            df = pd.DataFrame(filtered_posts)
-            st.dataframe(df)
-        else:
-            st.write("No posts found with the given filters.")
-    else:
-        st.write("Error fetching filtered posts. Please try again.")
-
-
-
-
-
-
-# # get the countries from the world bank data
-# with st.echo(code_location='above'):
-#     countries:pd.DataFrame = wb.get_countries()
-   
-#     st.dataframe(countries)
-
-# # the with statment shows the code for this block above it 
-# with st.echo(code_location='above'):
-#     arr = np.random.normal(1, 1, size=100)
-#     test_plot, ax = plt.subplots()
-#     ax.hist(arr, bins=20)
-
-#     st.pyplot(test_plot)
-
-
-# with st.echo(code_location='above'):
-#     slim_countries = countries[countries['incomeLevel'] != 'Aggregates']
-#     data_crosstab = pd.crosstab(slim_countries['region'], 
-#                                 slim_countries['incomeLevel'],  
-#                                 margins = False) 
-#     st.table(data_crosstab)
+# Display each post in a card
+for post in data:
+    create_card(post)
