@@ -7,9 +7,6 @@ from flask import jsonify
 import logging
 logger = logging.getLogger()
 
-df_scaled = pd.read_csv("backend/model1/data_scaled.csv")
-df_not_scaled = pd.read_csv("backend/model1/all_data_revised.csv")
-
 def linear_regression(X, y):
     """performs the linear perceptron algorithm which takes in an original X matrix and a y vector
     Args:
@@ -46,7 +43,19 @@ def linreg_predict(Xnew, ynew, m):
 def initialize():
     # PRESENT MODEL
     # Defining my X and y arrays
-    X = df_scaled[['public_trust_percentage_scaled', 'gdp_per_capita_scaled', 'Western', 'Asian', 'South American']]
+
+    # get a database cursor 
+    cursor = db.get_db().cursor()
+    # get the model params from the database
+    query = 'SELECT * FROM real_data_scaled ORDER BY id'
+    cursor.execute(query)
+    data_scaled = cursor.fetchall()
+
+    column_names = ['id', 'event_date', 'country', 'western', 'asian', 'south_american', 'counts', 'population_scaled', 'events_per_capita_scaled', 'gdp_per_capita_scaled', 'public_trust_percentage_scaled']
+    df_scaled = pd.DataFrame.from_records(data_scaled, columns=column_names)
+    #logger.info(f"coefficients: {df_scaled}")
+    
+    X = df_scaled[['public_trust_percentage_scaled', 'gdp_per_capita_scaled', 'western', 'asian', 'south_american']]
     y = df_scaled['events_per_capita_scaled']
 
     # Cross validation
@@ -85,8 +94,8 @@ def initialize():
     X_test_poly = np.concatenate((np.ones((X_test_poly.shape[0], 1)), X_test_poly), axis=1)
 
     # Concatenate the transformed features with the original categorical features
-    X_train_poly = np.concatenate((X_train_poly, X_train[['Western', 'Asian', 'South American', 'public_trust_x_gdp_per_capita']]), axis=1)
-    X_test_poly = np.concatenate((X_test_poly, X_test[['Western', 'Asian', 'South American', 'public_trust_x_gdp_per_capita']]), axis=1)
+    X_train_poly = np.concatenate((X_train_poly, X_train[['western', 'asian', 'south_american', 'public_trust_x_gdp_per_capita']]), axis=1)
+    X_test_poly = np.concatenate((X_test_poly, X_test[['western', 'asian', 'south_american', 'public_trust_x_gdp_per_capita']]), axis=1)
 
     # --- Create and Fit Model ---
     lobf = linear_regression(X_train_poly, y_train)
@@ -98,6 +107,16 @@ def predict(var01, var02, var03):
     """
     var01 = pd.to_numeric(var01)
     var02 = pd.to_numeric(var02)
+
+    # get a database cursor 
+    cursor = db.get_db().cursor()
+    # get the model params from the database
+    query = 'SELECT * FROM real_data ORDER BY id'
+    cursor.execute(query)
+    data_not_scaled = cursor.fetchall()
+
+    column_names = ['id', 'event_date', 'country', 'counts', 'population', 'events_per_capita', 'gdp_per_capita', 'western', 'asian', 'south_american', 'public_trust_percentage']
+    df_not_scaled = pd.DataFrame.from_records(data_not_scaled, columns=column_names)
 
     # get a database cursor 
     cursor = db.get_db().cursor()
