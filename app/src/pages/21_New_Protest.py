@@ -30,9 +30,9 @@ selected_cause = st.selectbox("Select Cause", options=cause_names, placeholder="
 description = st.text_area("Protest Description")
 
 
-# Submission Button
+# Submission Buttongit 
 if st.button("Submit"):
-    if user_id and location and date and violent and country and cause:
+    if user_id and location and date and violent and country and selected_cause:
         if violent == 'True':
             violent = 1
         else:
