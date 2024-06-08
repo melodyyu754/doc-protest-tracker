@@ -8,6 +8,7 @@ from backend.protests.protests_routes import protests
 from backend.cause.cause_routes import causes
 from backend.model1.model1_routes import model1
 from backend.cause.cause_routes import causes
+from backend.users.users_routes import users
 
 
 from dotenv import load_dotenv
@@ -73,7 +74,8 @@ def create_app():
     app.register_blueprint(protests,   url_prefix='/prtsts')
     app.register_blueprint(causes,      url_prefix='/cause')
     app.register_blueprint(model1,     url_prefix='/model1')
-    app.register_blueprint(causes,     url_prefix='/cause')
+    app.register_blueprint(users,      url_prefix='/users')
+   
 
     # Don't forget to return the app object
 

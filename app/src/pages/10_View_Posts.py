@@ -28,11 +28,9 @@ st.write(f"### Hi, {st.session_state['first_name']}.")
 
 # add filtering on the sidebar to filter the data by cause with checkboxes
 st.sidebar.header('Filter Data')
-causes = st.sidebar.multiselect('Select Causes', ['A', 'B', 'C'])
+
 
 # add filtering on the sidebar to filter the data by cause with checkboxes
-st.sidebar.header('Filter Data')
-#selected_causes = st.sidebar.multiselect('Select Causes', ['A', 'B', 'C'])
 
 # data = {} 
 # try:
@@ -43,14 +41,20 @@ st.sidebar.header('Filter Data')
 
 # st.dataframe(data)
 
-cause_names = requests.get('http://api:4000//cause/names').json()
 
-cause_dict = requests.get('http://api:4000/cause/cause').json()
-cause_mapping = {cause['cause_name']: cause['cause_id'] for cause in cause_dict}
+#requests.get('http://api:4000//cause/names').json()
+causes = requests.get('http://api:4000/cause/cause').json()
+cause_names = [cause['cause_name'] for cause in causes]
+cause_mapping = {cause['cause_name']: cause['cause_id'] for cause in causes}
+
+users = requests.get('http://api:4000/users/usernames').json()
+usernames = [user['full_name'] for user in users]
+user_mapping = {user['full_name']: user['user_id'] for user in users}
+
 
 
 # Inputs for filtering
-creation_time = st.sidebar.date_input('Creation Time', value=None, max_value=date.today())
+creation_date = st.sidebar.date_input('Creation Date', value=None, max_value=date.today())
 
 
 # Multi-select inputs for usernames and cause names
@@ -60,21 +64,26 @@ creation_time = st.sidebar.date_input('Creation Time', value=None, max_value=dat
 selected_causes = st.sidebar.multiselect("Select Causes", options=cause_names)
 selected_cause_ids = [cause_mapping[cause] for cause in selected_causes]
 
+# Multi-select for usernames
+selected_usernames = st.sidebar.multiselect('Select Usernames', options=usernames)
+selected_user_ids = [user_mapping[username] for username in selected_usernames]
+
+
 
 params = {}
 
 # Button to trigger the filter action
-if st.button('Filter Posts'):
+if st.sidebar.button('Filter Posts'):
     # Construct the query parameters
     
-    if creation_time:
-        params['creation_time'] = creation_time
-        logger.info(f'creation_time = {creation_time}')
-        
-    # if selected_usernames:
-    #     params['user_id'] = [usernames[username] for username in selected_usernames]
+    if creation_date:
+        params['creation_date'] = creation_date
+        logger.info(f'creation_date = {creation_date}')
+    if selected_user_ids:
+        params['created_by'] = selected_user_ids
     if selected_causes:
         params['cause'] = selected_cause_ids
+    
 
 
     logger.info(f'params = {params}')
@@ -105,8 +114,9 @@ def create_card(post):
     st.markdown(f"""
     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
         <h3>{post['title']}</h3>
+        <p style="color: grey; font-weight: bold;">{post['cause_name']}</p>
         <p>{post['text']}</p>
-        <small>Posted by {post['created_by']} on {post['creation_date']}</small>
+        <small>Posted by {post['full_name']}  on {post['creation_date']}</small>
     </div>
     """, unsafe_allow_html=True)
 
