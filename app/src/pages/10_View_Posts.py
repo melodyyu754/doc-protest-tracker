@@ -24,7 +24,29 @@ st.header('Community Post Forum')
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
 
+<<<<<<< HEAD
 
+causes = requests.get('http://api:4000/cause/cause').json()
+cause_names = [cause['cause_name'] for cause in causes]
+cause_mapping = {cause['cause_name']: cause['cause_id'] for cause in causes}
+=======
+# add filtering on the sidebar to filter the data by cause with checkboxes
+st.sidebar.header('Filter Data')
+
+
+# add filtering on the sidebar to filter the data by cause with checkboxes
+>>>>>>> f8ce327 (working creation date, cause and user filters)
+
+users = requests.get('http://api:4000/users/usernames').json()
+usernames = [user['full_name'] for user in users]
+user_mapping = {user['full_name']: user['user_id'] for user in users}
+
+<<<<<<< HEAD
+=======
+# st.dataframe(data)
+
+
+#requests.get('http://api:4000//cause/names').json()
 causes = requests.get('http://api:4000/cause/cause').json()
 cause_names = [cause['cause_name'] for cause in causes]
 cause_mapping = {cause['cause_name']: cause['cause_id'] for cause in causes}
@@ -33,6 +55,7 @@ users = requests.get('http://api:4000/users/usernames').json()
 usernames = [user['full_name'] for user in users]
 user_mapping = {user['full_name']: user['user_id'] for user in users}
 
+>>>>>>> f8ce327 (working creation date, cause and user filters)
 
 
 # Inputs for filtering
@@ -62,6 +85,7 @@ if st.sidebar.button('Filter Posts'):
         params['created_by'] = selected_user_ids
     if selected_causes:
         params['cause'] = selected_cause_ids
+    
 
 col1, col2, col3 = st.columns(3)
 if st.session_state['role'] != 'politician':
@@ -190,6 +214,16 @@ def create_card(post):
               if st.button("Update", type = 'primary', key=f"update-{post['post_id']}", use_container_width=True):
                 st.session_state['post_id'] = post['post_id']
                 st.switch_page('pages/12_Update_Post.py')
+=======
+    st.markdown(f"""
+    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+        <h3>{post['title']}</h3>
+        <p style="color: grey; font-weight: bold;">{post['cause_name']}</p>
+        <p>{post['text']}</p>
+        <small>Posted by {post['full_name']}  on {post['creation_date']}</small>
+    </div>
+    """, unsafe_allow_html=True)
+>>>>>>> f8ce327 (working creation date, cause and user filters)
 
 
 # Display each post in a card

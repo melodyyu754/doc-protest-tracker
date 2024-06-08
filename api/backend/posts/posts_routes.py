@@ -110,6 +110,7 @@ def get_user_posts(user_id):
     return jsonify(json_data)
 
 # Post a new post
+
 @posts.route('/addpost', methods=['POST'])
 def add_post():
       # collecting data from the request object 
