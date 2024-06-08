@@ -13,21 +13,25 @@ SideBarLinks()
 st.sidebar.header("New Post")
 
 st.title("Create a New Post")
+
 user_id = st.selectbox("User ID", options=['1','2','3'], placeholder="Choose an option") # (created_by)
+
 title = st.text_input("Post Title")
 creation_date = st.date_input("Creation Date", value=date.today())
 text = st.text_area("Post Description")
-cause = st.selectbox("Protest Cause", options=["BLM", "Free Palestine", "Pro Choice"], placeholder="Choose an option")
 
-
+causes = requests.get('http://api:4000/cause/cause').json()
+cause_names =  [cause['cause_name'] for cause in causes]
+selected_cause = st.selectbox("Select Cause", options=cause_names, placeholder="Choose an option")
+cause_mapping = {cause['cause_name']: cause['cause_id'] for cause in causes}
 
 # Submission Button
 if st.button("Submit"):
     if user_id and title and creation_date and text and cause:
        
         
-        if cause == "BLM":
-            cause = 1
+        
+        cause = cause_mapping[cause] # get the cause_id from the cause name
 
         api_url = "http://api:4000//psts/addpost"
         payload = {

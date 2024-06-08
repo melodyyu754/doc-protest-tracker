@@ -14,7 +14,12 @@ st.sidebar.header("New Protest")
 st.title("Create a New Protest")
 
 country_names = requests.get('http://api:4000/cntry/names').json()
-cause_names = requests.get('http://api:4000/cause/names').json()
+
+causes = requests.get('http://api:4000/cause/cause').json()
+cause_names =  [cause['cause_name'] for cause in causes]
+selected_cause = st.selectbox("Select Cause", options=cause_names, placeholder="Choose an option")
+cause_mapping = {cause['cause_name']: cause['cause_id'] for cause in causes}
+
 user_id = st.selectbox("Your User ID", placeholder="Choose an option", index = None, options=['1','2','3']) # (created_by)
 location = st.text_input("Location (City)")
 date = st.date_input("Protest Date", value = None)
@@ -32,8 +37,7 @@ if st.button("Submit"):
         else:
             violent = 0
         
-        if cause == "BLM":
-            cause = 1
+        cause = cause_mapping[cause] # get the cause_id from the cause name
 
         api_url = "http://api:4000//prtsts/addprotest"
         payload = {
