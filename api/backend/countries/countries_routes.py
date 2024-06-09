@@ -33,9 +33,9 @@ def get_countries():
     inflation_rate_max = request.args.get('inflation_rate_max')
 
     # Add filters to the query if they are provided
-    # if region:
-    #     filters.append("region = %s")
-    #     params.append(region)
+    if region:
+        filters.append("region = %s")
+        params.append(region)
     if protests_per_capita_min:
         filters.append("protests_per_capita >= %s")
         params.append(protests_per_capita_min)

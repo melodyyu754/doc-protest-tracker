@@ -15,12 +15,15 @@ st.title("Compare Countries")
 
 # makes two columns to get two countries and compare them
 col1, col2 = st.columns(2)
+countries = 'Brazil|Mexico|Colombia|Argentina|Chile|Uruguay|Jamaica|Costa%20Rica|India|Indonesia|Japan|Philippines|Thailand|South%20Korea|Taiwan|Israel|Mongolia|United%20States|Canada|Germany|United%20Kingdom|France|Italy|Spain|Portugal|Belgium|Austria|Finland|Norway|Sweden|Switzerland|Ireland|Singapore|Netherlands|Denmark|Iceland|Luxembourg|Albania|Bulgaria|Croatia|Czech%20Republic|Estonia|Greece|Hungary|Kosovo|Latvia|Lithuania|Malta|Poland|Romania|Serbia|Slovakia|Slovenia|Australia'
 with col1:
-    country1 = st.text_input("Country 1", "United States")
+    # make a dropdown with all the countries with default value of Brazil
+    country1 = st.selectbox("Country 1", countries.split('|'))
     c1_data = requests.get(f'http://api:4000/cntry/country/{country1}').json()
 
 with col2:
-    country2 = st.text_input("Country 2", "Belgium")
+    # make a dropdown with all the countries with a default value of Mexico
+    country2 = st.selectbox("Country 2", countries.split('|'), index=1)
     c2_data = requests.get(f'http://api:4000/cntry/country/{country2}').json()
     # makes a table to display the data
     # st.table(c2_data)
@@ -61,7 +64,7 @@ if c1_data and c2_data:
         <td>{c2_data[0]['population']}</td>
     </tr>
     <tr>
-        <td>Protests Per Capita</td>
+        <td>Protests Per 100,000 people</td>
         <td>{c1_data[0]['protests_per_capita']}</td>
         <td>{c2_data[0]['protests_per_capita']}</td>
     </tr>
