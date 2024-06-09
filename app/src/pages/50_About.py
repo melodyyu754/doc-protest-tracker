@@ -13,14 +13,15 @@ st.markdown (
     Our community forum fosters collaboration and knowledge-sharing, while our comprehensive protest 
     database helps users discover events and connect with allies.
 
-    But Rallify is more than just a networking tool. We leverage advanced machine learning to analyze 
-    protest data and provide actionable insights. These insights can help activists understand trends, 
-    predict turnout, and tailor their strategies for maximum effectiveness. Whether you're an activist 
-    on the front lines, a journalist reporting on the movement, or a politician seeking to understand 
-    constituent concerns, Rallify provides the data and tools you need to make a difference.
+    But Rallify is more than just a networking tool. We leverage machine learning to analyze 
+    protest data and provide valuable insights. These can help users understand trends worldwide. 
+    Whether you're an activist on the front lines, a journalist reporting on the movement, or a 
+    politician seeking to understand constituent concerns, Rallify provides the data and tools you 
+    need to make a difference.
     
-    This app was built for Norhteastern University's Summer 2024 Dialogue of Civilization Program 
+    This app was built for Northeastern University's Summer 2024 Dialogue of Civilization Program 
     titled *Data and Software in International Government and Politics*.  The program was being
     led by Dr. Mark Fontenot and Dr. Eric Gerber from the Khoury College of Computer Sciences.  
     """
         )
+

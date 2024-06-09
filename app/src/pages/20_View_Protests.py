@@ -90,8 +90,21 @@ def delete_protest(protest_id):
 
 # Define a function to create a card for each post
 def create_card(protest):
+    # Card Background Colors
+    cause_colors = {
+    "Racial Inequality": "#E6D7F7",
+    "Climate Change": "#F2E8FD",
+    "Animal Rights": "#E3F5FD",
+    "Black Lives Matter": "#F1F2FD",
+    "Political Corruption": "#D7E4F3",
+    "Gender Equality": "#E2E2E4",
+    "Israeli-Palestine": "#E6F2F8"
+    }
+
+    card_bg_color = cause_colors.get(protest['cause_name'], "#FFFFFF")  # Default to white if cause not found
+  
     st.markdown(f"""
-    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+    <div style="border: 1px solid #ddd; border-radius: 8px; background-color: {card_bg_color}; padding: 16px; margin-bottom: 16px;">
         <h2>{protest['cause_name']}</h2>
         <h4>{protest['date']}</h4>
         <h4>{protest['location']},{protest['country']} </h4>
