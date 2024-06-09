@@ -60,6 +60,7 @@ def add_protest():
     db.get_db().commit()
 
     return "Success"
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 # Get one protest with one protest
@@ -234,3 +235,6 @@ def get_user_protests(user_id):
         return jsonify({"error": "Protest not found"}), 404
 
     return jsonify(json_data)
+=======
+    
+>>>>>>> d364fda (began working on proper values for our protest drop downs)
