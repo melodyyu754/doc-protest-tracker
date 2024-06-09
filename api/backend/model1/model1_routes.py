@@ -46,7 +46,18 @@ def get_lobf():
     "beta_8" : lobf[8],
     "beta_9" : lobf[9],
     "beta_10" : lobf[10],
-    "beta_11" : lobf[11]
+    "beta_11" : lobf[11],
+    "beta_12" : lobf[12],
+    "beta_13" : lobf[13],
+    "beta_14" : lobf[14],
+    "beta_15" : lobf[15],
+    "beta_16" : lobf[16],
+    "beta_17" : lobf[17],
+    "beta_18" : lobf[18],
+    "beta_19" : lobf[19],
+    "beta_20" : lobf[20],
+    "beta_21" : lobf[21],
+    "beta_22" : lobf[22]
     }
     #current_app.logger.info(f'hello = {return_dict}')
     the_response = make_response(jsonify(lobf_dict))
@@ -75,10 +86,22 @@ def insert_coefficients():
     beta_9 = data['beta_9']
     beta_10 = data['beta_10']
     beta_11 = data['beta_11']
+    beta_12 = data['beta_12']
+    beta_13 = data['beta_13']
+    beta_14 = data['beta_14']
+    beta_15 = data['beta_15']
+    beta_16 = data['beta_16']
+    beta_17 = data['beta_17']
+    beta_18 = data['beta_18']
+    beta_19 = data['beta_19']
+    beta_20 = data['beta_20']
+    beta_21 = data['beta_21']
+    beta_22 = data['beta_22']
+
 
 
     # Construct the query
-    query = 'INSERT INTO model1_lobf_coefficients (beta_0, beta_1, beta_2, beta_3, beta_4, beta_5, beta_6, beta_7, beta_8, beta_9, beta_10, beta_11) VALUES ('
+    query = 'INSERT INTO model1_lobf_coefficients (beta_0, beta_1, beta_2, beta_3, beta_4, beta_5, beta_6, beta_7, beta_8, beta_9, beta_10, beta_11, beta_12, beta_13, beta_14, beta_15, beta_16, beta_17, beta_18, beta_19, beta_20, beta_21, beta_22) VALUES ('
     query += "'" + str(beta_0) + "',"
     query += "'" + str(beta_1) + "',"
     query += "'" + str(beta_2) + "',"
@@ -90,7 +113,18 @@ def insert_coefficients():
     query += "'" + str(beta_8) + "',"
     query += "'" + str(beta_9) + "',"
     query += "'" + str(beta_10) + "',"
-    query += "'" + str(beta_11) + "')"
+    query += "'" + str(beta_11) + "',"
+    query += "'" + str(beta_12) + "',"
+    query += "'" + str(beta_13) + "',"
+    query += "'" + str(beta_14) + "',"
+    query += "'" + str(beta_15) + "',"
+    query += "'" + str(beta_16) + "',"
+    query += "'" + str(beta_17) + "',"
+    query += "'" + str(beta_18) + "',"
+    query += "'" + str(beta_19) + "',"
+    query += "'" + str(beta_20) + "',"
+    query += "'" + str(beta_21) + "',"
+    query += "'" + str(beta_22) + "')"
    
     
     print(query)
