@@ -34,13 +34,23 @@ st.write("### Update Post")
 post_id = st.text_input("Post ID to Update", value=preload_post['post_id'], disabled = True)
 title = st.text_input("New Post Title", value=preload_post['title'])
 text = st.text_area("Update your post here...", value=preload_post['text'])
-if st.button("Update Post"):
-    if post_id and title and text:
-        response = update_post(post_id, title, text)
-        if response.status_code == 200:
-            st.success("Post updated successfully!")
-            st.experimental_rerun()  # Refresh the UI to clear the form
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("Update Post", use_container_width = True):
+        if post_id and title and text:
+            if title != preload_post['title'] or text != preload_post['text']:
+                response = update_post(post_id, title, text)
+                if response.status_code == 200:
+                    st.success("Post updated successfully!")
+                else:
+                    st.error(f"Failed to update post ({response.status_code}). Please try again.")
+            else: 
+                st.warning("No Changes detected.")
         else:
-            st.error(f"Failed to update post ({response.status_code}). Please try again.")
-    else:
-        st.warning("Please fill in all fields.")
+            st.warning("Please fill in all fields.")
+
+with col2:
+    if st.button("Back", use_container_width = True):
+        st.switch_page("pages/14_my_posts.py")

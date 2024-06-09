@@ -64,7 +64,6 @@ def add_protest():
     location = data['location']
     date = data['date']
     description = data['description']
-    violent = data['violent']
     created_by = data['user_id']
     country = data['country']
     cause = data['cause']
@@ -75,7 +74,6 @@ def add_protest():
     query += "'" + location + "',"
     query += "'" + date + "',"
     query += "'" + description + "',"
-    query += "'" + str(violent) + "',"
     query += "'" + str(created_by) + "',"
     query += "'" + country + "',"
     query += "'" + str(cause) + "',"
@@ -94,7 +92,7 @@ def add_protest():
 # Get one protest with one protest
 @protests.route('/protests/<protest_id>', methods=['GET'])
 def get_protest_detail(protest_id):
-    query = ('SELECT * FROM protests WHERE protest_id = ' + str(protest_id))
+    query = ('SELECT * FROM protests LEFT JOIN cause on protests.cause = cause.cause_id WHERE protest_id = ' + str(protest_id))
     current_app.logger.info(query)
     cursor = db.get_db().cursor()
     cursor.execute(query)
@@ -117,20 +115,22 @@ def update_protest():
         protest_id = the_data['protest_id']
         location = the_data['location']
         description = the_data['description']
+        cause = the_data['cause']
+        country = the_data['country']
       
 
-        query = 'UPDATE protests SET location = %s, description = %s WHERE protest_id = %s'
-
-        current_app.logger.info(f'Updating post with post_id: {protest_id}')
-        cursor.execute(query, (location, description, protest_id))
+        query = 'UPDATE protests SET location = %s, description = %s, cause = %s, country = %s WHERE protest_id = %s'
+        
+        current_app.logger.info(f'Updating protest with protest_id: {protest_id}')
+        cursor.execute(query, (location, description, cause, country, protest_id))
         connection.commit()
 
         if cursor.rowcount == 0:
-            return make_response(jsonify({"error": "Post not found"}), 404)
+            return make_response(jsonify({"error": "Protest not found"}), 404)
 
         return make_response(jsonify({"message": "Post updated successfully"}), 200)
    except Error as e:
-        current_app.logger.error(f"Error updating post with post_id: {protest_id}, error: {e}")
+        current_app.logger.error(f"Error updating protest with protest_id: {protest_id}, error: {e}")
         return make_response(jsonify({"error": "Internal server error"}), 500)
    finally:
         if cursor:
