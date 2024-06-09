@@ -7,8 +7,6 @@ from flask import Flask
 from backend.db_connection import db
 
 from backend.countries.countries_routes import countries
-from backend.db_connection import db
-# from backend.model1.model1_routes import model1
 from backend.posts.posts_routes import posts
 from backend.protests.protests_routes import protests
 from backend.cause.cause_routes import causes
@@ -84,8 +82,6 @@ def create_app():
     app.register_blueprint(model2,     url_prefix='/model2')
     app.register_blueprint(users,      url_prefix='/users')
    
-    app.register_blueprint(model2,     url_prefix='/model2')
-
     # Don't forget to return the app object
 
     return app

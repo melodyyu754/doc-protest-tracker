@@ -103,7 +103,6 @@ def get_protest_detail(protest_id):
     # Check if any data is found
     if not json_data:
         return jsonify({"error": "Post not found"}), 404
-=======
 # # Get all the products from the database
 # @protests.route('/protests', methods=['GET'])
 # def get_protests():
@@ -227,7 +226,6 @@ def get_protest_detail(protest_id):
 #     return jsonify(json_data)
 
 
->>>>>>> 5b99559 (working on filtering)
 
     return jsonify(json_data)
 
@@ -262,6 +260,4 @@ def get_user_protests(user_id):
         return jsonify({"error": "Protest not found"}), 404
 
     return jsonify(json_data)
-=======
-    
->>>>>>> d364fda (began working on proper values for our protest drop downs)
+

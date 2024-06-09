@@ -104,7 +104,6 @@ def get_country_names():
     theData = cursor.fetchall()
     country_names = [row[0] for row in theData]
     return jsonify(country_names)
-<<<<<<< HEAD
 
 # route for getting just one country
 @countries.route('/country/<country>', methods=['GET'])
@@ -129,5 +128,4 @@ def get_country_detail(country):
         return jsonify({"error": "Country not found"}), 404
 
     return jsonify(json_data)
-=======
->>>>>>> d364fda (began working on proper values for our protest drop downs)
+
