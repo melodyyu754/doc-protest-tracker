@@ -136,6 +136,7 @@ def SideBarLinks(show_home=False):
             ViewCountriesNav()
             CompareCountriesNav()
             ViewModel1Nav()
+            ViewModel2Nav()
 
     # Always show the About page at the bottom of the list of links
     AboutPageNav()
