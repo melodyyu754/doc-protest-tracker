@@ -57,4 +57,9 @@ if st.button('Compare Countries',
 if st.button('View Model 1',
               type='primary',
               use_container_width=True):
-    st.switch_page('pages/41_View_Model_1.py')
+    st.switch_page('pages/41_Model_1.py')
+
+if st.button('View Model 2',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/42_Model_2.py')
