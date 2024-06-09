@@ -22,7 +22,10 @@ def JournalistHomeNav():
 
 #### ------------------------ Post Pages ------------------------
 def ViewPostsNav():
-    st.sidebar.page_link("pages/10_View_Posts.py", label="View Posts", icon='📄')
+    st.sidebar.page_link("pages/10_View_Posts.py", label="All Posts", icon='📄')
+
+def MyPostsPostsNav():
+    st.sidebar.page_link("pages/14_my_posts.py", label="My Posts", icon='📄') 
 
 def NewPostNav():
     st.sidebar.page_link("pages/11_New_Post.py", label="New Post", icon='✍️')
@@ -39,7 +42,10 @@ def UpdatePostNav():
 
 #### ------------------------ Protest Pages ------------------------
 def ViewProtestsNav():
-    st.sidebar.page_link("pages/20_View_Protests.py", label="View Protests", icon='📢')
+    st.sidebar.page_link("pages/20_View_Protests.py", label="All Protests", icon='📢')
+
+def MyProtestsNav():
+    st.sidebar.page_link("pages/26_my_protests.py", label="My Protests", icon='📢')
 
 def NewProtestNav():
     st.sidebar.page_link("pages/21_New_Protest.py", label="New Protest", icon='🚩')
@@ -51,7 +57,7 @@ def DeleteProtestNav():
     st.sidebar.page_link("pages/23_Delete_Protests.py", label="Remove Protest", icon='✏️')
 
 def UpdateProtestNav():
-    st.sidebar.page_link("pages/22_Update_Protest.py", label="Add Protest", icon='✏️')
+    st.sidebar.page_link("pages/22_Update_Protest.py", label="Update Protest", icon='✏️')
 
 def CompareProtestsNav():
     st.sidebar.page_link("pages/23_Compare_Protests.py", label="Compare Protests", icon='⚖️')
@@ -102,13 +108,12 @@ def SideBarLinks(show_home=False):
         if st.session_state['role'] == 'activist':
             ActivistHomeNav()
             ViewPostsNav()
+            MyPostsPostsNav()
             NewPostNav()
-            UpdatePostNav()
-            DeletePostNav()
+
             ViewProtestsNav()
+            MyProtestsNav()
             NewProtestNav()
-            UpdateProtestNav()
-            DeleteProtestNav()
 
         #  If the user is a politician, show the politician pages
         if st.session_state['role'] == 'politician':
@@ -121,9 +126,9 @@ def SideBarLinks(show_home=False):
         if st.session_state['role'] == 'journalist':
             JournalistHomeNav()
             ViewPostsNav()
+            MyPostsPostsNav()
             NewPostNav()
-            UpdatePostNav()
-            DeletePostNav()
+
             ViewProtestsNav()
             SaveProtestsNav()
             # CompareProtestsNav()
