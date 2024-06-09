@@ -59,16 +59,23 @@ if st.button('Predict Number of Protests',
   logger.info(f"Response: {results}")
   pred_per_capita = results['prediction_value']
   activity_level = requests.get(f'http://api:4000/model1/activity-level/{pred_per_capita}').json()
-  pred = pred_per_capita * var_04
+  pred = pred_per_capita * var_04 / 100000
   results_display = f'The estimated number of protests that will occur in {country_input} this year will be: {pred}'
+  results_per_capita_display = f'The estimated number of protests per 100,000 people that will occur in {country_input} this year will be: {pred_per_capita}'
+
   def stream_data():
     for word in results_display.split(" "):
+        yield word + " "
+        time.sleep(0.03)
+  def stream_data_per_capita():
+    for word in results_per_capita_display.split(" "):
         yield word + " "
         time.sleep(0.03)
   st.markdown(f"""
         <div style="background-color: silver;"> Numeric Predicton: </div>
       """, unsafe_allow_html=True)
   st.write_stream(stream_data)
+  st.write_stream(stream_data_per_capita)
 
   # Define a dictionary mapping text to colors (you can customize this)
   level_to_color = {
@@ -96,5 +103,6 @@ if st.button('Predict Number of Protests',
   st.markdown(f"""
       <div style="background-color: silver;"> Activity Level Prediction: </div>
     """, unsafe_allow_html=True)
-  create_circle_box(f'In terms of protest events per capita, this country will have a relatively ')
+  st.write("")
+  create_circle_box(f'In terms of protest events per 100,000 people, this country will have a relatively ')
 
