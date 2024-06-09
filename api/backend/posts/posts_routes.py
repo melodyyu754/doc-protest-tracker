@@ -136,18 +136,18 @@ def delete_post(id):
     return jsonify({"message": "Post deleted successfully"}), 200
 
 
-# # Get one post with one post_id
-# @posts.route('/post/<post_id>', methods=['GET'])
-# def get_post_detail(post_id):
-#     query = ('SELECT post_id, title, creation_date, text, created_by, cause FROM posts WHERE post_id = ' + str(post_id))
-#     current_app.logger.info(query)
-#     cursor = db.get_db().cursor()
-#     cursor.execute(query)
-#     column_headers = [x[0] for x in cursor.description]
-#     theData = cursor.fetchall()
-#     json_data = [dict(zip(column_headers, row)) for row in theData]
-#     # Check if any data is found
-#     if not json_data:
-#         return jsonify({"error": "Post not found"}), 404
+# Get one post with one post_id
+@posts.route('/post/<post_id>', methods=['GET'])
+def get_post_detail(post_id):
+    query = ('SELECT post_id, title, creation_date, text, created_by, cause FROM posts WHERE post_id = ' + str(post_id))
+    current_app.logger.info(query)
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    column_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    json_data = [dict(zip(column_headers, row)) for row in theData]
+    # Check if any data is found
+    if not json_data:
+        return jsonify({"error": "Post not found"}), 404
 
-#     return jsonify(json_data)
+    return jsonify(json_data)

@@ -25,6 +25,7 @@ def get_protests():
     the_response.mimetype = 'application/json' # what tyoe of data are we sending back
     return the_response # returns it back through the rest api stuff
 
+# Add a protest
 @protests.route('/addprotest', methods=['POST'])
 def add_protest():
       # collecting data from the request object 
@@ -60,7 +61,7 @@ def add_protest():
 
     return "Success"
 
-# Get one post with one post_id
+# Get one protest with one protest
 @protests.route('/protests/<protest_id>', methods=['GET'])
 def get_protest_detail(protest_id):
     query = ('SELECT * FROM protests WHERE protest_id = ' + str(protest_id))
@@ -76,9 +77,27 @@ def get_protest_detail(protest_id):
 
     return jsonify(json_data)
 
+# DELETE a protest
+@protests.route('/protest/<int:id>', methods=['DELETE'])
+def delete_protest(id):
+    cursor = db.get_db().cursor()
+
+    # Constructing the query to delete the post by id
+    query = 'DELETE FROM protests WHERE protest_id = %s'
+    
+    current_app.logger.info(f'Deleting protest with id: {id}')
+    cursor.execute(query, (id,))
+    db.get_db().commit()
+    
+    if cursor.rowcount == 0:
+        return make_response(jsonify({"error": "Protest not found"}), 404)
+    
+    return jsonify({"message": "Protest deleted successfully"}), 200
+
+# Get a particular user's protests
 @protests.route('/myprotests/<user_id>', methods=['GET'])
-def get_user_posts(user_id):
-    query = ('SELECT post_id, title, creation_date, text, created_by, cause, first_name, last_name FROM protests LEFT JOIN users on protests.created_by = users.user_id WHERE user_id = ' + str(user_id))
+def get_user_protests(user_id):
+    query = ('SELECT cause_name, protest_id, location, date, description, created_by, protests.country, cause, first_name, last_name FROM protests LEFT JOIN users on protests.created_by = users.user_id LEFT JOIN cause on protests.cause = cause.cause_id WHERE user_id = ' + str(user_id))
     cursor = db.get_db().cursor()
     cursor.execute(query)
     column_headers = [x[0] for x in cursor.description]
@@ -86,7 +105,6 @@ def get_user_posts(user_id):
     json_data = [dict(zip(column_headers, row)) for row in theData]
     # Check if any data is found
     if not json_data:
-        return jsonify({"error": "Post not found"}), 404
+        return jsonify({"error": "Protest not found"}), 404
 
     return jsonify(json_data)
-    

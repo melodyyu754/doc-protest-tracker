@@ -1,17 +1,23 @@
-import logging
-
-import requests
-import streamlit as st # type: ignore
+import streamlit as st
+from streamlit_extras.app_logo import add_logo
+import numpy as np
+import random
+import time
 from modules.nav import SideBarLinks
+import requests
 
-logger = logging.getLogger()
-
-st.set_page_config(layout="wide")
-
-# Display the appropriate sidebar links for the role of the logged in user
+# Call the SideBarLinks from the nav module in the modules directory
 SideBarLinks()
 
-st.title("Protests")
+import logging
+
+logger = logging.getLogger(__name__)
+
+# set the header of the page
+st.header('My Protests')
+
+# You can access the session state to make a more customized/personalized app experience
+st.write(f"### Hi, {st.session_state['first_name']}. Check out your protests here.")
 
 col1, col2, col3 = st.columns(3)
 if st.session_state['role'] != 'politician':
@@ -22,13 +28,16 @@ if st.session_state['role'] != 'politician':
             use_container_width=True):
       st.switch_page('pages/21_New_Protest.py')
 
-st.header("Past and Current Protests")
-data ={}
-try:
-  data = requests.get('http://api:4000/prtsts/protests').json()
-except:
-  st.write("**Important**: Could not connect to sample api")
 
+data = {} 
+try:
+  data = requests.get(f"http://api:4000/prtsts/myprotests/{st.session_state['user_id']}").json()
+
+except:
+  st.write("**Important**: Could not connect to sample api, so using dummy data.")
+  data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
+
+logger.info(data)
 def delete_protest(protest_id):
     api_url = f"http://api:4000/prtsts/protest/{protest_id}"
     response = requests.delete(api_url)
@@ -38,17 +47,17 @@ def delete_protest(protest_id):
 def create_card(protest):
     st.markdown(f"""
     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-        <h2>{protest['Cause']}</h2>
-        <h4>{protest['Date']}</h4>
-        <h4>{protest['City']},{protest['Country']} </h4>
-        <p>{protest['Description']}</p>
+        <h2>{protest['cause_name']}</h2>
+        <h4>{protest['date']}</h4>
+        <h4>{protest['location']},{protest['country']} </h4>
+        <p>{protest['description']}</p>
     </div>
     """, unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
 
     # Add a delete and update button 
-    if st.session_state['user_id'] == protest['Created By']:
+    if st.session_state['user_id'] == protest['created_by']:
             with col1:
               if st.button("Delete", type = 'primary', key=f"delete-{protest['protest_id']}", use_container_width=True):
                   response = delete_protest(protest['protest_id'])
