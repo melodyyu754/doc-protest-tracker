@@ -107,9 +107,6 @@ user_mapping = {user['full_name']: user['user_id'] for user in users}
 creation_date = st.sidebar.date_input('Creation Date', value=None, max_value=date.today())
 
 
-# Multi-select inputs for usernames and cause names
-# doing later
-#selected_usernames = st.multiselect('Usernames', list('1', '2', '3'))
 # Multi-select for causes
 selected_causes = st.multiselect("Select Causes", options=cause_names)
 selected_cause_ids = [cause_mapping[cause] for cause in selected_causes]
