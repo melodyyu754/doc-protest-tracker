@@ -14,6 +14,7 @@ st.sidebar.header("New Post")
 
 st.title("Create a New Post")
 
+
 user_id = st.text_input("Username", value=str(st.session_state['first_name']), disabled = True)
 
 title = st.text_input("Post Title")

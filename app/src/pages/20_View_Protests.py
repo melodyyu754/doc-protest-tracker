@@ -120,3 +120,4 @@ def create_card(protest):
 # Display each post in a card
 for protest in data:
     create_card(protest)
+

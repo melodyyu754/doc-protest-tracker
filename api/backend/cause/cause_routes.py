@@ -27,9 +27,9 @@ def get_cause():
 
     return jsonify(json_data)
 
-
 @causes.route('/addcause', methods=['POST'])
 def add_cause():
+    # get a cursor object from the database
     cursor = db.get_db().cursor()
     query = 'SELECT cause_name FROM cause'   
     current_app.logger.info(query)

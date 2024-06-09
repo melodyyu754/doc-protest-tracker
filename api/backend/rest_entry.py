@@ -11,15 +11,16 @@ from backend.posts.posts_routes import posts
 from backend.protests.protests_routes import protests
 from backend.cause.cause_routes import causes
 from backend.model1.model1_routes import model1
-from backend.model2.model2_routes import model2
+
+from backend.cause.cause_routes import causes
 from backend.users.users_routes import users
+from backend.model2.model2_routes import model2
 
 import os
 from dotenv import load_dotenv
 from flask import Flask
 
 logging.basicConfig(level=logging.DEBUG)
-
 
 
 def create_app():

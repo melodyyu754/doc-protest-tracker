@@ -114,7 +114,6 @@ def SideBarLinks(show_home=False):
             ViewProtestsNav()
             MyProtestsNav()
             NewProtestNav()
-            
 
         #  If the user is a politician, show the politician pages
         if st.session_state['role'] == 'politician':
@@ -129,7 +128,7 @@ def SideBarLinks(show_home=False):
             ViewPostsNav()
             MyPostsPostsNav()
             NewPostNav()
-        
+
             ViewProtestsNav()
             SaveProtestsNav()
             # CompareProtestsNav()

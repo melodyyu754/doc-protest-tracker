@@ -90,6 +90,7 @@ def add_protest():
     db.get_db().commit()
 
     return "Success"
+
 # Get one protest with one protest
 @protests.route('/protests/<protest_id>', methods=['GET'])
 def get_protest_detail(protest_id):
@@ -105,7 +106,37 @@ def get_protest_detail(protest_id):
         return jsonify({"error": "Post not found"}), 404
     return jsonify(json_data)
 
-# DELETE a protest
+# UPDATE a post
+@protests.route('/protest', methods = ['PUT'])
+def update_protest():
+   try:
+        connection = db.get_db()
+        cursor = connection.cursor()
+
+        the_data = request.json
+        protest_id = the_data['protest_id']
+        location = the_data['location']
+        description = the_data['description']
+      
+
+        query = 'UPDATE protests SET location = %s, description = %s WHERE protest_id = %s'
+
+        current_app.logger.info(f'Updating post with post_id: {protest_id}')
+        cursor.execute(query, (location, description, protest_id))
+        connection.commit()
+
+        if cursor.rowcount == 0:
+            return make_response(jsonify({"error": "Post not found"}), 404)
+
+        return make_response(jsonify({"message": "Post updated successfully"}), 200)
+   except Error as e:
+        current_app.logger.error(f"Error updating post with post_id: {protest_id}, error: {e}")
+        return make_response(jsonify({"error": "Internal server error"}), 500)
+   finally:
+        if cursor:
+            cursor.close()
+
+# DELETE a post
 @protests.route('/protest/<int:id>', methods=['DELETE'])
 def delete_protest(id):
     cursor = db.get_db().cursor()

@@ -9,6 +9,7 @@ from backend.db_connection import db
 from datetime import datetime
 from datetime import datetime
 
+
 # GET all posts, -filtering of posts 
 # POST  new post 
 # UPDATE a new post 
@@ -21,8 +22,8 @@ posts = Blueprint('posts', __name__)
 def get_posts():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
-
     query = """SELECT title, created_by, post_id, creation_date, text, CONCAT(first_name, ' ', last_name) as full_name, cause_name 
+
     FROM posts
         JOIN cause on posts.cause = cause.cause_id
         JOIN users on posts.created_by = users.user_id
@@ -71,6 +72,7 @@ def get_posts():
 
     return jsonify(json_data)
 
+
 @posts.route('/myposts/<user_id>', methods=['GET'])
 def get_user_posts(user_id):
     query = ('SELECT post_id, title, creation_date, text, created_by, cause, first_name, last_name FROM posts JOIN users on posts.created_by = users.user_id WHERE user_id = ' + str(user_id))
@@ -86,7 +88,6 @@ def get_user_posts(user_id):
     return jsonify(json_data)
 
 # Post a new post
-
 @posts.route('/addpost', methods=['POST'])
 def add_post():
       # collecting data from the request object 

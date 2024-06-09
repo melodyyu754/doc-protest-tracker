@@ -6,6 +6,7 @@ import time
 from modules.nav import SideBarLinks
 import requests
 
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -25,7 +26,6 @@ def update_post(post_id, title, text):
 
 
 # makes a call to the post api for a single post based on sessionstate[postid]
-
 preload_post = requests.get(f"http://api:4000/psts/post/{st.session_state['post_id']}").json()
 preload_post = preload_post[0]
 logger.info(preload_post)
@@ -44,6 +44,3 @@ if st.button("Update Post"):
             st.error(f"Failed to update post ({response.status_code}). Please try again.")
     else:
         st.warning("Please fill in all fields.")
-
-
-
