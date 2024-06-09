@@ -9,6 +9,7 @@ from backend.cause.cause_routes import causes
 from backend.model1.model1_routes import model1
 from backend.cause.cause_routes import causes
 from backend.users.users_routes import users
+from backend.model2.model2_routes import model2
 
 
 from dotenv import load_dotenv
@@ -76,6 +77,7 @@ def create_app():
     app.register_blueprint(model1,     url_prefix='/model1')
     app.register_blueprint(users,      url_prefix='/users')
    
+    app.register_blueprint(model2,     url_prefix='/model2')
 
     # Don't forget to return the app object
 
