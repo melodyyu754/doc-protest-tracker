@@ -13,7 +13,8 @@ SideBarLinks()
 
 # add filtering options on the sidebar based on region (Western, Asia, South America), protests_per_capita, population, gdp_per_capita, unemployment_rate, urbanization_rate, inflation_rate
 st.sidebar.header('Filter Countries')
-region = st.sidebar.selectbox('Region', ['Western', 'Asia', 'South America'])
+# multi-select input for region
+region = st.sidebar.multiselect('Region', ['Western', 'Eastern Europe', 'Asia', 'South America'], default=['Western', 'Eastern Europe', 'Asia', 'South America'])
 protests_per_capita_min, protests_per_capita_max = st.sidebar.slider('Protests Per Capita', 0, 100, (0, 100))
 population_min, population_max = st.sidebar.slider('Population', 0, 2000000000, (0, 2000000000))
 gdp_per_capita_min, gdp_per_capita_max = st.sidebar.slider('GDP Per Capita', 0, 100000, (0, 100000))
@@ -21,9 +22,14 @@ unemployment_rate_min, unemployment_rate_max = st.sidebar.slider('Unemployment R
 urbanization_rate_min, urbanization_rate_max = st.sidebar.slider('Urbanization Rate', 0.0, 100.0, (0.0, 100.0))
 inflation_rate_min, inflation_rate_max = st.sidebar.slider('Inflation Rate', 0.0, 200.0, (0.0, 200.0))
 
-# set the header of the page
-st.header('World Bank Data')
+# set the header of the page.
+st.header('Countries')
 
+
+if st.button(label = "Compare Two Countries",
+             type = 'primary',
+             use_container_width=True):
+  st.switch_page('pages/31_Compare_Countries.py')
 
 data = {} 
 try:
