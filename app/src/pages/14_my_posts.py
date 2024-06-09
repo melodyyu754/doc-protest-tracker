@@ -67,5 +67,8 @@ def create_card(post):
                 st.switch_page('pages/12_Update_Post.py')
 
 # Display each post in a card
-for post in data:
-    create_card(post)
+if data != {'error': 'Post not found'}:
+  for post in data:
+      create_card(post)
+else: 
+   st.write("You have no posts.")

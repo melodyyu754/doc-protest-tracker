@@ -118,6 +118,10 @@ def create_card(protest):
                 st.switch_page('pages/22_Update_Protest.py')
 
 # Display each post in a card
-for protest in data:
-    create_card(protest)
+
+if data != {'error': 'Protest not found'}:
+  for protest in data:
+      create_card(protest)
+else: 
+   st.write("No protests to display")
 
