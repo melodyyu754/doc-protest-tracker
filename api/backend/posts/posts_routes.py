@@ -22,7 +22,6 @@ def get_posts():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
 
-    #need to edit
     query = """SELECT post_id, title, creation_date, text, created_by, cause 
     FROM posts
         JOIN cause on posts.cause = cause.cause_id

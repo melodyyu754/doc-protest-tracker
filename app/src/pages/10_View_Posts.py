@@ -94,9 +94,10 @@ except:
 
 # st.dataframe(data)
 
-causes_response = requests.get('http://api:4000/cause/names').json()
-cause_names = [cause['name'] for cause in causes_response]
-cause_dict = {cause['name']: cause['id'] for cause in causes_response}
+cause_names = requests.get('http://api:4000/causes/names').json()
+
+cause_dict = requests.get('http://api:4000/causes/cause').json()
+cause_mapping = {cause['name']: cause['id'] for cause in cause_dict}
 
 
 # Inputs for filtering
@@ -108,6 +109,8 @@ creation_time = st.date_input('Creation Time', value = None)
 #selected_usernames = st.multiselect('Usernames', list('1', '2', '3'))
 # Multi-select for causes
 selected_causes = st.multiselect("Select Causes", options=cause_names)
+selected_cause_ids = [cause_mapping[cause] for cause in selected_causes]
+
 
 # Button to trigger the filter action
 if st.button('Filter Posts'):
@@ -118,7 +121,7 @@ if st.button('Filter Posts'):
     # if selected_usernames:
     #     params['user_id'] = [usernames[username] for username in selected_usernames]
     if selected_causes:
-        params['cause'] = [cause_dict[cause] for cause in selected_causes]
+        params['cause'] = selected_cause_ids
 
     # Make a request to the backend API
     response = requests.get('http://api:4000/psts/posts', params= params).json()
