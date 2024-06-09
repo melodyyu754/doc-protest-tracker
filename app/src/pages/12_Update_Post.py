@@ -29,6 +29,7 @@ def update_post(post_id, title, text):
 preload_post = requests.get(f"http://api:4000/psts/post/{st.session_state['post_id']}").json()
 preload_post = preload_post[0]
 logger.info(preload_post)
+
 # populates the update form with sessionstate[postid] data, make call to api to get post, then populate the form with the data
 st.write("### Update Post")
 post_id = st.text_input("Post ID to Update", value=preload_post['post_id'], disabled = True)

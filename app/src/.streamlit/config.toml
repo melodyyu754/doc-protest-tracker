@@ -4,8 +4,8 @@ showSidebarNavigation = false
 [theme]
 base="light"
 primaryColor="#9999cc"
-secondaryColor="#FF0000"
-font="monospace"
+secondaryColor="#e0e4fb"
+font="Lato"
 
 [server]
 fileWatcherType = "poll"

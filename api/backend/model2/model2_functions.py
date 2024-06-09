@@ -25,17 +25,18 @@ def initialize():
 # Takes in protests per capita and gdp per capita, and returns the list of clusters with country names and the cluster the input data belongs to
 def predict(protests_per_capita, gdp_per_capita, n_clusters):
     df_country = initialize()
-
-    # Print column names to debug
-    print(df_country.columns)
+    # df_country = pd.read_csv('backend/model2/world_bank_data.csv')
 
     # Ensure column names match exactly
     df_country.rename(columns=lambda x: x.strip(), inplace=True)
-    
     # turn n_clusters into an integer
     n_clusters = int(n_clusters)
     kmeans = KMeans(n_clusters=n_clusters, n_init=10)  # Set n_init explicitly
-    kmeans.fit(df_country[['protests_per_capita', 'gdp_per_capita']])
+    X = df_country[['protests_per_capita', 'gdp_per_capita']]
+
+    # Normalizing features
+    X = (X - X.mean()) / X.std()
+    kmeans.fit(X)
     
     # Get the cluster labels for all data points
     df_country['cluster'] = kmeans.labels_
@@ -44,7 +45,7 @@ def predict(protests_per_capita, gdp_per_capita, n_clusters):
     clusters = {}
     for cluster_num in range(n_clusters):
         clusters[cluster_num] = df_country[df_country['cluster'] == cluster_num]['country'].tolist()
-    
+           
     # Create a DataFrame for the input to maintain feature names
     input_data = pd.DataFrame([[protests_per_capita, gdp_per_capita]], columns=['protests_per_capita', 'gdp_per_capita'])
     
@@ -53,4 +54,7 @@ def predict(protests_per_capita, gdp_per_capita, n_clusters):
     
     input_cluster = int(input_cluster)
     
-    return clusters, input_cluster
+    # make df_country json serializable
+    df_country = df_country.to_dict()
+    
+    return clusters, input_cluster, df_country

@@ -14,17 +14,18 @@ SideBarLinks()
 # add filtering options on the sidebar based on region (Western, Asia, South America), protests_per_capita, population, gdp_per_capita, unemployment_rate, urbanization_rate, inflation_rate
 st.sidebar.header('Filter Countries')
 # multi-select input for region
-region = st.sidebar.multiselect('Region', ['Western', 'Eastern Europe', 'Asia', 'South America'], default=['Western', 'Eastern Europe', 'Asia', 'South America'])
-protests_per_capita_min, protests_per_capita_max = st.sidebar.slider('Protests Per Capita', 0, 100, (0, 100))
+# make the maximum number of selections in the multi-select input to be 1
+
+region = st.sidebar.multiselect('Region', ['Western', 'Eastern Europe', 'Asia', 'South America'], default=[])
+protests_per_capita_min, protests_per_capita_max = st.sidebar.slider('Protests Per Capita', 0, 200, (0, 200))
 population_min, population_max = st.sidebar.slider('Population', 0, 2000000000, (0, 2000000000))
-gdp_per_capita_min, gdp_per_capita_max = st.sidebar.slider('GDP Per Capita', 0, 100000, (0, 100000))
-unemployment_rate_min, unemployment_rate_max = st.sidebar.slider('Unemployment Rate', 0.0, 100.0, (0.0, 100.0))
+gdp_per_capita_min, gdp_per_capita_max = st.sidebar.slider('GDP Per Capita', 0, 200000, (0, 200000))
+unemployment_rate_min, unemployment_rate_max = st.sidebar.slider('Unemployment Rate', 0.0, 50.0, (0.0, 50.0))
 urbanization_rate_min, urbanization_rate_max = st.sidebar.slider('Urbanization Rate', 0.0, 100.0, (0.0, 100.0))
-inflation_rate_min, inflation_rate_max = st.sidebar.slider('Inflation Rate', 0.0, 200.0, (0.0, 200.0))
+inflation_rate_min, inflation_rate_max = st.sidebar.slider('Inflation Rate', 0.0, 300.0, (0.0, 300.0))
 
 # set the header of the page.
 st.header('Countries')
-
 
 if st.button(label = "Compare Two Countries",
              type = 'primary',
@@ -53,4 +54,7 @@ except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-st.dataframe(data)
+# rename the columns to be more professional
+data = pd.DataFrame(data)
+data = data.rename(columns={'country_name': 'Country Name', 'region': 'Region', 'protests_per_capita': 'Protests Per 100,000', 'population': 'Population', 'gdp_per_capita': 'GDP Per Capita', 'unemployment_rate': 'Unemployment Rate', 'urbanization_rate': 'Urbanization Rate', 'inflation_rate': 'Inflation Rate'})
+st.table(data)

@@ -18,7 +18,7 @@ def get_countries():
     params = []
 
     # Get filter parameters from request
-    # region = request.args.get('region')
+    region = request.args.get('region')
     protests_per_capita_min = request.args.get('protests_per_capita_min')
     protests_per_capita_max = request.args.get('protests_per_capita_max')
     population_min = request.args.get('population_min')

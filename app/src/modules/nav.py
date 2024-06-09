@@ -25,7 +25,7 @@ def ViewPostsNav():
     st.sidebar.page_link("pages/10_View_Posts.py", label="All Posts", icon='📄')
 
 def MyPostsPostsNav():
-    st.sidebar.page_link("pages/14_my_posts.py", label="My Posts", icon='📄') 
+    st.sidebar.page_link("pages/14_my_posts.py", label="My Posts", icon='💬')
 
 def NewPostNav():
     st.sidebar.page_link("pages/11_New_Post.py", label="New Post", icon='✍️')
@@ -37,12 +37,12 @@ def DeletePostNav():
     st.sidebar.page_link("pages/12_Update_Post.py", label="Delete Post", icon='📝')
 
 def UpdatePostNav():
-    st.sidebar.page_link("pages/13_Delete_Post.py", label="Edit Post", icon='📝')
+    st.sidebar.page_link("pages/13_Delete_Post.py", label="Edit Post", icon='🗑️')
 
 
 #### ------------------------ Protest Pages ------------------------
 def ViewProtestsNav():
-    st.sidebar.page_link("pages/20_View_Protests.py", label="All Protests", icon='📢')
+    st.sidebar.page_link("pages/20_View_Protests.py", label="All Protests", icon='✊')
 
 def MyProtestsNav():
     st.sidebar.page_link("pages/26_my_protests.py", label="My Protests", icon='📢')
@@ -77,11 +77,10 @@ def CompareCountriesNav():
 
 #### ------------------------ Model Pages ------------------------
 def ViewModel1Nav():
-    st.sidebar.page_link("pages/41_Model_1.py", label="View Model 1", icon='🔬')
+    st.sidebar.page_link("pages/41_Model_1.py", label="View Model 1", icon='📈')
 
 def ViewModel2Nav():
     st.sidebar.page_link("pages/42_Model_2.py", label="View Model 2", icon='🔭')
-
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
@@ -90,16 +89,16 @@ def SideBarLinks(show_home=False):
     """    
 
     # add a logo to the sidebar always
-    st.sidebar.image("assets/logo.png", width = 150)
+    st.sidebar.image("assets/logo.jpeg", width = 150)
 
     # If there is no logged in user, redirect to the Home (Landing) page
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
         st.switch_page('Home.py')
         
-    if show_home:
-        # Show the Home page link (the landing page)
-        HomeNav()
+    # if show_home:
+    #     # Show the Home page link (the landing page)
+    #     HomeNav()
 
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
@@ -130,13 +129,15 @@ def SideBarLinks(show_home=False):
             NewPostNav()
 
             ViewProtestsNav()
-            SaveProtestsNav()
-            # CompareProtestsNav()
             ViewCountriesNav()
             CompareCountriesNav()
             ViewModel1Nav()
             ViewModel2Nav()
 
+    # if on the about page and not logged in, show the home page link
+    if not st.session_state["authenticated"]:
+        HomeNav()
+        
     # Always show the About page at the bottom of the list of links
     AboutPageNav()
 
