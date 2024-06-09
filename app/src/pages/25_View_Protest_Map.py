@@ -8,7 +8,7 @@ from modules.nav import SideBarLinks
 SideBarLinks()
 
 # add the logo
-add_logo("assets/logo.png", height=400)
+add_logo("assets/logo.jpeg", height=400)
 
 # set up the page
 st.markdown("# View Protest Map")
