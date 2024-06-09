@@ -10,7 +10,6 @@ logger = logging.getLogger()
 
 model2 = Blueprint('model2', __name__)
 
-
 @model2.route('/model2/<var01>/<var02>/<var03>', methods=['GET'])
 def predicting_amount_of_protests(var01, var02, var03):
     current_app.logger.info(f'var01 = {var01}')
