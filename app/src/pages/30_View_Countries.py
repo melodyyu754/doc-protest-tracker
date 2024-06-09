@@ -53,4 +53,7 @@ except:
   st.write("**Important**: Could not connect to sample api, so using dummy data.")
   data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-st.dataframe(data)
+# rename the columns to be more professional
+data = pd.DataFrame(data)
+data = data.rename(columns={'country_name': 'Country Name', 'region': 'Region', 'protests_per_capita': 'Protests Per 100,000', 'population': 'Population', 'gdp_per_capita': 'GDP Per Capita', 'unemployment_rate': 'Unemployment Rate', 'urbanization_rate': 'Urbanization Rate', 'inflation_rate': 'Inflation Rate'})
+st.table(data)
