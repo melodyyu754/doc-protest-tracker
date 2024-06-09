@@ -86,9 +86,6 @@ except:
 #   st.write("**Important**: Could not connect to sample api, so using dummy data.")
 #   data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
-
-# date = st.date_input("Protest Date", value = None)
-
 # st.dataframe(data)
 
 
