@@ -24,21 +24,16 @@ with col1:
                 type='primary',
                 use_container_width=True):
         st.switch_page('pages/10_View_Posts.py')
+        
+    if st.button('My Posts',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/14_my_posts.py')
 
     if st.button('Create a New Post',
                 type='primary',
                 use_container_width=True):
         st.switch_page('pages/11_New_Post.py')
-
-    if st.button('Edit a Post',
-                type='primary',
-                use_container_width=True):
-        st.switch_page('pages/12_Update_Post.py')
-
-    if st.button('Delete a Post',
-                type='primary',
-                use_container_width=True):
-        st.switch_page('pages/13_Delete_Post.py')
 
 with col2: 
     st.markdown("<h4 style='text-align: center; color: black;'>Protests</h4>", unsafe_allow_html=True)
@@ -52,12 +47,7 @@ with col2:
                 use_container_width=True):
         st.switch_page('pages/21_New_Protest.py')
 
-    if st.button('Edit a Protest',
+    if st.button('My Protests',
                 type='primary',
                 use_container_width=True):
-        st.switch_page('pages/22_Update_Protest.py')
-
-    if st.button('Delete a Protest',
-                type='primary',
-                use_container_width=True):
-        st.switch_page('pages/23_Delete_Protests.py')
+        st.switch_page('pages/26_my_protests.py')

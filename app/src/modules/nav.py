@@ -25,7 +25,7 @@ def ViewPostsNav():
     st.sidebar.page_link("pages/10_View_Posts.py", label="All Posts", icon='📄')
 
 def MyPostsPostsNav():
-    st.sidebar.page_link("pages/14_my_posts.py", label="My Posts", icon='📄') 
+    st.sidebar.page_link("pages/14_my_posts.py", label="My Posts", icon='💬')
 
 def NewPostNav():
     st.sidebar.page_link("pages/11_New_Post.py", label="New Post", icon='✍️')
@@ -37,12 +37,12 @@ def DeletePostNav():
     st.sidebar.page_link("pages/12_Update_Post.py", label="Delete Post", icon='📝')
 
 def UpdatePostNav():
-    st.sidebar.page_link("pages/13_Delete_Post.py", label="Edit Post", icon='📝')
+    st.sidebar.page_link("pages/13_Delete_Post.py", label="Edit Post", icon='🗑️')
 
 
 #### ------------------------ Protest Pages ------------------------
 def ViewProtestsNav():
-    st.sidebar.page_link("pages/20_View_Protests.py", label="All Protests", icon='📢')
+    st.sidebar.page_link("pages/20_View_Protests.py", label="All Protests", icon='✊')
 
 def MyProtestsNav():
     st.sidebar.page_link("pages/26_my_protests.py", label="My Protests", icon='📢')
@@ -77,11 +77,10 @@ def CompareCountriesNav():
 
 #### ------------------------ Model Pages ------------------------
 def ViewModel1Nav():
-    st.sidebar.page_link("pages/41_Model_1.py", label="View Model 1", icon='🔬')
+    st.sidebar.page_link("pages/41_Model_1.py", label="View Model 1", icon='📈')
 
 def ViewModel2Nav():
     st.sidebar.page_link("pages/42_Model_2.py", label="View Model 2", icon='🔭')
-
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
@@ -130,8 +129,6 @@ def SideBarLinks(show_home=False):
             NewPostNav()
 
             ViewProtestsNav()
-            SaveProtestsNav()
-            # CompareProtestsNav()
             ViewCountriesNav()
             CompareCountriesNav()
             ViewModel1Nav()
