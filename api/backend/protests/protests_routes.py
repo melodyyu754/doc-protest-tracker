@@ -64,7 +64,6 @@ def add_protest():
     location = data['location']
     date = data['date']
     description = data['description']
-    violent = data['violent']
     created_by = data['user_id']
     country = data['country']
     cause = data['cause']
@@ -75,7 +74,6 @@ def add_protest():
     query += "'" + location + "',"
     query += "'" + date + "',"
     query += "'" + description + "',"
-    query += "'" + str(violent) + "',"
     query += "'" + str(created_by) + "',"
     query += "'" + country + "',"
     query += "'" + str(cause) + "',"
