@@ -42,12 +42,12 @@ with col2:
                 use_container_width=True):
         st.switch_page('pages/20_View_Protests.py')
 
+    if st.button('My Protest',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/26_my_protests.py')
+
     if st.button('Create a New Protest',
                 type='primary',
                 use_container_width=True):
         st.switch_page('pages/21_New_Protest.py')
-
-    if st.button('My Protests',
-                type='primary',
-                use_container_width=True):
-        st.switch_page('pages/26_my_protests.py')
