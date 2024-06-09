@@ -131,7 +131,18 @@ CREATE TABLE IF NOT EXISTS model1_lobf_coefficients(
     beta_8 FLOAT,
     beta_9 FLOAT,
     beta_10 FLOAT,
-    beta_11 FLOAT
+    beta_11 FLOAT,
+    beta_12 FLOAT,
+    beta_13 FLOAT,
+    beta_14 FLOAT,
+    beta_15 FLOAT,
+    beta_16 FLOAT,
+    beta_17 FLOAT,
+    beta_18 FLOAT,
+    beta_19 FLOAT,
+    beta_20 FLOAT,
+    beta_21 FLOAT,
+    beta_22 FLOAT
 );
 
 CREATE TABLE IF NOT EXISTS model1_coefficients(
