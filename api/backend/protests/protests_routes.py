@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 from backend.db_connection import db
 
+
 protests = Blueprint('protests', __name__)
 
 # Get all the protests from the data base
@@ -9,13 +10,42 @@ def get_protests():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
     query = """
-        SELECT cause_name, date, location, protests.country, description
+        SELECT cause_name, date, location, protests.country, description, violent, 
+        CONCAT(first_name, ' ', last_name) as full_name
         FROM protests
             JOIN cause on protests.cause = cause.cause_id
-        ORDER BY date
+            JOIN users on protests.created_by = users.user_id
+            JOIN country on protests.country = country.country
+    
         """
+    filters = []
+
+        # Apply filters
+    if 'date' in request.args:
+        filters.append(f"date >= '{request.args['date']}'")
+    if 'cause' in request.args:
+        causes = request.args.getlist('cause')
+        cause_filter = ', '.join(causes)
+        filters.append(f"cause IN ({cause_filter})")
+    if 'created_by' in request.args:
+        usernames = request.args.getlist('created_by')
+        user_filter = ', '.join(usernames)
+        filters.append(f"created_by IN ({user_filter})")
+    if 'protests.country' in request.args:
+        countries = request.args.getlist('protests.country')
+        countries_string = ["\"" + country + "\"" for country in countries]
+        country_filter = ', '.join(countries_string)
+        filters.append(f"country.country IN ({country_filter})")
+
+    if filters:
+        query += ' WHERE ' + ' AND '.join(filters)
+
+    query += ' order by date desc'
+
+    current_app.logger.info(f'Query: {query}')
+
     cursor.execute(query)
-    row_headers = ["Cause", "Date", "City", "Country", "Description"]
+    row_headers = [x[0] for x in cursor.description]
     data = cursor.fetchall() # give back all the date from the sql statement
     json_data = []
     for row in data:

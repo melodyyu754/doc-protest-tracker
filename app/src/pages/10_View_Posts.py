@@ -57,9 +57,6 @@ user_mapping = {user['full_name']: user['user_id'] for user in users}
 creation_date = st.sidebar.date_input('Creation Date', value=None, max_value=date.today())
 
 
-# Multi-select inputs for usernames and cause names
-# doing later
-#selected_usernames = st.multiselect('Usernames', list('1', '2', '3'))
 # Multi-select for causes
 selected_causes = st.sidebar.multiselect("Select Causes", options=cause_names)
 selected_cause_ids = [cause_mapping[cause] for cause in selected_causes]
@@ -92,7 +89,11 @@ if st.sidebar.button('Filter Posts'):
 
 
 data = {}
-data = requests.get('http://api:4000/psts/posts', params= params).json()    
+try :
+    data = requests.get('http://api:4000/psts/posts', params= params).json()    
+except:
+    st.write("**Important**: Could not connect to sample api, so using dummy data.")
+    data = {"a":{"b": "123", "c": "hello"}, "z": {"b": "456", "c": "goodbye"}}
 
 #     # Check if the request was successful
 # if response.status_code == 200:
