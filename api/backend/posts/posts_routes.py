@@ -22,13 +22,11 @@ def get_posts():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
 
-    query = """SELECT title, creation_date, text, CONCAT(first_name, ' ', last_name) as full_name, cause_name 
+    query = """SELECT title, created_by, post_id, creation_date, text, CONCAT(first_name, ' ', last_name) as full_name, cause_name 
     FROM posts
         JOIN cause on posts.cause = cause.cause_id
         JOIN users on posts.created_by = users.user_id
     """
-
-
     filters = []
 
         # Apply filters
@@ -73,28 +71,6 @@ def get_posts():
 
     return jsonify(json_data)
 
-
-    # creation_time = request.args.get('creation_time')
-    # user_ids = request.args.getlist('user_id', type=int)
-    # causes = request.args.getlist('cause', type=int)
-    
-    # filtered_posts = posts
-
-    # if creation_time:
-    #     creation_time = datetime.strptime(creation_time, '%Y-%m-%dT%H:%M:%S')
-    #     filtered_posts = [post for post in filtered_posts if datetime.strptime(post['creation_time'], '%Y-%m-%dT%H:%M:%S') >= creation_time]
-
-    # if user_ids:
-    #     filtered_posts = [post for post in filtered_posts if post['user_id'] in user_ids]
-
-    # if causes:
-    #     filtered_posts = [post for post in filtered_posts if post['cause'] in causes]
-
-    # return jsonify(filtered_posts)
-
-
-
-
 @posts.route('/myposts/<user_id>', methods=['GET'])
 def get_user_posts(user_id):
     query = ('SELECT post_id, title, creation_date, text, created_by, cause, first_name, last_name FROM posts JOIN users on posts.created_by = users.user_id WHERE user_id = ' + str(user_id))
@@ -129,11 +105,7 @@ def add_post():
     query += "'" + text + "',"
     query += "'" + str(created_by) + "',"
     query += "'" + str(cause) + "')"
-    query += "'" + str(cause) + "')"
    
-    
-    print(query)
-
     # executing and committing the insert statement 
     cursor = db.get_db().cursor()
     cursor.execute(query)

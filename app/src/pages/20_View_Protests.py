@@ -103,7 +103,7 @@ def create_card(protest):
     col1, col2 = st.columns(2)
 
     # Add a delete and update button 
-    if st.session_state['user_id'] == protest['Created By']:
+    if st.session_state['user_id'] == protest['created_by']:
             with col1:
               if st.button("Delete", type = 'primary', key=f"delete-{protest['protest_id']}", use_container_width=True):
                   response = delete_protest(protest['protest_id'])
