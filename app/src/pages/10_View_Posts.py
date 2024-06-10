@@ -28,14 +28,13 @@ st.header('Community Post Forum')
 # You can access the session state to make a more customized/personalized app experience
 st.write(f"### Hi, {st.session_state['first_name']}.")
 
+# add filtering on the sidebar to filter the data by cause with checkboxes
+st.sidebar.header('Filter Data')
+
 causes = requests.get('http://api:4000/cause/cause').json()
 cause_names = [cause['cause_name'] for cause in causes]
 cause_mapping = {cause['cause_name']: cause['cause_id'] for cause in causes}
 
-# add filtering on the sidebar to filter the data by cause with checkboxes
-st.sidebar.header('Filter Data')
-
-# add filtering on the sidebar to filter the data by cause with checkboxes
 users = requests.get('http://api:4000/users/usernames').json()
 usernames = [user['full_name'] for user in users]
 user_mapping = {user['full_name']: user['user_id'] for user in users}
@@ -52,11 +51,9 @@ selected_usernames = st.sidebar.multiselect('Select Usernames', options=username
 selected_user_ids = [user_mapping[username] for username in selected_usernames]
 
 params = {}
-
 # Button to trigger the filter action
 if st.sidebar.button('Filter Posts'):
     # Construct the query parameters
-    
     if creation_date:
         params['creation_date'] = creation_date
         logger.info(f'creation_date = {creation_date}')

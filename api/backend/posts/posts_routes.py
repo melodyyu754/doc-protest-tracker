@@ -20,17 +20,15 @@ posts = Blueprint('posts', __name__)
 # Get all the products from the database
 @posts.route('/posts', methods=['GET'])
 def get_posts():
-    # get a cursor object from the database
     cursor = db.get_db().cursor()
-    query = """SELECT title, created_by, post_id, creation_date, text, CONCAT(first_name, ' ', last_name) as full_name, cause_name 
-
+    query = """SELECT title, created_by, post_id, creation_date, text,
+      CONCAT(first_name, ' ', last_name) as full_name, cause_name 
     FROM posts
         JOIN cause on posts.cause = cause.cause_id
         JOIN users on posts.created_by = users.user_id
     """
     filters = []
-
-        # Apply filters
+    # Apply filters
     if 'creation_date' in request.args:
         filters.append(f"creation_date >= '{request.args['creation_date']}'")
     if 'cause' in request.args:
@@ -41,35 +39,17 @@ def get_posts():
         usernames = request.args.getlist('created_by')
         user_filter = ', '.join(usernames)
         filters.append(f"created_by IN ({user_filter})")
-
-
     if filters:
         query += ' WHERE ' + ' AND '.join(filters)
-
     query += ' order by creation_date desc'
     
-
     current_app.logger.info(query)
     cursor.execute(query)
-    
-    # use cursor to query the database for a list of products
-    # EDIT HERE: cursor.execute('SELECT id, product_code, product_name, list_price, category FROM products')
-
-    # grab the column headers from the returned data
     column_headers = [x[0] for x in cursor.description]
-
-    # create an empty dictionary object to use in 
-    # putting column headers together with data
     json_data = []
-
-    # fetch all the data from the cursor
     theData = cursor.fetchall()
-
-    # for each of the rows, zip the data elements together with
-    # the column headers. 
     for row in theData:
         json_data.append(dict(zip(column_headers, row)))
-
     return jsonify(json_data)
 
 

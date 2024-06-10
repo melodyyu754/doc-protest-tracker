@@ -61,35 +61,50 @@ data = requests.get('http://api:4000/prtsts/protests', params = params).json()
 df = pd.DataFrame(data)
 
 
+  
+
+if 'latitude' not in df.columns and 'longitude' not in df.columns and 'cause_name' not in df.columns:
+    st.write("No data to display.")
+    st.stop()
+
     # Plotly scatter mapbox plot
 fig = px.scatter_mapbox(df, lat='latitude', lon='longitude', 
-                        hover_name='cause_name', zoom=2, height=600)
+                        hover_name='cause_name' , zoom=2, height=600)
 
 # Use a mapbox style
-fig.update_layout(mapbox_style="carto-positron")
+fig.update_layout(mapbox_style="carto-positron",
+                  width=500,  # Set the width of the map
+    height=500,  # Set the height of the map
+    margin={"r":0,"t":0,"l":0,"b":0}  # Set the margins
+    )
 fig.update_layout(clickmode = 'event+select')
+
+# Enhance the plotting dots
+fig.update_traces(marker=dict(size=15, color='red', opacity=0.7))
+
     
 def stream_data(results_display):
     for word in results_display.split(" "):
         yield word + " "
-        time.sleep(0.03)
+        time.sleep(0.05)
 
 
 pl_chart = st.plotly_chart(fig, use_container_width=True, on_select="rerun")
 #pl_chart
 if len(pl_chart['selection']['points']) == 0:
-    st.write("Click on a point to see details.")
+    st.markdown("<h4>Click on a point to see details.</h4>", unsafe_allow_html=True)
 else: 
+
+    
     lat_long = (pl_chart["selection"]["points"][0]["lat"], pl_chart["selection"]["points"][0]["lon"])
 
-    protest_mapping = {(protest['latitude'], protest['longitude']): protest['protest_id'] for protest in data}
+    protest_mapping = {(p['latitude'], p['longitude']): p['protest_id'] for p in data}
     logger.info(f'protest_mapping = {protest_mapping}')
 
     selected_point = protest_mapping[lat_long]
     logger.info(f'selected_point = {selected_point}')
 
     protest = requests.get('http://api:4000/prtsts/protests/' + str(selected_point)).json()[0]
-    
     logger.info(f'protest = {protest}')
     
        # Concatenate first name and last name if they exist
@@ -102,15 +117,18 @@ else:
 
     date = str(protest['date'][:16])
 
+    coords = f'You have selected -- {protest["latitude"]}, {protest["longitude"]}'
     protest_string_data = f"""
-    Selected Protest ID: {protest['protest_id']} \n
-    Cause: {protest['cause_name']} \n
-    {date} {full_name_html} \n
-   
-    {protest['description']}
+    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+        <h2>Cause: {protest['cause_name']}</h2>
+        <p><strong>Date:</strong> {date}{full_name_html}</p>
+        <p>{protest['description']}</p>
+    </div>
     """
-
-    st.write_stream(stream_data(protest_string_data))
+    st.write_stream(stream_data(coords))
+    time.sleep(0.05)
+    st.markdown(protest_string_data, unsafe_allow_html=True)
+    
 
 
 #click_data = pl_chart.clickData
