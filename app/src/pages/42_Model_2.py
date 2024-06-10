@@ -12,7 +12,7 @@ st.set_page_config(layout = 'wide')
 # Display the appropriate sidebar links for the role of the logged in user
 SideBarLinks()
 
-st.title('K-Means Clustering Model')
+st.title('Predicting Similar Countries')
 
 # writes a description of the model
 st.write('Enter the GDP per Capita and Protests per 100,000 to predict the k-means cluster for each country. The countries in the database are clustered based on these two features. The model will predict the cluster for the input values and display the countries in each cluster.')
