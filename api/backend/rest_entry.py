@@ -82,7 +82,5 @@ def create_app():
     app.register_blueprint(model2,     url_prefix='/model2')
     app.register_blueprint(users,      url_prefix='/users')
     app.register_blueprint(articles,   url_prefix='/articles')
-   
-    # Don't forget to return the app object
 
     return app
