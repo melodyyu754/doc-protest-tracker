@@ -1,3 +1,4 @@
+From the Israel-Palestine protests on college campuses to farmer demonstrations in Brussels, the world is crying out for change. Imagine a platform that unites activists, informs politicians, and empowers journalists to amplify the impact of political protest movements. That's Rallify. We're a data-driven app that connects communities, organizes protests, and provides insights to fuel effective action. We're not just building an app; we're empowering every voice to create a world where change is possible.
 
 # Rallify: A Data-Driven Full-Stack Platform Empowering Political Protest Movements
 
