@@ -100,7 +100,7 @@ def create_card(post):
     card_bg_color = cause_colors.get(post['cause_name'], "#FFFFFF")  # Default to white if cause not found
     
     st.markdown(f"""
-    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+    <div style="border: 1px solid #ddd; background-color: {card_bg_color}; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
         <h3>{post['title']}</h3>
         <p style="color: grey; font-weight: bold;">{post['cause_name']}</p>
         <p>{post['text']}</p>
