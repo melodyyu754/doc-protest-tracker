@@ -10,8 +10,9 @@ def get_protests():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
     query = """
-        SELECT protests.created_by, protest_id, cause_name, date, location, protests.country, description, violent, 
-        CONCAT(first_name, ' ', last_name) as full_name
+        SELECT created_by, protest_id, cause_name, date, location, protests.country, description, violent, 
+        CONCAT(first_name, ' ', last_name) as full_name,
+        longitude, latitude
         FROM protests
             JOIN cause on protests.cause = cause.cause_id
             LEFT JOIN users on protests.created_by = users.user_id
@@ -89,20 +90,7 @@ def add_protest():
 
     return "Success"
 
-# Get one protest with one protest
-@protests.route('/protests/<protest_id>', methods=['GET'])
-def get_protest_detail(protest_id):
-    query = ('SELECT * FROM protests LEFT JOIN cause on protests.cause = cause.cause_id WHERE protest_id = ' + str(protest_id))
-    current_app.logger.info(query)
-    cursor = db.get_db().cursor()
-    cursor.execute(query)
-    column_headers = [x[0] for x in cursor.description]
-    theData = cursor.fetchall()
-    json_data = [dict(zip(column_headers, row)) for row in theData]
-    # Check if any data is found
-    if not json_data:
-        return jsonify({"error": "Post not found"}), 404
-    return jsonify(json_data)
+
 
 # UPDATE a post
 @protests.route('/protest', methods = ['PUT'])
@@ -168,3 +156,22 @@ def get_user_protests(user_id):
 
     return jsonify(json_data)
 
+
+# Get one protest with one protest
+@protests.route('/protests/<protest_id>', methods=['GET'])
+def get_protest_detail(protest_id):
+    query = ("""SELECT * FROM protests 
+             LEFT JOIN cause on protests.cause = cause.cause_id 
+             LEFT JOIN users on protests.created_by = users.user_id
+             WHERE protest_id = """
+              + str(protest_id))
+    current_app.logger.info(query)
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    column_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    json_data = [dict(zip(column_headers, row)) for row in theData]
+    # Check if any data is found
+    if not json_data:
+        return jsonify({"error": "Post not found"}), 404
+    return jsonify(json_data)

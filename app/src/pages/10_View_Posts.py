@@ -89,12 +89,25 @@ def delete_post(post_id):
 
 # Define a function to create a card for each post
 def create_card(post):
+  # Card Background Colors
+    cause_colors = {
+    "Racial Inequality": "#E6D7F7",
+    "Climate Change": "#F2E8FD",
+    "Animal Rights": "#E3F5FD",
+    "Black Lives Matter": "#F1F2FD",
+    "Political Corruption": "#D7E4F3",
+    "Gender Equality": "#E2E2E4",
+    "Israeli-Palestine": "#E6F2F8"
+}
+    date = str(post['creation_date'][:16])
+    card_bg_color = cause_colors.get(post['cause_name'], "#FFFFFF")  # Default to white if cause not found
+    
     st.markdown(f"""
     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
         <h3>{post['title']}</h3>
         <p style="color: grey; font-weight: bold;">{post['cause_name']}</p>
         <p>{post['text']}</p>
-        <small>Posted by {post['full_name']}  on {post['creation_date']}</small>
+        <small>Posted by {post['full_name']}  on {date}</small>
     </div>
     """, unsafe_allow_html=True)
 

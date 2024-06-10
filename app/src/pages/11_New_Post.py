@@ -10,7 +10,7 @@ st.set_page_config(layout = 'wide')
 
 SideBarLinks()
 
-st.sidebar.header("New Post")
+
 
 st.title("Create a New Post")
 

@@ -45,10 +45,12 @@ def delete_protest(protest_id):
 
 # Define a function to create a card for each post
 def create_card(protest):
+    
+    date = str(protest['date'][:16])
     st.markdown(f"""
     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
         <h2>{protest['cause_name']}</h2>
-        <h4>{protest['date']}</h4>
+        <h4>{date}</h4>
         <h4>{protest['location']},{protest['country']} </h4>
         <p>{protest['description']}</p>
     </div>
