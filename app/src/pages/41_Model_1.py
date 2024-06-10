@@ -20,29 +20,25 @@ st.set_page_config(layout = 'wide')
 SideBarLinks()
 
 st.title('Predicting the Number of Protests in a Specific Region')
-
+#description of what this page is for
 st.write('Think of a country you would like to learn more about and input the following information to see how many protests are likely to occur in the country of your choice!')
 
 regions = ["Western", "Asian", "South American"]
 
-# create a 3 column layout
-col1, col2, col3, col4, col5 = st.columns(5)
-with col1:
-  country_input = st.text_input('Insert Country Name:')
-# add one number input for variable 1 into column 1
-with col2:
-  var_01 = st.slider('Select Public Trust in Government (Percentage in Decimal Form):', 0.0, 100.0, 50.0)
+# user inputs the country of their choice
+country_input = st.text_input('Insert Country Name:')
 
-# add another number input for variable 2 into column 2
-with col3:
-  var_02 = st.slider('Select GDP per Capita:', 0.0, 200000.0, 50.0)
+# user selects the public trust in government percentage
+var_01 = st.slider('Select Public Trust in Government (Percentage in Decimal Form):', 0.0, 100.0, 50.0)
 
-# Region Dropdown
-with col4:
-  var_03 = st.selectbox("Select Region:", regions)
-# Population Input
-with col5:
-  var_04 = st.number_input('Insert Population:',
+# user selects gdp per capita 
+var_02 = st.slider('Select GDP per Capita:', 0.0, 200000.0, 50.0)
+
+# user selects the region the country is located in
+var_03 = st.selectbox("Select Region:", regions)
+
+# user inputs the population
+var_04 = st.number_input('Insert Population:',
                            step=1)
 
 logger.info(f'var_01 = {var_01}')
@@ -50,7 +46,7 @@ logger.info(f'var_02 = {var_02}')
 logger.info(f'var_03 = {var_03}')
 logger.info(f'var_04 = {var_04}')
 
-# add a button to use the values entered into the number field to send to the 
+
 # prediction function via the REST API
 if st.button('Predict Number of Protests',
              type='primary',
@@ -63,6 +59,8 @@ if st.button('Predict Number of Protests',
   results_display = f'The estimated number of protests that will occur in {country_input} this year will be: {pred}'
   results_per_capita_display = f'The estimated number of protests per 100,000 people that will occur in {country_input} this year will be: {pred_per_capita}'
 
+  background_color = "#f5f5f5"  # Lighter silver
+
   def stream_data():
     for word in results_display.split(" "):
         yield word + " "
@@ -72,8 +70,10 @@ if st.button('Predict Number of Protests',
         yield word + " "
         time.sleep(0.03)
   st.markdown(f"""
-        <div style="background-color: silver;"> Numeric Predicton: </div>
-      """, unsafe_allow_html=True)
+<div style="background-color: {background_color}; font-size: 25px; font-weight: bold;">
+  Numeric Prediction:
+</div>
+""", unsafe_allow_html=True)
   st.write_stream(stream_data)
   st.write_stream(stream_data_per_capita)
 
@@ -101,7 +101,9 @@ if st.button('Predict Number of Protests',
       st.write(" protest activity level")
 
   st.markdown(f"""
-      <div style="background-color: silver;"> Activity Level Prediction: </div>
+      <div style="background-color: {background_color}; font-size: 25px; font-weight: bold;">
+  Activity Level Prediction:
+</div>
     """, unsafe_allow_html=True)
   st.write("")
   create_circle_box(f'In terms of protest events per 100,000 people, this country will have a relatively ')

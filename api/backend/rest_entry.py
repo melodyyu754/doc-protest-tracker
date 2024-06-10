@@ -12,7 +12,6 @@ from backend.protests.protests_routes import protests
 from backend.cause.cause_routes import causes
 from backend.model1.model1_routes import model1
 
-from backend.cause.cause_routes import causes
 from backend.users.users_routes import users
 from backend.model2.model2_routes import model2
 
