@@ -26,7 +26,7 @@ if st.button("Act as Sally, a student activist at Columbia University",
     st.session_state['post_id'] = 0
     st.switch_page('pages/00_Activist_Home.py')
 
-if st.button('Act as McGuinness, the president of the United States',
+if st.button('Act as Peter, the president of the United States',
             type = 'primary',
             use_container_width=True):
     st.session_state['authenticated'] = True
