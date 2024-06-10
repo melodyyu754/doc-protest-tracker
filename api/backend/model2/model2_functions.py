@@ -25,7 +25,6 @@ def initialize():
 # Takes in protests per capita and gdp per capita, and returns the list of clusters with country names and the cluster the input data belongs to
 def predict(protests_per_capita, gdp_per_capita, n_clusters):
     df_country = initialize()
-    # df_country = pd.read_csv('backend/model2/world_bank_data.csv')
 
     # Ensure column names match exactly
     df_country.rename(columns=lambda x: x.strip(), inplace=True)
