@@ -131,7 +131,18 @@ CREATE TABLE IF NOT EXISTS model1_lobf_coefficients(
     beta_8 FLOAT,
     beta_9 FLOAT,
     beta_10 FLOAT,
-    beta_11 FLOAT
+    beta_11 FLOAT,
+    beta_12 FLOAT,
+    beta_13 FLOAT,
+    beta_14 FLOAT,
+    beta_15 FLOAT,
+    beta_16 FLOAT,
+    beta_17 FLOAT,
+    beta_18 FLOAT,
+    beta_19 FLOAT,
+    beta_20 FLOAT,
+    beta_21 FLOAT,
+    beta_22 FLOAT
 );
 
 CREATE TABLE IF NOT EXISTS model1_coefficients(
@@ -468,9 +479,9 @@ INSERT INTO country (year, country, protests_per_capita, population, gdp_per_cap
 INSERT INTO country (year, country, protests_per_capita, population, gdp_per_capita, unemployment_rate, urbanization_rate, inflation_rate, region) VALUES ('2022', 'United States', '36.55401992700256', '333287557', '76329.5822652029', '3.65', '83.084', '134.21120616846', 'Western');
 INSERT INTO country (year, country, protests_per_capita, population, gdp_per_capita, unemployment_rate, urbanization_rate, inflation_rate, region) VALUES ('2022', 'Uruguay', '31.5531697204097', '3422794', '20795.0423535553', '7.87', '95.688', '261.824349714601', 'South America');
 
-INSERT INTO users (user_id, first_name, last_name, email, country, user_type, party) VALUES ('1', 'Christen', 'Simacek', 'csimacek0@admin.ch', 'Sweden', 'Journalist', NULL);
+INSERT INTO users (user_id, first_name, last_name, email, country, user_type, party) VALUES ('1', 'Sally', 'Clark', 'csimacek0@admin.ch', 'Sweden', 'Journalist', NULL);
 INSERT INTO users (user_id, first_name, last_name, email, country, user_type, party) VALUES ('2', 'Filippa', 'Irvin', 'firvin1@prnewswire.com', 'Israel', 'Journalist', NULL);
-INSERT INTO users (user_id, first_name, last_name, email, country, user_type, party) VALUES ('3', 'Gleda', 'Greenacre', 'ggreenacre2@networkadvertising.org', 'Uruguay', 'Journalist', NULL);
+INSERT INTO users (user_id, first_name, last_name, email, country, user_type, party) VALUES ('3', 'Sydney', 'Stone', 'ggreenacre2@networkadvertising.org', 'Uruguay', 'Journalist', NULL);
 INSERT INTO users (user_id, first_name, last_name, email, country, user_type, party) VALUES ('4', 'Julieta', 'Ballantine', 'jballantine3@moonfruit.com', 'Philippines', 'Politician', 'Democratic');
 INSERT INTO users (user_id, first_name, last_name, email, country, user_type, party) VALUES ('5', 'Fay', 'Sallenger', 'fsallenger4@odnoklassniki.ru', 'Finland', 'Journalist', NULL);
 INSERT INTO users (user_id, first_name, last_name, email, country, user_type, party) VALUES ('6', 'Bartel', 'Valder', 'bvalder5@1und1.de', 'Slovenia', 'Activist', NULL);

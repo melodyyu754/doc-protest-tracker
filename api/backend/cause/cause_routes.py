@@ -4,7 +4,6 @@ from backend.db_connection import db
 
 causes = Blueprint('causes', __name__)
 
-
 @causes.route('/cause', methods=['GET'])
 def get_cause():
     # get a cursor object from the database
@@ -27,7 +26,6 @@ def get_cause():
         json_data.append(dict(zip(column_headers, row)))
 
     return jsonify(json_data)
-
 
 @causes.route('/addcause', methods=['POST'])
 def add_cause():

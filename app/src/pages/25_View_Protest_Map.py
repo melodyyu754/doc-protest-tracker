@@ -17,7 +17,7 @@ st.set_page_config(layout='wide')
 SideBarLinks()
 
 # add the logo
-add_logo("assets/logo.png", height=400)
+add_logo("assets/logo.jpeg", height=400)
 
 
 

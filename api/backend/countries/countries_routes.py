@@ -94,7 +94,6 @@ def get_countries():
 
     return jsonify(json_data)
 
-
 @countries.route('/names', methods=['GET'])
 def get_country_names():
     # get a cursor object from the database
@@ -105,7 +104,6 @@ def get_country_names():
     theData = cursor.fetchall()
     country_names = [row[0] for row in theData]
     return jsonify(country_names)
-
 
 # route for getting just one country
 @countries.route('/country/<country>', methods=['GET'])
@@ -130,3 +128,4 @@ def get_country_detail(country):
         return jsonify({"error": "Country not found"}), 404
 
     return jsonify(json_data)
+

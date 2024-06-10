@@ -15,28 +15,13 @@ SideBarLinks()
 st.title("Protests")
 
 col1, col2, col3 = st.columns(3)
-d = False
 if st.session_state['role'] != 'politician':
   
-
   with col1:
     if st.button(label = "Add Protest",
             type = 'primary',
             use_container_width=True):
       st.switch_page('pages/21_New_Protest.py')
-
-  with col2:
-    if st.button(label = "Update Protest",
-            type = 'primary',
-            use_container_width=True):
-      st.switch_page('pages/22_Update_Protest.py')
-
-  with col3:
-    if st.button(label = "Remove Protest",
-            type = 'primary',
-            use_container_width=True):
-      st.switch_page('pages/23_Delete_Protests.py')
-
 
 st.header("Past and Current Protests")
 st.sidebar.header('Filter Data')
@@ -100,12 +85,28 @@ try:
 except:
   st.write("**Important**: Could not connect to sample api")
 
+def delete_protest(protest_id):
+    api_url = f"http://api:4000/prtsts/protest/{protest_id}"
+    response = requests.delete(api_url)
+    return response
+
 # Define a function to create a card for each post
 def create_card(protest):
-    full_name = protest['full_name']
-    full_name_html = f"<p>Created by: {full_name}</p>" if full_name else ""
+    # Card Background Colors
+    cause_colors = {
+    "Racial Inequality": "#E6D7F7",
+    "Climate Change": "#F2E8FD",
+    "Animal Rights": "#E3F5FD",
+    "Black Lives Matter": "#F1F2FD",
+    "Political Corruption": "#D7E4F3",
+    "Gender Equality": "#E2E2E4",
+    "Israeli-Palestine": "#E6F2F8"
+    }
+
+    card_bg_color = cause_colors.get(protest['cause_name'], "#FFFFFF")  # Default to white if cause not found
+  
     st.markdown(f"""
-    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+    <div style="border: 1px solid #ddd; border-radius: 8px; background-color: {card_bg_color}; padding: 16px; margin-bottom: 16px;">
         <h2>{protest['cause_name']}</h2>
         <h4>{protest['date']}</h4>
         <h4>{protest['location']},{protest['country']} </h4>
@@ -114,6 +115,28 @@ def create_card(protest):
     </div>
     """, unsafe_allow_html=True)
 
+    col1, col2 = st.columns(2)
+
+    # Add a delete and update button 
+    if st.session_state['user_id'] == protest['created_by']:
+            with col1:
+              if st.button("Delete", type = 'primary', key=f"delete-{protest['protest_id']}", use_container_width=True):
+                  response = delete_protest(protest['protest_id'])
+                  if response.status_code == 200:
+                    st.success("Protest deleted successfully!")
+                    st.experimental_rerun()
+                  else:
+                    st.error(f"Failed to delete protest ({response.status_code}). Please try again.")
+            with col2:
+              if st.button("Update", type = 'primary', key=f"update-{protest['protest_id']}", use_container_width=True):
+                st.session_state['protest_id'] = protest['protest_id']
+                st.switch_page('pages/22_Update_Protest.py')
+
 # Display each post in a card
-for protest in data:
-    create_card(protest)
+
+if data != {'error': 'Protest not found'}:
+  for protest in data:
+      create_card(protest)
+else: 
+   st.write("No protests to display")
+

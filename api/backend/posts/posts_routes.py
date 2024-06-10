@@ -7,6 +7,8 @@ from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from backend.db_connection import db
 from datetime import datetime
+from datetime import datetime
+
 
 # GET all posts, -filtering of posts 
 # POST  new post 
@@ -20,14 +22,12 @@ posts = Blueprint('posts', __name__)
 def get_posts():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
+    query = """SELECT title, created_by, post_id, creation_date, text, CONCAT(first_name, ' ', last_name) as full_name, cause_name 
 
-    query = """SELECT title, creation_date, text, CONCAT(first_name, ' ', last_name) as full_name, cause_name 
     FROM posts
         JOIN cause on posts.cause = cause.cause_id
         JOIN users on posts.created_by = users.user_id
     """
-
-
     filters = []
 
         # Apply filters
@@ -72,7 +72,22 @@ def get_posts():
 
     return jsonify(json_data)
 
-# POST a new product
+
+@posts.route('/myposts/<user_id>', methods=['GET'])
+def get_user_posts(user_id):
+    query = ('SELECT post_id, title, creation_date, text, created_by, cause, first_name, last_name FROM posts JOIN users on posts.created_by = users.user_id WHERE user_id = ' + str(user_id))
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    column_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    json_data = [dict(zip(column_headers, row)) for row in theData]
+    # Check if any data is found
+    if not json_data:
+        return jsonify({"error": "Post not found"}), 404
+
+    return jsonify(json_data)
+
+# Post a new post
 @posts.route('/addpost', methods=['POST'])
 def add_post():
       # collecting data from the request object 
@@ -92,9 +107,6 @@ def add_post():
     query += "'" + str(created_by) + "',"
     query += "'" + str(cause) + "')"
    
-    
-    print(query)
-
     # executing and committing the insert statement 
     cursor = db.get_db().cursor()
     cursor.execute(query)
@@ -148,3 +160,20 @@ def delete_post(id):
         return make_response(jsonify({"error": "Post not found"}), 404)
     
     return jsonify({"message": "Post deleted successfully"}), 200
+
+
+# Get one post with one post_id
+@posts.route('/post/<post_id>', methods=['GET'])
+def get_post_detail(post_id):
+    query = ('SELECT post_id, title, creation_date, text, created_by, cause FROM posts WHERE post_id = ' + str(post_id))
+    current_app.logger.info(query)
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    column_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    json_data = [dict(zip(column_headers, row)) for row in theData]
+    # Check if any data is found
+    if not json_data:
+        return jsonify({"error": "Post not found"}), 404
+
+    return jsonify(json_data)

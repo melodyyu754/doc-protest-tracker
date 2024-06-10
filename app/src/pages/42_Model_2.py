@@ -35,6 +35,7 @@ if st.button('Predict Clusters', type='primary', use_container_width=True):
         # Extract prediction results
         clusters = results['prediction_value'][0]
         predicted_cluster = results['prediction_value'][1]
+        df_country = results['prediction_value'][2]
                 
         # Get the countries into n lists based on the cluster number
         cluster_data = []
@@ -63,6 +64,16 @@ if st.button('Predict Clusters', type='primary', use_container_width=True):
                             color_continuous_scale=px.colors.sequential.Plasma)
 
         fig.update_layout(height=600, width=800, margin=dict(l=20, r=20, t=30, b=20))
+        st.plotly_chart(fig)
+
+        # make the colors more distinct
+        st.write('### Cluster Visualization with Distinct Colors:')
+        st.write('The plot below shows the clusters based on the input data.')
+        fig = px.scatter(df_country, x='gdp_per_capita', y='protests_per_capita', color='cluster', title='Cluster Visualization with Distinct Colors')
+        fig.update_traces(marker=dict(size=12, line=dict(width=2, color='DarkSlateGrey')), selector=dict(mode='markers'))
+        
+        # also plots the input data
+        fig.add_trace(px.scatter(x=[gdp_per_capita], y=[protests_per_100000], color=['Input Data']).data[0])
         st.plotly_chart(fig)
 
         st.write('### Predicted Cluster:')
