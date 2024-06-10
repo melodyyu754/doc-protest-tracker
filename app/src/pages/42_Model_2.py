@@ -23,7 +23,7 @@ protests_per_100000 = st.slider('Protests per 100,000 people:', 0, 200, 50)
 
 # max number of clusters is 10, number input
 n_clusters = st.number_input('Number of Clusters:', min_value=0, max_value=10, value=3)
-  
+
 # Make a predict button that sends the input values to the REST API
 if st.button('Predict Clusters', type='primary', use_container_width=True):
     response = requests.get(f'http://api:4000/model2/model2/{gdp_per_capita}/{protests_per_100000}/{n_clusters}')
