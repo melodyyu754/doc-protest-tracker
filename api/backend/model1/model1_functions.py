@@ -49,24 +49,26 @@ def initialize():
     cursor.execute(query)
     data_scaled = cursor.fetchall()
     logger.info(f'dataset: {data_scaled}')
-    column_names = ['id', 'event_date', 'country', 'western', 'asian', 'south_american', 'counts', 'population_scaled', 'events_per_capita_scaled', 'gdp_per_capita_scaled', 'public_trust_percentage_scaled']
+    column_names = ['id', 'event_date', 'country', 'western', 'asian', 'south_american', 'counts', 'population_scaled', 
+                    'events_per_capita_scaled', 'gdp_per_capita_scaled', 'public_trust_percentage_scaled']
     df_scaled = pd.DataFrame.from_records(data_scaled, columns=column_names)
     
     # Defining my X and y arrays
-    X = df_scaled[['public_trust_percentage_scaled', 'gdp_per_capita_scaled', 'western', 'asian', 'south_american', 'population_scaled']]
+    X = df_scaled[['public_trust_percentage_scaled', 'gdp_per_capita_scaled', 'western', 'asian', 'south_american', 
+                   'population_scaled']]
     y = df_scaled['events_per_capita_scaled']
 
     # Adding Interaction Terms because public trust percentage and gdp per capita are highly correlated  
     X['public_trust_x_gdp_per_capita'] = X['public_trust_percentage_scaled'] * X['gdp_per_capita_scaled']
 
-   # --- #Polynomial Features ---
+   # Polynomial Features 
     poly_features = PolynomialFeatures(degree=3) 
     X_poly = poly_features.fit_transform(X[['public_trust_percentage_scaled', 'gdp_per_capita_scaled', 'population_scaled']])
 
-    # Concatenate features individually to make the model simpler 
+    # Concatenate the polynomial features with the linear features to create the final X matrix
     X_poly = np.concatenate((X_poly, X[['western', 'asian', 'south_american']]), axis=1)
 
-    # --- Create and Fit Model ---
+    # Create and Fit Model
     lobf = linear_regression(X_poly, y)
     return lobf
 
