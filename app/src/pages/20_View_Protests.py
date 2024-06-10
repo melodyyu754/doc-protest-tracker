@@ -92,6 +92,15 @@ def delete_protest(protest_id):
 
 # Define a function to create a card for each post
 def create_card(protest):
+    
+        # Assuming 'full_name' is defined somewhere in your code
+    full_name = protest['full_name']
+
+    # Generate the HTML for the "created by" line if full_name exists
+    full_name_html = f"<p>Created by: {full_name}</p>" if full_name else ""
+
+    date = str(protest['date'][:16])
+    
     # Card Background Colors
     cause_colors = {
     "Racial Inequality": "#E6D7F7",
@@ -104,11 +113,11 @@ def create_card(protest):
     }
 
     card_bg_color = cause_colors.get(protest['cause_name'], "#FFFFFF")  # Default to white if cause not found
-  
+
     st.markdown(f"""
     <div style="border: 1px solid #ddd; border-radius: 8px; background-color: {card_bg_color}; padding: 16px; margin-bottom: 16px;">
         <h2>{protest['cause_name']}</h2>
-        <h4>{protest['date']}</h4>
+        <h4>{date}</h4>
         <h4>{protest['location']},{protest['country']} </h4>
         <p>{protest['description']}</p>
         {full_name_html}

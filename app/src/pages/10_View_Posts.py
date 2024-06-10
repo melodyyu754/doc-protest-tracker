@@ -99,7 +99,7 @@ def create_card(post):
     "Gender Equality": "#E2E2E4",
     "Israeli-Palestine": "#E6F2F8"
 }
-
+    date = str(post['creation_date'][:16])
     card_bg_color = cause_colors.get(post['cause_name'], "#FFFFFF")  # Default to white if cause not found
     
     st.markdown(f"""
@@ -107,7 +107,7 @@ def create_card(post):
         <h3>{post['title']}</h3>
         <p style="color: grey; font-weight: bold;">{post['cause_name']}</p>
         <p>{post['text']}</p>
-        <small>Posted by {post['full_name']}  on {post['creation_date']}</small>
+        <small>Posted by {post['full_name']}  on {date}</small>
     </div>
     """, unsafe_allow_html=True)
 

@@ -95,15 +95,17 @@ else:
        # Concatenate first name and last name if they exist
     full_name = ""
     if protest['first_name'] is not None:
-        full_name += " | " + protest['first_name']
+        full_name +=  protest['first_name']
     if protest['last_name'] is not None:
         full_name += " " + protest['last_name']
-    full_name_html = f'Created By: {full_name}' if full_name else ""
+    full_name_html = f' | Created By: {full_name}' if full_name else ""
+
+    date = str(protest['date'][:16])
 
     protest_string_data = f"""
     Selected Protest ID: {protest['protest_id']} \n
     Cause: {protest['cause_name']} \n
-    {protest['date']} {full_name_html} \n
+    {date} {full_name_html} \n
    
     {protest['description']}
     """

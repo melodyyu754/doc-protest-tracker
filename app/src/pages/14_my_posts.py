@@ -41,11 +41,13 @@ def delete_post(post_id):
 # Define a function to create a card for each post
 def create_card(post):
     with st.container():
+        
+        date = str(post['creation_date'][:16])
         st.markdown(f"""
         <div style="border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
             <h3>{post['title']}</h3>
             <p>{post['text']}</p>
-             <small>Posted by {post['first_name']} {post['last_name']} on {post['creation_date']}</small>
+             <small>Posted by {post['first_name']} {post['last_name']} on {date}</small>
         </div>
         """, unsafe_allow_html=True)
 
