@@ -34,11 +34,16 @@ with col1:
         st.switch_page('pages/11_New_Post.py')
 
 with col2:
-    st.markdown("<h4 style='text-align: center; color: black;'>Protests</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center; color: black;'> Protests/Articles</h4>", unsafe_allow_html=True)
     if st.button('View Protests',
                 type='primary',
                 use_container_width=True):
         st.switch_page('pages/20_View_Protests.py')
+    if st.button('View Articles',
+                type='primary',
+                use_container_width=True):
+        st.switch_page('pages/27_View_Articles.py')
+
 
 with col3:
     st.markdown("<h4 style='text-align: center; color: black;'>Countries</h4>", unsafe_allow_html=True)
