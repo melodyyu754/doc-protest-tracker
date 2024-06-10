@@ -53,25 +53,6 @@ def create_app():
     # Can be accessed from a web browser
     # http://ip_address:port/
     # Example: localhost:8001
-    @app.route("/")
-    def welcome():
-        return "<h1>Welcome to the Summer 2024 Belgium DoC Boilerplate App</h1>"
-
-    # Example route for testing streamlit
-    @app.route("/data")
-    def getData():
-        data = {
-            "user1": {
-                "Name": "Mark Fontenot",
-                "Course": "CS 3200",
-            },
-            "user2": {
-                "Name": "Eric Gerber",
-                "Course": "DS 3000",
-            },
-        }
-        return data
-
     app.logger.info("current_app(): registering blueprints with app object.")
 
     app.register_blueprint(countries,   url_prefix='/cntry')

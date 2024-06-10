@@ -18,8 +18,7 @@ def get_articles():
         """
     filters = []
 
-        # Apply filters
-        # what does this do maggie ????
+     # Apply filters
     if 'published_date' in request.args:
         filters.append(f"publication_date >= '{request.args['published_date']}'")
     if 'sources' in request.args:
