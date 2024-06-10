@@ -51,7 +51,7 @@ def create_card(protest):
     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
         <h2>{protest['cause_name']}</h2>
         <h4>{date}</h4>
-        <h4>{protest['location']},{protest['country']} </h4>
+        <h4>{protest['location']}, {protest['country']} </h4>
         <p>{protest['description']}</p>
     </div>
     """, unsafe_allow_html=True)

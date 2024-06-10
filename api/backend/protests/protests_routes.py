@@ -160,7 +160,7 @@ def get_user_protests(user_id):
 # Get one protest with one protest
 @protests.route('/protests/<protest_id>', methods=['GET'])
 def get_protest_detail(protest_id):
-    query = ("""SELECT * FROM protests 
+    query = ("""SELECT protest_id, location, date, description, created_by, protests.country as protest_country, cause, longitude, latitude, cause_id, cause_name, user_id, first_name, last_name, users.country as user_country FROM protests 
              LEFT JOIN cause on protests.cause = cause.cause_id 
              LEFT JOIN users on protests.created_by = users.user_id
              WHERE protest_id = """
@@ -169,7 +169,9 @@ def get_protest_detail(protest_id):
     cursor = db.get_db().cursor()
     cursor.execute(query)
     column_headers = [x[0] for x in cursor.description]
+    current_app.logger.info(f'column_headers = {column_headers}')
     theData = cursor.fetchall()
+    current_app.logger.info(f'theData = {theData}')
     json_data = [dict(zip(column_headers, row)) for row in theData]
     # Check if any data is found
     if not json_data:
