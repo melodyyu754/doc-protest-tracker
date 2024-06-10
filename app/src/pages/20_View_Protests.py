@@ -69,7 +69,7 @@ selected_countries = st.sidebar.multiselect('Select Countries', options=country_
 params = {}
 
 # Button to trigger the filter action
-if st.sidebar.button('Filter Posts'):
+if st.sidebar.button('Filter Protests'):
     # Construct the query parameters
     
     if date:
@@ -93,6 +93,8 @@ if st.sidebar.button('Filter Posts'):
 data ={}
 try:
   data = requests.get('http://api:4000/prtsts/protests', params = params).json()
+
+
   if len(data) == 0:
     st.write("No protests found with the selected filters")
 except:
@@ -100,13 +102,15 @@ except:
 
 # Define a function to create a card for each post
 def create_card(protest):
+    full_name = protest['full_name']
+    full_name_html = f"<p>Created by: {full_name}</p>" if full_name else ""
     st.markdown(f"""
     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
         <h2>{protest['cause_name']}</h2>
         <h4>{protest['date']}</h4>
         <h4>{protest['location']},{protest['country']} </h4>
         <p>{protest['description']}</p>
-        <p>{protest['full_name']}
+        {full_name_html}
     </div>
     """, unsafe_allow_html=True)
 
